@@ -1,4 +1,4 @@
-import myButton from './myButton';
+import myButton from '@/components/UI/myButton';
 import myInput from '@/components/UI/myInput';
 import myDatepicker from '@/components/UI/myDatepicker';
 import navBar from '@/components/UI/navBar';

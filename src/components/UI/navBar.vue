@@ -2,13 +2,9 @@
   <div class="navbar">
     <div class="navbar__wrapper container">
       <svg-icon name="logo-icon" width="64" height="64"/>
-      <router-link to="/" class="navbar__link" @mouseover="mouseOver" @mouseleave="mouseLeave" data-float-parent >
-        <svg-icon name="home-icon" width="64" height="64"/>
-        <span class="navbar__text-wrapper" data-float-text><span class="navbar__text">Главная страница</span></span>
-      </router-link>
-      <router-link to="/todo-list" class="navbar__link" @mouseover="mouseOver" @mouseleave="mouseLeave" data-float-parent >
-        <svg-icon name="tasks-icon" width="64" height="64"/>
-        <span class="navbar__text-wrapper" data-float-text><span class="navbar__text">Список задач</span></span>
+      <router-link v-for="link in links" :key="link.key" :to="link.url" class="navbar__link" @mouseover.self="mouseOver" @mouseleave="mouseLeave" data-float-parent >
+        <svg-icon :name="link.icon" width="64" height="64"/>
+        <span class="navbar__text-wrapper" data-float-text><span class="navbar__text">{{ link.text }}</span></span>
       </router-link>
     </div>
   </div>
@@ -16,6 +12,7 @@
 
 <script>
 import svgIcon from '@/components/UI/svgIcon';
+import {links} from '@/_config';
 
 export default {
   name: 'nav-bar',
@@ -26,20 +23,18 @@ export default {
 
   data() {
     return {
-      isHover: false
+      links: links,
     }
   },
 
   methods: {
     mouseOver(e) {
-      const target = e.target.classList.contains('navbar__link') ? e.target : e.target.closest('.navbar__link');
-      const floatingText = target.querySelector('[data-float-text]');
+      const floatingText = e.target.querySelector('[data-float-text]');
       floatingText.style.maxWidth = floatingText.scrollWidth + 'px';
     },
 
     mouseLeave(e) {
-      const target = e.target.classList.contains('navbar__link') ? e.target : e.target.closest('.navbar__link');
-      const floatingText = target.querySelector('[data-float-text]');
+      const floatingText = e.target.querySelector('[data-float-text]');
       floatingText.style.maxWidth = 0;
     }
   }

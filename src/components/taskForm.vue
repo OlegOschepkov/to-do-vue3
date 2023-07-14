@@ -10,7 +10,7 @@
         label="Описание:"
         v-model="title"
         placeholder="Введите описание"/>
-    <my-button type="submit" @click="addTask">Создать</my-button>
+    <my-button type="submit" @click="addTask">{{ this.btnTitle }}</my-button>
   </form>
 </template>
 
@@ -36,21 +36,23 @@ export default {
         id: '',
         date: '',
         title: '',
+        btnTitle: '',
       })
     },
   },
 
   data () {
     return {
-      id: this.initialData.length ? this.initialData[0].id : '',
-      date: this.initialData.length ? this.initialData[0].date : '',
-      title: this.initialData.length ? this.initialData[0].title : '',
+      id: this.initialData.id ? this.initialData.id : '',
+      date: this.initialData.date ? this.initialData.date : '',
+      title: this.initialData.title ? this.initialData.title : '',
+      btnTitle: this.initialData.btnTitle ? this.initialData.btnTitle : 'Создать',
     }
   },
 
   methods: {
     addTask() {
-      if (!this.initialData.length) {
+      if (!this.initialData.id) {
         if (this.date && this.title.length > 0) {
           let task = {
             id: Date.now(),
@@ -65,14 +67,16 @@ export default {
           this.title = '';
         }
       } else {
-        if (this.date && this.title.length > 0) {
-          let task = {
-            id: this.id,
-            date: this.date,
-            title: this.title
-          }
-          this.$emit('editTask', task);
+        let task = {
+          id: this.id,
+          date: this.date,
+          title: this.title
         }
+        this.$emit('editTask', task);
+
+        this.id = '';
+        this.date = '';
+        this.title = '';
       }
     },
   }

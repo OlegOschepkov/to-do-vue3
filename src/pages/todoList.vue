@@ -28,6 +28,7 @@
 import tasksList from '@/components/tasksList';
 import taskForm from '@/components/taskForm';
 import mySelect from '@/components/UI/mySelect';
+import tasks from "@/seeders/tasks.json";
 import {mapActions, mapMutations, mapGetters, mapState} from 'vuex';
 
 export default {
@@ -41,6 +42,12 @@ export default {
 
   mounted() {
     this.fetchTasks();
+  },
+
+  data() {
+    return {
+      tasks: tasks.tasks
+    }
   },
 
   computed: {

@@ -74,7 +74,7 @@ export const taskModule = {
     },
 
     taskById(state, getters) {
-      return getters.sortedTasks.filter((task) => task.id === state.taskId);
+      return getters.sortedTasks.filter((task) => task.id === state.taskId)[0];
     },
 
     sortedAndSearchedTasks(state, getters) {
@@ -93,8 +93,6 @@ export const taskModule = {
           returnObj = JSON.parse(localStorage.getItem("todovue3tasks"));
           commit('setTasks', returnObj);
         }
-        console.log(returnObj);
-        console.log(localStorage["todovue3tasks"]);
         if (returnObj && returnObj.taskId ) {
           commit('setTaskIdToEdit', {id: returnObj.taskId, setState: false});
         }

@@ -40,10 +40,14 @@ export default {
   },
 
   mounted() {
-    this.date = this.modelValue ? this.modelValue : Date.now();
+    this.setInitialDate()
   },
 
   methods: {
+    setInitialDate() {
+      this.date = this.modelValue ? this.modelValue : Date.now();
+    },
+
     updateDate(e) {
       this.date = e;
       this.$emit('update:modelValue', e.getTime());

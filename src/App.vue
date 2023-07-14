@@ -3,10 +3,6 @@
     <div class="page-container">
       <navBar/>
       <div class="container container--animation">
-<!--        <transition name="route" mode="out-in" appear>-->
-<!--          <router-view />-->
-<!--        </transition>-->
-
         <router-view v-slot="{ Component }">
           <transition name="route" mode="out-in" appear>
             <component :is="Component" />

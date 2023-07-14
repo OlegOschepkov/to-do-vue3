@@ -1,7 +1,36 @@
 <template>
-  <div class="page">
+	<div class="page">
     <h1 class="title">Главная страница</h1>
-    <p class="text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,</p>
+    <p class="text">Какие технологии и плагины использовались</p>
+    <ul class="list">
+      <li class="list__element">Vue3</li>
+      <li class="list__element">Vue CLI</li>
+      <li class="list__element">Vue router</li>
+      <li class="list__element">Vuex</li>
+      <li class="list__element">Options API</li>
+      <li class="list__element">SCSS</li>
+      <li class="list__element">@vueform/multiselect для селекта</li>
+      <li class="list__element">@vuepic/vue-datepicker для выбора даты</li>
+    </ul>
+    <p class="text">Что было реализовано в приложении</p>
+    <ul class="list">
+      <li class="list__element">Несколько страниц + динамическая страница edit-task</li>
+      <li class="list__element">Динамическая перерисовка</li>
+      <li class="list__element">Динамический navbar</li>
+      <li class="list__element">Обработка несуществующих роутов</li>
+      <li class="list__element">Состояние приложения сохраняется при перезагрузке, используется LocalStorage</li>
+      <li class="list__element">Динамические роуты</li>
+      <li class="list__element">Динамическое состояние формы (для edit-task)</li>
+      <li class="list__element"></li>
+      <li class="list__element"></li>
+      <li class="list__element"></li>
+      <li class="list__element"></li>
+      <li class="list__element"></li>
+      <li class="list__element"></li>
+      <li class="list__element"></li>
+    </ul>
+
+<!--     launch server - serve -s dist-->
 
   </div>
 </template>

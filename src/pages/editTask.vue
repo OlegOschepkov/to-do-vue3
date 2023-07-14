@@ -1,5 +1,7 @@
 <template>
-  <task-form :initialData="taskById" @editTask="editTask"/>
+  <div class="page">
+    <task-form :initialData="{id: taskById.id, date: taskById.date, title: taskById.title, btnTitle}" @editTask="editTask"/>
+  </div>
 </template>
 
 <script>
@@ -15,6 +17,12 @@ export default {
 
   created() {
     this.fetchTasks();
+  },
+
+  data() {
+    return {
+      btnTitle: "Изменить",
+    }
   },
 
   computed: {
