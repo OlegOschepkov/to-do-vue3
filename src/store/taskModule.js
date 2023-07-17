@@ -6,6 +6,8 @@ export const taskModule = {
     taskId: '',
     selectedSort: '',
     searchQuery: '',
+    isLoading: true,
+    isError: false,
     sortOptions: [
       {
         value: '',
@@ -29,6 +31,14 @@ export const taskModule = {
       }
     },
 
+    setLoading(state, payload) {
+      state.isLoading = payload
+    },
+
+    setError(state, payload) {
+      state.isError = payload
+    },
+
     setSelectedSort(state, payload) {
       state.selectedSort = payload
     },
@@ -37,25 +47,25 @@ export const taskModule = {
       state.searchQuery = payload
     },
 
-    addTask(state, payload) {
+    async addTask(state, payload) {
       state.tasks.push(payload);
       localStorage.setItem("todovue3tasks", JSON.stringify(state));
     },
 
-    setTaskIdToEdit(state, payload) {
+    async setTaskIdToEdit(state, payload) {
       state.taskId = payload.id;
       if (payload.setState) {
         localStorage.setItem("todovue3tasks", JSON.stringify(state));
       }
     },
 
-    editTask(state, payload) {
+    async editTask(state, payload) {
       const modifiedTaskIndex = [...state.tasks].findIndex(item => item.id === payload.id);
       state.tasks[modifiedTaskIndex] = payload;
       localStorage.setItem("todovue3tasks", JSON.stringify(state));
     },
 
-    deleteTask(state, payload) {
+    async deleteTask(state, payload) {
       state.tasks = state.tasks.filter(item => item.id !== payload);
       localStorage.setItem("todovue3tasks", JSON.stringify(state));
     },
@@ -84,20 +94,28 @@ export const taskModule = {
 
   actions: {
     // функции вызывающие мутации, сами они не должны менять state
-    fetchTasks({commit}) { //  {state, commit, ...}  = context
+    async fetchTasks({commit}) { //  {state, commit, ...}  = context
       try {
-        let returnObj;
-        if (!localStorage["todovue3tasks"]) {
-          localStorage.setItem('todovue3tasks', '');
-        } else {
-          returnObj = JSON.parse(localStorage.getItem("todovue3tasks"));
-          commit('setTasks', returnObj);
-        }
-        if (returnObj && returnObj.taskId ) {
-          commit('setTaskIdToEdit', {id: returnObj.taskId, setState: false});
-        }
-      } catch(e) {
-        console.log(e)
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            let returnObj;
+            if (!localStorage["todovue3tasks"]) {
+              localStorage.setItem('todovue3tasks', '');
+            } else {
+              returnObj = JSON.parse(localStorage.getItem("todovue3tasks"));
+              commit('setTasks', returnObj);
+            }
+            if (returnObj && returnObj.taskId ) {
+              commit('setTaskIdToEdit', {id: returnObj.taskId, setState: false});
+            }
+            resolve()
+          }, 1000)
+        });
+      } catch (e) {
+        commit('setError', true);
+        console.log(e.message)
+      } finally {
+        commit('setLoading', false);
       }
     },
   }

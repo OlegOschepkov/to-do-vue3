@@ -11,14 +11,22 @@
         @update:model-value="setSelectedSort"
         :options="sortOptions"
     />
-    <h2 class="title title--h2" v-if="sortedAndSearchedTasks.length === 0">
-      Создайте задачу или измените условия фильтрации
+    <h2 class="title title--h2 error" v-if="isError">
+      Произошла ошибка, попробуйте еще раз
     </h2>
+    <h2 class="title title--h2" v-if="isLoading">
+      Идет загрузка...
+    </h2>
+    <div v-else>
+      <h2 class="title title--h2" v-if="sortedAndSearchedTasks.length === 0">
+        Создайте задачу или измените условия фильтрации
+      </h2>
 
-    <div class="tasks-container" v-else>
-      <tasks-list
+      <div class="tasks-container" v-else>
+        <tasks-list
           :tasks="sortedAndSearchedTasks"
-      />
+        />
+      </div>
     </div>
     <task-form @addTask="addTask"/>
   </div>
@@ -46,7 +54,7 @@ export default {
 
   data() {
     return {
-      tasks: tasks.tasks
+      tasks: tasks.tasks,
     }
   },
 
@@ -54,7 +62,9 @@ export default {
     ...mapState({
       selectedSort: state => state.task.selectedSort,
       searchQuery: state => state.task.searchQuery,
-      sortOptions: state => state.task.sortOptions
+      sortOptions: state => state.task.sortOptions,
+      isLoading: state => state.task.isLoading,
+      isError: state => state.task.isError,
     }),
 
     ...mapGetters({
@@ -80,5 +90,9 @@ export default {
 .page {
   min-height: 100vh;
   padding: 74px 0;
+}
+
+.error {
+  color: $color-cardinal;
 }
 </style>

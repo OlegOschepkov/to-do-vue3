@@ -57,6 +57,7 @@ export default {
 ```vue
 <myTask
           v-for="task in tasks"
+          v-for="(foo, bar) in tasks" /> // можно и так
           :task="task" // или v-bind:task="task"
           :key="task.id"
           @deleteTask="deleteTask"

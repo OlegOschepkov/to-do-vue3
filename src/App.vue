@@ -27,17 +27,6 @@ export default {
 <style lang="scss">
 @import '@/assets/scss/variables.scss';
 
-:root {
-  --ms-border-color: $color-heather;
-  --ms-border-width: 2px;
-  --ms-border-color-active: $color-juniper;
-  --ms-border-width-active: 2px;
-  --ms-radius: 8px;
-  --ms-dropdown-radius: 8px;
-  --ms-dropdown-border-color: $color-heather;
-  --ms-dropdown-border-width: 2px;
-}
-
 #app {
   min-height: 100vh;
   //width: 100vw;
