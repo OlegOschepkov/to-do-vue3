@@ -33,11 +33,16 @@
 </template>
 
 <script>
+/* eslint-disable */
 import tasksList from '@/components/tasksList';
 import taskForm from '@/components/taskForm';
 import mySelect from '@/components/UI/mySelect';
 import tasks from "@/seeders/tasks.json";
-import {mapActions, mapMutations, mapGetters, mapState} from 'vuex';
+import {mapActions, mapMutations, mapGetters, mapState, useStore} from 'vuex';
+import {computed, reactive, ref} from 'vue';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
+// import {taskModule} from '@/store/taskModule';
+const { useGetters, useActions, useMutations } = createNamespacedHelpers( 'task'); // specific module name
 
 export default {
   name: "todo-list",
@@ -48,41 +53,74 @@ export default {
     taskForm
   },
 
-  mounted() {
-    this.fetchTasks();
-  },
+  setup() {
+    const state = ref({ tasks: {} })
+    const store = useStore();
+    const taskState = store.state.task;
+    const { fetchTasks } = useActions(['fetchTasks']);
+    const { sortedAndSearchedTasks } = useGetters(['sortedAndSearchedTasks']);
+    const { setSelectedSort, setSearchQuery, addTask } = useMutations(['setSelectedSort', 'setSearchQuery', 'addTask']);
 
-  data() {
-    return {
-      tasks: tasks.tasks,
+    const getTasks = async () => {
+      state.value.tasks = await fetchTasks()
     }
-  },
 
-  computed: {
-    ...mapState({
-      selectedSort: state => state.task.selectedSort,
-      searchQuery: state => state.task.searchQuery,
-      sortOptions: state => state.task.sortOptions,
-      isLoading: state => state.task.isLoading,
-      isError: state => state.task.isError,
-    }),
+    const isLoading = computed(() => taskState.isLoading);
+    const isError = computed(() => taskState.isError);
+    const selectedSort = computed(() => taskState.selectedSort);
+    const searchQuery = computed(() => taskState.searchQuery);
+    const sortOptions = computed(() => taskState.sortOptions);
 
-    ...mapGetters({
-      sortedAndSearchedTasks: 'task/sortedAndSearchedTasks'
-    })
-  },
+    getTasks()
 
-  methods: {
-    ...mapActions({
-        fetchTasks: 'task/fetchTasks'
-    }),
-
-    ...mapMutations({
-      setSelectedSort: 'task/setSelectedSort',
-      setSearchQuery: 'task/setSearchQuery',
-      addTask: 'task/addTask',
-    }),
+    return {
+      selectedSort,
+      searchQuery,
+      sortOptions,
+      isLoading,
+      isError,
+      setSelectedSort,
+      setSearchQuery,
+      addTask,
+      sortedAndSearchedTasks
+    }
   }
+
+  // mounted() {
+  //   this.fetchTasks();
+  // },
+  //
+  // data() {
+  //   return {
+  //     tasks: tasks.tasks,
+  //   }
+  // },
+  //
+  // computed: {
+  //   ...mapState({
+  //     selectedSort: state => state.task.selectedSort,
+  //     searchQuery: state => state.task.searchQuery,
+  //     sortOptions: state => state.task.sortOptions,
+  //     isLoading: state => state.task.isLoading,
+  //     isError: state => state.task.isError,
+  //   }),
+  //
+  //   ...mapGetters({
+  //     sortedAndSearchedTasks: 'task/sortedAndSearchedTasks'
+  //   })
+  // },
+  //
+  // methods: {
+  //   ...mapActions({
+  //       fetchTasks: 'task/fetchTasks'
+  //   }),
+  //
+  //   ...mapMutations({
+  //     setSelectedSort: 'task/setSelectedSort',
+  //     setSearchQuery: 'task/setSearchQuery',
+  //     addTask: 'task/addTask',
+  //   }),
+  // }
 }
 </script>
 

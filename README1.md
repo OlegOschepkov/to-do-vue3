@@ -345,3 +345,6 @@ export default {
 
 ### Aliases
 В URL вместо ID лучше использовать aliases
+
+
+# Composition API

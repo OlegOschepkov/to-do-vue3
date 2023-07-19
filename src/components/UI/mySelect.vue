@@ -31,11 +31,32 @@ export default {
     }
   },
 
-  methods: {
-    selectedOption(value) {
-      this.$emit('update:modelValue', value)
+  setup(_, {emit}) {
+    const selectedOption = (value) => {
+      emit('update:modelValue', value)
+    }
+
+    return {
+      selectedOption
     }
   }
+
+  // props: {
+  //   modelValue: {
+  //     type: [String, Number]
+  //   },
+  //   options: {
+  //     type: Array,
+  //     default: () => {},
+  //     required: true
+  //   }
+  // },
+  //
+  // methods: {
+  //   selectedOption(value) {
+  //     this.$emit('update:modelValue', value)
+  //   }
+  // }
 }
 </script>
 

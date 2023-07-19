@@ -12,7 +12,6 @@
 
 <script>
 import svgIcon from '@/components/UI/svgIcon';
-import {links} from '@/_config';
 
 export default {
   name: 'nav-bar',
@@ -21,23 +20,57 @@ export default {
     svgIcon
   },
 
-  data() {
-    return {
-      links: links,
-    }
-  },
+  setup() {
+    const links = [
+      {
+        icon: 'home-icon',
+        url: '/',
+        text: 'Главная страница',
+        key: 123
+      },
+      {
+        icon: 'tasks-icon',
+        url: '/todo-list',
+        text: 'Список задач',
+        key: 321
+      },
+    ];
 
-  methods: {
-    mouseOver(e) {
-      const floatingText = e.target.querySelector('[data-float-text]');
+    let floatingText;
+
+    const mouseOver = (e) => {
+      floatingText = e.target.querySelector('[data-float-text]');
       floatingText.style.maxWidth = floatingText.scrollWidth + 'px';
-    },
+    }
 
-    mouseLeave(e) {
-      const floatingText = e.target.querySelector('[data-float-text]');
+    const mouseLeave = () => {
       floatingText.style.maxWidth = 0;
     }
+
+    return {
+      links,
+      mouseOver,
+      mouseLeave
+    }
   }
+
+  // data() {
+  //   return {
+  //     links: links,
+  //   }
+  // },
+  //
+  // methods: {
+  //   mouseOver(e) {
+  //     const floatingText = e.target.querySelector('[data-float-text]');
+  //     floatingText.style.maxWidth = floatingText.scrollWidth + 'px';
+  //   },
+  //
+  //   mouseLeave(e) {
+  //     const floatingText = e.target.querySelector('[data-float-text]');
+  //     floatingText.style.maxWidth = 0;
+  //   }
+  // }
 }
 </script>
 

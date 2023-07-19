@@ -10,6 +10,7 @@
 <script>
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import { ref } from 'vue';
 
 export default {
   name: 'my-datepicker',
@@ -20,7 +21,7 @@ export default {
 
   props: {
     modelValue: {
-      type: [String, Number],
+      type: [String, Number, Date],
       default: '',
     },
     id: {
@@ -33,26 +34,42 @@ export default {
     },
   },
 
-  data() {
+  setup(props, {emit}) {
+    const date = ref();
+
+    date.value = props.modelValue ? props.modelValue : Date.now();
+
+    const updateDate = (e) => {
+      date.value = e;
+      emit('update:modelValue', e);
+    }
+
     return {
-      date: '',
-    };
-  },
-
-  mounted() {
-    this.setInitialDate()
-  },
-
-  methods: {
-    setInitialDate() {
-      this.date = this.modelValue ? this.modelValue : Date.now();
-    },
-
-    updateDate(e) {
-      this.date = e;
-      this.$emit('update:modelValue', e.getTime());
-    },
+      date,
+      updateDate
+    }
   }
+
+  // data() {
+  //   return {
+  //     date: '',
+  //   };
+  // },
+  //
+  // mounted() {
+  //   this.setInitialDate()
+  // },
+  //
+  // methods: {
+  //   setInitialDate() {
+  //     this.date = this.modelValue ? this.modelValue : Date.now();
+  //   },
+  //
+  //   updateDate(e) {
+  //     this.date = e;
+  //     this.$emit('update:modelValue', e.getTime());
+  //   },
+  // }
 }
 </script>
 

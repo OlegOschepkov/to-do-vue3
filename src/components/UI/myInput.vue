@@ -34,11 +34,21 @@ export default {
     }
   },
 
-  methods: {
-    updateInput(e) {
-      this.$emit('update:modelValue', e.target.value);
+  setup(_, {emit}) {
+    const updateInput = (e) => {
+      emit('update:modelValue', e.target.value);
+    }
+
+    return {
+      updateInput
     }
   }
+
+  // methods: {
+  //   updateInput(e) {
+  //     this.$emit('update:modelValue', e.target.value);
+  //   }
+  // }
 }
 </script>
 

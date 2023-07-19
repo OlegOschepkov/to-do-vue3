@@ -49,25 +49,65 @@ export const taskModule = {
 
     async addTask(state, payload) {
       state.tasks.push(payload);
-      localStorage.setItem("todovue3tasks", JSON.stringify(state));
+      try {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            localStorage.setItem("todovue3tasks", JSON.stringify(state));
+            resolve()
+          }, 1000)
+        });
+      } catch (e) {
+        this.setError( true);
+        console.log(e.message)
+      }
     },
 
     async setTaskIdToEdit(state, payload) {
       state.taskId = payload.id;
       if (payload.setState) {
-        localStorage.setItem("todovue3tasks", JSON.stringify(state));
+        try {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              localStorage.setItem("todovue3tasks", JSON.stringify(state));
+              resolve()
+            }, 1000)
+          });
+        } catch (e) {
+          this.setError( true);
+          console.log(e.message)
+        }
       }
     },
 
     async editTask(state, payload) {
       const modifiedTaskIndex = [...state.tasks].findIndex(item => item.id === payload.id);
       state.tasks[modifiedTaskIndex] = payload;
-      localStorage.setItem("todovue3tasks", JSON.stringify(state));
+      try {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            localStorage.setItem("todovue3tasks", JSON.stringify(state));
+            resolve()
+          }, 1000)
+        });
+      } catch (e) {
+        this.setError( true);
+        console.log(e.message)
+      }
     },
 
     async deleteTask(state, payload) {
       state.tasks = state.tasks.filter(item => item.id !== payload);
-      localStorage.setItem("todovue3tasks", JSON.stringify(state));
+      try {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            localStorage.setItem("todovue3tasks", JSON.stringify(state));
+            resolve()
+          }, 1000)
+        });
+      } catch (e) {
+        this.setError( true);
+        console.log(e.message)
+      }
     },
   },
 
@@ -83,8 +123,8 @@ export const taskModule = {
       })
     },
 
-    taskById(state, getters) {
-      return getters.sortedTasks.filter((task) => task.id === state.taskId)[0];
+    taskById(state) {
+      return [...state.tasks].filter((task) => task.id === state.taskId)[0];
     },
 
     sortedAndSearchedTasks(state, getters) {

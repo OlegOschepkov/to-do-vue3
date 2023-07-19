@@ -12,7 +12,13 @@
 
 <script>
 import taskForm from '@/components/taskForm';
-import {mapActions, mapGetters, mapMutations, mapState} from 'vuex';
+import {useStore} from 'vuex';
+import {computed} from 'vue';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
+// import {taskModule} from '@/store/taskModule';
+const { useGetters, useActions } = createNamespacedHelpers( 'task'); // specific module name
+
+// import { useRoute, useRouter } from 'vue-router';
 
 export default {
   name: "editTask",
@@ -21,36 +27,63 @@ export default {
     taskForm
   },
 
-  created() {
-    this.fetchTasks();
-  },
+  setup() {
+    const btnTitle = "Изменить";
+    const store = useStore();
+    const { taskById } = useGetters(['taskById']);
+    const { fetchTasks } = useActions(['fetchTasks']);
 
-  data() {
+    fetchTasks();
+    // access a mutation
+    const editTask = (task) => {
+      store.commit('task/editTask', task)
+    };
+
+    // access a state in computed function / access a getter in computed function
+    const isLoading = computed(() => store.state.task.isLoading);
+    // access a state in computed function / access a getter in computed function
+    const isError = computed(() => store.state.task.isError);
+    // access a mutation
+
     return {
-      btnTitle: "Изменить",
+      isLoading,
+      isError,
+      btnTitle,
+      taskById,
+      editTask,
     }
-  },
+  }
 
-  computed: {
-    ...mapState({
-      isLoading: state => state.task.isLoading,
-      isError: state => state.task.isError,
-    }),
-
-    ...mapGetters({
-      taskById: 'task/taskById'
-    })
-  },
-
-  methods: {
-    ...mapActions({
-      fetchTasks: 'task/fetchTasks'
-    }),
-
-    ...mapMutations({
-      editTask: 'task/editTask',
-    }),
-  },
+  // created() {
+  //   this.fetchTasks();
+  // },
+  //
+  // data() {
+  //   return {
+  //     btnTitle: "Изменить",
+  //   }
+  // },
+  //
+  // computed: {
+  //   ...mapState({
+  //     isLoading: state => state.task.isLoading,
+  //     isError: state => state.task.isError,
+  //   }),
+  //
+  //   ...mapGetters({
+  //     taskById: 'task/taskById'
+  //   })
+  // },
+  //
+  // methods: {
+  //   ...mapActions({
+  //     fetchTasks: 'task/fetchTasks'
+  //   }),
+  //
+  //   ...mapMutations({
+  //     editTask: 'task/editTask',
+  //   }),
+  // },
 }
 </script>
 

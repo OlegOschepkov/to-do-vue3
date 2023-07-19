@@ -14,7 +14,7 @@
 
 <script>
 import myTask from '@/components/myTask';
-import {mapMutations} from 'vuex';
+import { useStore } from 'vuex'
 
 export default {
   name: "tasks-list",
@@ -30,11 +30,20 @@ export default {
     }
   },
 
-  methods: {
-    ...mapMutations({
-      deleteTask: 'task/deleteTask'
-    }),
+  setup() {
+    const store = useStore();
+    const deleteTask = (id) => store.commit('task/deleteTask', id);
+
+    return {
+      deleteTask
+    }
   }
+
+  // methods: {
+  //   ...mapMutations({
+  //     deleteTask: 'task/deleteTask'
+  //   }),
+  // }
 }
 </script>
 

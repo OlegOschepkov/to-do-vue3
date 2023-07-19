@@ -4,6 +4,7 @@
 
 <script>
 import { defineAsyncComponent } from 'vue';
+import { computed } from 'vue';
 
 export default {
   name: "svg-icon",
@@ -15,12 +16,20 @@ export default {
     },
   },
 
-  computed: {
-    dynamicComponent() {
-      const name = this.name;
+  setup(props) {
+    const dynamicComponent = computed(() => defineAsyncComponent(() => import(`@/assets/svg/${props.name}.vue`)))
 
-      return defineAsyncComponent(() => import(`@/assets/svg/${name}.vue`));
-    },
-  },
+    return {
+      dynamicComponent
+    }
+  }
+
+  // computed: {
+  //   dynamicComponent() {
+  //     const name = this.name;
+  //
+  //     return defineAsyncComponent(() => import(`@/assets/svg/${name}.vue`));
+  //   },
+  // },
 };
 </script>
