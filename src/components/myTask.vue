@@ -1,5 +1,5 @@
 <template>
-  <li class="task-list__element" :class="{ isOverdue }">
+  <li class="task-list__element" :class="{ 'task-list__element--overdue': isOverdue }">
     <div class="task-list__date">
       <div class="task-list__date-wrapper">
         <p class="task-list__day">{{prettifyDate.day}}</p>
@@ -107,7 +107,7 @@ export default {
     background-color: $color-cadet-blue;
     gap: 20px;
 
-    &.isOverdue {
+    &.task-list__element--overdue {
       order: -1;
       border-color: $color-cardinal;
       box-shadow: 0 0 6px 2px rgba($color-cardinal, 0.4);
@@ -153,7 +153,7 @@ export default {
     color: $color-matterhorn;
     text-align: center;
 
-    .isOverdue & {
+    .task-list__element--overdue & {
       color: $color-cardinal;
     }
   }

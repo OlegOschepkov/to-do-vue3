@@ -8,6 +8,7 @@ export const taskModule = {
     searchQuery: '',
     isLoading: true,
     isError: false,
+    isRouted: false,
     sortOptions: [
       {
         value: '',
@@ -45,6 +46,10 @@ export const taskModule = {
 
     setSearchQuery(state, payload) {
       state.searchQuery = payload
+    },
+
+    setRouteState(state) {
+      state.isRouted = true
     },
 
     async addTask(state, payload) {
@@ -113,7 +118,7 @@ export const taskModule = {
 
   getters: {
     // computed свойства, кешируемые, вычисляемые значение
-    sortedTasks(state) {
+    getSortedTasks(state) {
       return [...state.tasks].sort((task1, task2) => {
         if (typeof task1[state.selectedSort] === 'number') {
           return task1[state.selectedSort] - task2[state.selectedSort]
@@ -123,18 +128,27 @@ export const taskModule = {
       })
     },
 
-    taskById(state) {
+    getRouteState (state) {
+      return state.isRouted;
+    },
+
+    getTaskById(state) {
       return [...state.tasks].filter((task) => task.id === state.taskId)[0];
     },
 
-    sortedAndSearchedTasks(state, getters) {
-      return getters.sortedTasks.filter((task) => task.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
+    // getTaskById: state => id => { Другой вариант. Внимание! двойная стрелочка
+    //   return [...state.tasks].filter((task) => task.id === id)[0];
+    // },
+
+    getSortedAndSearchedTasks(state, getters) {
+      return getters.getSortedTasks.filter((task) => task.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
     },
   },
 
   actions: {
     // функции вызывающие мутации, сами они не должны менять state
     async fetchTasks({commit}) { //  {state, commit, ...}  = context
+      console.log(111)
       try {
         await new Promise((resolve) => {
           setTimeout(() => {
@@ -144,6 +158,7 @@ export const taskModule = {
             } else {
               returnObj = JSON.parse(localStorage.getItem("todovue3tasks"));
               commit('setTasks', returnObj);
+              commit('setRouteState');
             }
             if (returnObj && returnObj.taskId ) {
               commit('setTaskIdToEdit', {id: returnObj.taskId, setState: false});

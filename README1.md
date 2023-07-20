@@ -274,7 +274,7 @@ watch: {
 <template>
   <ul class="tasks-list">
     <myTask
-        v-for="task in sortedTasks"
+        v-for="task in getSortedTasks"
         :task="task"
         :key="task.id"
         @deleteTask="deleteTask"
@@ -285,7 +285,7 @@ watch: {
 
 <script >
 computed: {
-  sortedTasks() {
+  getSortedTasks() {
     return [...this.tasks].sort((task1, task2) => {
       return task1[this.selectedSort]?.localeCompare(task2[this.selectedSort])
     })
@@ -303,13 +303,13 @@ computed: {
 ### intersection API гуглить
 
 
-### Ref
+### $refs
 Позволяет получить узел из Vue
 ```vue
 <template>
   <ul class="tasks-list">
     <myTask
-        v-for="task in sortedTasks"
+        v-for="task in getSortedTasks"
         :task="task"
         :key="task.id"
         fer="foo"
@@ -348,3 +348,14 @@ export default {
 
 
 # Composition API
+
+
+### Вместо data можно использовать computed, тогда данные будут всегда свежими.
+
+
+
+## State
+mutations (commit('smth', data)) - чтобы задать значение в стейт. ТОЛЬКО мутации могут менять стейт. Мутации отвечают только за стейт, не за бизнес логику. Их нельзя делать асинхронными, иначе один запрос может переписать другой.
+actions - для запросов, фильтров, условий, изменить дату с сервера до внесения ее в стейт, Вызывают мутации. Это просто функции которые вызывают мутации. Тут бюизнес логика лежит. Перенос данных с ссервера в стьейт с помощью мутации!
+
+

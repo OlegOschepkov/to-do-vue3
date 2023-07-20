@@ -6,19 +6,16 @@
     <h2 class="title title--h2" v-if="isLoading">
       Идет загрузка...
     </h2>
-    <task-form v-else :initialData="{id: taskById.id, date: taskById.date, title: taskById.title, btnTitle}" @editTask="editTask"/>
+    <task-form v-else :initialData="{id: getTaskById.id, date: getTaskById.date, title: getTaskById.title, btnTitle}" @editTask="editTask"/>
   </div>
 </template>
 
 <script>
 import taskForm from '@/components/taskForm';
 import {useStore} from 'vuex';
-import {computed} from 'vue';
-import { createNamespacedHelpers } from 'vuex-composition-helpers';
-// import {taskModule} from '@/store/taskModule';
+import {computed, ref} from 'vue';
+import {createNamespacedHelpers} from 'vuex-composition-helpers';
 const { useGetters, useActions } = createNamespacedHelpers( 'task'); // specific module name
-
-// import { useRoute, useRouter } from 'vue-router';
 
 export default {
   name: "editTask",
@@ -28,28 +25,36 @@ export default {
   },
 
   setup() {
+    const state = ref({ tasks: {} });
     const btnTitle = "Изменить";
     const store = useStore();
-    const { taskById } = useGetters(['taskById']);
+    const { getTaskById, getRouteState } = useGetters(['getTaskById', 'getRouteState']);
     const { fetchTasks } = useActions(['fetchTasks']);
 
-    fetchTasks();
+    const getTasks = async () => {
+      state.value.tasks = await fetchTasks()
+    }
+
     // access a mutation
     const editTask = (task) => {
-      store.commit('task/editTask', task)
+      store.commit('task/editTask', task);
+      // тут надо сообщение вывести что ок.
     };
 
     // access a state in computed function / access a getter in computed function
     const isLoading = computed(() => store.state.task.isLoading);
     // access a state in computed function / access a getter in computed function
     const isError = computed(() => store.state.task.isError);
-    // access a mutation
+
+    if (!getRouteState.value) {
+      getTasks();
+    }
 
     return {
       isLoading,
       isError,
       btnTitle,
-      taskById,
+      getTaskById,
       editTask,
     }
   }
@@ -71,7 +76,7 @@ export default {
   //   }),
   //
   //   ...mapGetters({
-  //     taskById: 'task/taskById'
+  //     getTaskById: 'task/getTaskById'
   //   })
   // },
   //

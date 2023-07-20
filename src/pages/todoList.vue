@@ -18,13 +18,13 @@
       Идет загрузка...
     </h2>
     <div v-else>
-      <h2 class="title title--h2" v-if="sortedAndSearchedTasks.length === 0">
+      <h2 class="title title--h2" v-if="getSortedAndSearchedTasks.length === 0">
         Создайте задачу или измените условия фильтрации
       </h2>
 
       <div class="tasks-container" v-else>
         <tasks-list
-          :tasks="sortedAndSearchedTasks"
+          :tasks="getSortedAndSearchedTasks"
         />
       </div>
     </div>
@@ -33,15 +33,12 @@
 </template>
 
 <script>
-/* eslint-disable */
 import tasksList from '@/components/tasksList';
 import taskForm from '@/components/taskForm';
 import mySelect from '@/components/UI/mySelect';
-import tasks from "@/seeders/tasks.json";
-import {mapActions, mapMutations, mapGetters, mapState, useStore} from 'vuex';
-import {computed, reactive, ref} from 'vue';
+import {useStore} from 'vuex';
+import {computed, ref} from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-// import {taskModule} from '@/store/taskModule';
 const { useGetters, useActions, useMutations } = createNamespacedHelpers( 'task'); // specific module name
 
 export default {
@@ -54,11 +51,11 @@ export default {
   },
 
   setup() {
-    const state = ref({ tasks: {} })
+    const state = ref({ tasks: {} });
     const store = useStore();
     const taskState = store.state.task;
     const { fetchTasks } = useActions(['fetchTasks']);
-    const { sortedAndSearchedTasks } = useGetters(['sortedAndSearchedTasks']);
+    const { getSortedAndSearchedTasks } = useGetters(['getSortedAndSearchedTasks']);
     const { setSelectedSort, setSearchQuery, addTask } = useMutations(['setSelectedSort', 'setSearchQuery', 'addTask']);
 
     const getTasks = async () => {
@@ -71,7 +68,7 @@ export default {
     const searchQuery = computed(() => taskState.searchQuery);
     const sortOptions = computed(() => taskState.sortOptions);
 
-    getTasks()
+    getTasks();
 
     return {
       selectedSort,
@@ -82,7 +79,7 @@ export default {
       setSelectedSort,
       setSearchQuery,
       addTask,
-      sortedAndSearchedTasks
+      getSortedAndSearchedTasks
     }
   }
 
@@ -106,7 +103,7 @@ export default {
   //   }),
   //
   //   ...mapGetters({
-  //     sortedAndSearchedTasks: 'task/sortedAndSearchedTasks'
+  //     getSortedAndSearchedTasks: 'task/getSortedAndSearchedTasks'
   //   })
   // },
   //
@@ -131,6 +128,6 @@ export default {
 }
 
 .error {
-  color: $color-cardinal;
+  color: red;
 }
 </style>
