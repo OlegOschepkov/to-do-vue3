@@ -19,17 +19,19 @@
   </li>
 </template>
 
-<script>
-import { computed } from 'vue';
+<script lang="ts">
+import {computed, defineComponent, PropType} from 'vue';
 import { useRouter } from 'vue-router'
 import store from '@/store';
+import task from '@/types/task';
+import DateObjTypes from '@/types/dateobjtypes';
 
-export default {
+export default defineComponent({
   name: 'my-task',
 
   props: {
     task: {
-      type: Object,
+      type: Object as PropType<task>,
       required: true
     }
   },
@@ -38,22 +40,23 @@ export default {
     const router = useRouter();
 
     const prettifyDate = (computed(() => {
-      const dateObj = {};
       const date = new Date(props.task.date);
-      dateObj.year = date.toLocaleString('ru-RU', { year: 'numeric'});
-      dateObj.month = date.toLocaleString('ru-RU', { month: 'short'});
-      dateObj.weekday = date.toLocaleString('ru-RU', { weekday: 'short' });
-      dateObj.day = date.toLocaleString('ru-RU', { day: 'numeric' });
-      dateObj.time = date.toLocaleString('ru-RU', {hour: '2-digit', minute: '2-digit' });
+
+      const dateObj: DateObjTypes = {
+        year: date.toLocaleString('ru-RU', { year: 'numeric'}),
+        month: date.toLocaleString('ru-RU', { month: 'short'}),
+        weekday: date.toLocaleString('ru-RU', { weekday: 'short' }),
+        day: date.toLocaleString('ru-RU', { day: 'numeric' }),
+        time: date.toLocaleString('ru-RU', {hour: '2-digit', minute: '2-digit' }),
+      };
       return dateObj;
     }))
 
     const isOverdue = (computed(() => {
-      const today = Date.now();
-      return today > new Date(props.task.date)
+      return Date.now() > new Date(props.task.date).getTime()
     }))
 
-    const setTaskIdToEdit = (id) => {
+    const setTaskIdToEdit = (id: number) => {
       store.commit('task/setTaskIdToEdit', {id, setState: true});
       router.push(`/edit-task/${id}`)
     }
@@ -90,7 +93,7 @@ export default {
   //     this.$router.push(`/edit-task/${id}`)
   //   }
   // }
-}
+})
 </script>
 
 <style scoped lang="scss">

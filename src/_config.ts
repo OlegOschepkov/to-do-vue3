@@ -1,4 +1,4 @@
-export const links = [
+const links = [
   {
     icon: 'home-icon',
     url: '/',
@@ -13,4 +13,5 @@ export const links = [
   },
 ]
 
+export default links;
 // тут можно хранить какие-то общие конфиги, переменные и пр.

@@ -7,12 +7,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
-import { ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'my-datepicker',
 
   components: {
@@ -21,8 +21,8 @@ export default {
 
   props: {
     modelValue: {
-      type: [String, Number, Date],
-      default: '',
+      type: Date,
+      default: new Date(Date.now()),
     },
     id: {
       type: String,
@@ -35,11 +35,11 @@ export default {
   },
 
   setup(props, {emit}) {
-    const date = ref();
+    const date = ref<Date>();
 
-    date.value = props.modelValue ? props.modelValue : Date.now();
+    date.value = props.modelValue as Date ? props.modelValue : new Date(Date.now());
 
-    const updateDate = (e) => {
+    const updateDate = (e: Date) => {
       date.value = e;
       emit('update:modelValue', e);
     }
@@ -49,6 +49,7 @@ export default {
       updateDate
     }
   }
+});
 
   // data() {
   //   return {
@@ -70,7 +71,6 @@ export default {
   //     this.$emit('update:modelValue', e.getTime());
   //   },
   // }
-}
 </script>
 
 <style lang="scss">

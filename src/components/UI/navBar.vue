@@ -2,7 +2,7 @@
   <div class="navbar">
     <div class="navbar__wrapper container">
       <svg-icon name="logo-icon" width="64" height="64"/>
-      <router-link v-for="link in links" :key="link.key" :to="link.url" class="navbar__link" @mouseover.self="mouseOver" @mouseleave="mouseLeave" data-float-parent >
+      <router-link v-for="link in headerLinks" :key="link.key" :to="link.url" class="navbar__link" @mouseover.self="mouseOver" @mouseleave="mouseLeave" data-float-parent >
         <svg-icon :name="link.icon" width="64" height="64"/>
         <span class="navbar__text-wrapper" data-float-text><span class="navbar__text">{{ link.text }}</span></span>
       </router-link>
@@ -10,10 +10,13 @@
   </div>
 </template>
 
-<script>
-import svgIcon from '@/components/UI/svgIcon';
+<script lang="ts">
+import svgIcon from '@/components/UI/svgIcon.vue';
+import {defineComponent} from 'vue';
+import HeaderLinks from '@/types/header-links';
+import links from '@/_config';
 
-export default {
+export default defineComponent({
   name: 'nav-bar',
 
   components: {
@@ -21,25 +24,13 @@ export default {
   },
 
   setup() {
-    const links = [
-      {
-        icon: 'home-icon',
-        url: '/',
-        text: 'Главная страница',
-        key: 123
-      },
-      {
-        icon: 'tasks-icon',
-        url: '/todo-list',
-        text: 'Список задач',
-        key: 321
-      },
-    ];
+    const headerLinks: HeaderLinks[] = links;
 
     let floatingText;
 
-    const mouseOver = (e) => {
-      floatingText = e.target.querySelector('[data-float-text]');
+    const mouseOver = (e: Event) => {
+      const target = e.target as HTMLElement;
+      floatingText = target.querySelector('[data-float-text]') as HTMLElement;
       floatingText.style.maxWidth = floatingText.scrollWidth + 'px';
     }
 
@@ -48,7 +39,7 @@ export default {
     }
 
     return {
-      links,
+      headerLinks,
       mouseOver,
       mouseLeave
     }
@@ -71,7 +62,7 @@ export default {
   //     floatingText.style.maxWidth = 0;
   //   }
   // }
-}
+})
 </script>
 
 <style lang="scss">

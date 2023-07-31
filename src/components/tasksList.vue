@@ -12,9 +12,11 @@
   </ul>
 </template>
 
-<script>
-import myTask from '@/components/myTask';
+<script lang="ts">
+import myTask from '@/components/myTask.vue';
 import { useStore } from 'vuex'
+import {PropType} from 'vue';
+import task from '@/types/task';
 
 export default {
   name: "tasks-list",
@@ -25,14 +27,14 @@ export default {
 
   props: {
     tasks: {
-      type: Array,
+      type: Array as PropType<task[]>,
       required: true
     }
   },
 
   setup() {
     const store = useStore();
-    const deleteTask = (id) => store.commit('task/deleteTask', id);
+    const deleteTask = (id: number) => store.commit('task/deleteTask', id);
 
     return {
       deleteTask

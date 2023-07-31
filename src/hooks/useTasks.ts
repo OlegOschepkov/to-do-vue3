@@ -16,7 +16,7 @@ export const useTasks = () => {
             returnObj = JSON.parse(localStorage.getItem("todovue3tasks"));
             tasks.value = returnObj.tasks;
           }
-          resolve()
+          resolve(1)
         }, 1000)
       });
     } catch (e) {

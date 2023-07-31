@@ -15,8 +15,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import {defineComponent} from 'vue';
+
+export default defineComponent({
   name: 'my-input',
 
   props: {
@@ -35,8 +37,9 @@ export default {
   },
 
   setup(_, {emit}) {
-    const updateInput = (e) => {
-      emit('update:modelValue', e.target.value);
+    const updateInput = (e: Event) => {
+      const el = e.target as HTMLInputElement;
+      emit('update:modelValue', el.value as String);
     }
 
     return {
@@ -49,7 +52,7 @@ export default {
   //     this.$emit('update:modelValue', e.target.value);
   //   }
   // }
-}
+})
 </script>
 
 <style scoped lang="scss">

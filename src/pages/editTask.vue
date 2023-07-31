@@ -10,14 +10,15 @@
   </div>
 </template>
 
-<script>
-import taskForm from '@/components/taskForm';
+<script lang="ts">
+import taskForm from '@/components/taskForm.vue';
 import {useStore} from 'vuex';
-import {computed, ref} from 'vue';
+import {computed, defineComponent, ref} from 'vue';
 import {createNamespacedHelpers} from 'vuex-composition-helpers';
+import task from '@/types/task';
 const { useGetters, useActions } = createNamespacedHelpers( 'task'); // specific module name
 
-export default {
+export default defineComponent({
   name: "editTask",
 
   components: {
@@ -25,18 +26,18 @@ export default {
   },
 
   setup() {
-    const state = ref({ tasks: {} });
+    const state = ref<task>(null);
     const btnTitle = "Изменить";
     const store = useStore();
     const { getTaskById, getRouteState } = useGetters(['getTaskById', 'getRouteState']);
     const { fetchTasks } = useActions(['fetchTasks']);
 
     const getTasks = async () => {
-      state.value.tasks = await fetchTasks()
+      state.value = await fetchTasks()
     }
 
     // access a mutation
-    const editTask = (task) => {
+    const editTask = (task: task) => {
       store.commit('task/editTask', task);
       // тут надо сообщение вывести что ок.
     };
@@ -89,7 +90,8 @@ export default {
   //     editTask: 'task/editTask',
   //   }),
   // },
-}
+
+})
 </script>
 
 <style scoped>

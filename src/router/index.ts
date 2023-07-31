@@ -1,8 +1,8 @@
 import {createRouter, createWebHistory} from 'vue-router/dist/vue-router';
-import mainPage from '@/pages/mainPage';
-import todoList from '@/pages/todoList';
-import editTask from '@/pages/editTask';
-import notFound from '@/pages/notFound';
+import mainPage from '@/pages/mainPage.vue';
+import todoList from '@/pages/todoList.vue';
+import editTask from '@/pages/editTask.vue';
+import notFound from '@/pages/notFound.vue';
 
 const routes = [
   {
@@ -29,7 +29,7 @@ const routes = [
   },
 ]
 
-const router = new createRouter({
+const router = createRouter({
   routes,
   history: createWebHistory(process.env.BASE_URL)
 })

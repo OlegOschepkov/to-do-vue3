@@ -10,10 +10,12 @@
 </template>
 
 
-<script>
+<script lang="ts">
 import Multiselect from '@vueform/multiselect';
+import {defineComponent, PropType} from 'vue';
+import SortOptions from '@/types/sort-options';
 
-export default {
+export default defineComponent({
   name: 'my-select',
 
   components: {
@@ -25,14 +27,14 @@ export default {
       type: [String, Number]
     },
     options: {
-      type: Array,
+      type: Array as PropType<SortOptions[]>,
       default: () => {},
       required: true
     }
   },
 
   setup(_, {emit}) {
-    const selectedOption = (value) => {
+    const selectedOption = (value: SortOptions) => { // Ограничиваем возможности выбора указанными в SortOptions
       emit('update:modelValue', value)
     }
 
@@ -57,7 +59,7 @@ export default {
   //     this.$emit('update:modelValue', value)
   //   }
   // }
-}
+})
 </script>
 
 <style scoped lang="scss">

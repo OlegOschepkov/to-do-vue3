@@ -32,16 +32,17 @@
   </div>
 </template>
 
-<script>
-import tasksList from '@/components/tasksList';
-import taskForm from '@/components/taskForm';
-import mySelect from '@/components/UI/mySelect';
+<script lang="ts">
+import tasksList from '@/components/tasksList.vue';
+import taskForm from '@/components/taskForm.vue';
+import mySelect from '@/components/UI/mySelect.vue';
 import {useStore} from 'vuex';
-import {computed, ref} from 'vue';
+import {computed, defineComponent, ref} from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
+import task from '@/types/task';
 const { useGetters, useActions, useMutations } = createNamespacedHelpers( 'task'); // specific module name
 
-export default {
+export default defineComponent({
   name: "todo-list",
 
   components: {
@@ -51,7 +52,7 @@ export default {
   },
 
   setup() {
-    const state = ref({ tasks: {} });
+    const state = ref<task[]>(null);
     const store = useStore();
     const taskState = store.state.task;
     const { fetchTasks } = useActions(['fetchTasks']);
@@ -59,7 +60,7 @@ export default {
     const { setSelectedSort, setSearchQuery, addTask } = useMutations(['setSelectedSort', 'setSearchQuery', 'addTask']);
 
     const getTasks = async () => {
-      state.value.tasks = await fetchTasks()
+      state.value = await fetchTasks()
     }
 
     const isLoading = computed(() => taskState.isLoading);
@@ -118,7 +119,7 @@ export default {
   //     addTask: 'task/addTask',
   //   }),
   // }
-}
+})
 </script>
 
 <style>

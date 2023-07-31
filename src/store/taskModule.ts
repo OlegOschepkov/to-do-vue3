@@ -1,9 +1,11 @@
+import Task from '@/types/task';
+
 export const taskModule = {
   namespaced: true,
 
   state: () => ({
     tasks: [],
-    taskId: '',
+    taskId: null,
     selectedSort: '',
     searchQuery: '',
     isLoading: true,
@@ -58,7 +60,7 @@ export const taskModule = {
         await new Promise((resolve) => {
           setTimeout(() => {
             localStorage.setItem("todovue3tasks", JSON.stringify(state));
-            resolve()
+            resolve(1)
           }, 1000)
         });
       } catch (e) {
@@ -74,7 +76,7 @@ export const taskModule = {
           await new Promise((resolve) => {
             setTimeout(() => {
               localStorage.setItem("todovue3tasks", JSON.stringify(state));
-              resolve()
+              resolve(1)
             }, 1000)
           });
         } catch (e) {
@@ -91,7 +93,7 @@ export const taskModule = {
         await new Promise((resolve) => {
           setTimeout(() => {
             localStorage.setItem("todovue3tasks", JSON.stringify(state));
-            resolve()
+            resolve(1)
           }, 1000)
         });
       } catch (e) {
@@ -106,7 +108,7 @@ export const taskModule = {
         await new Promise((resolve) => {
           setTimeout(() => {
             localStorage.setItem("todovue3tasks", JSON.stringify(state));
-            resolve()
+            resolve(1)
           }, 1000)
         });
       } catch (e) {
@@ -119,7 +121,7 @@ export const taskModule = {
   getters: {
     // computed свойства, кешируемые, вычисляемые значение
     getSortedTasks(state) {
-      return [...state.tasks].sort((task1, task2) => {
+      return [...state.tasks].sort((task1: Task, task2: Task) => {
         if (typeof task1[state.selectedSort] === 'number') {
           return task1[state.selectedSort] - task2[state.selectedSort]
         } else {
@@ -148,7 +150,6 @@ export const taskModule = {
   actions: {
     // функции вызывающие мутации, сами они не должны менять state
     async fetchTasks({commit}) { //  {state, commit, ...}  = context
-      console.log(111)
       try {
         await new Promise((resolve) => {
           setTimeout(() => {
@@ -163,7 +164,7 @@ export const taskModule = {
             if (returnObj && returnObj.taskId ) {
               commit('setTaskIdToEdit', {id: returnObj.taskId, setState: false});
             }
-            resolve()
+            resolve(1)
           }, 1000)
         });
       } catch (e) {
