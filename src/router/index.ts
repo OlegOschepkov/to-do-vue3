@@ -1,10 +1,10 @@
-import {createRouter, createWebHistory} from 'vue-router/dist/vue-router';
+import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router/dist/vue-router';
 import mainPage from '@/pages/mainPage.vue';
 import todoList from '@/pages/todoList.vue';
 import editTask from '@/pages/editTask.vue';
 import notFound from '@/pages/notFound.vue';
 
-const routes = [
+const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home page',

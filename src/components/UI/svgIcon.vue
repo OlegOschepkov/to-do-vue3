@@ -17,7 +17,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const dynamicComponent = computed(() => defineAsyncComponent(() => import(`@/assets/svg/${props.name}.vue`)));
+    const dynamicComponent = computed((): [ReturnType<typeof defineAsyncComponent>] => defineAsyncComponent(() => import(`@/assets/svg/${props.name}.vue`)));
 
     return {
       dynamicComponent

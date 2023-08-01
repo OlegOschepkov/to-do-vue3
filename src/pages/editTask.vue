@@ -15,7 +15,7 @@ import taskForm from '@/components/taskForm.vue';
 import {useStore} from 'vuex';
 import {computed, defineComponent, ref} from 'vue';
 import {createNamespacedHelpers} from 'vuex-composition-helpers';
-import task from '@/types/task';
+import Task from '@/types/task';
 const { useGetters, useActions } = createNamespacedHelpers( 'task'); // specific module name
 
 export default defineComponent({
@@ -26,7 +26,7 @@ export default defineComponent({
   },
 
   setup() {
-    const state = ref<task>(null);
+    const state = ref<Task>(null);
     const btnTitle = "Изменить";
     const store = useStore();
     const { getTaskById, getRouteState } = useGetters(['getTaskById', 'getRouteState']);
@@ -37,15 +37,15 @@ export default defineComponent({
     }
 
     // access a mutation
-    const editTask = (task: task) => {
+    const editTask = (task: Task) => {
       store.commit('task/editTask', task);
       // тут надо сообщение вывести что ок.
     };
 
     // access a state in computed function / access a getter in computed function
-    const isLoading = computed(() => store.state.task.isLoading);
+    const isLoading = computed((): boolean => store.state.task.isLoading);
     // access a state in computed function / access a getter in computed function
-    const isError = computed(() => store.state.task.isError);
+    const isError = computed((): boolean => store.state.task.isError);
 
     if (!getRouteState.value) {
       getTasks();

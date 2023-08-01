@@ -1,9 +1,11 @@
 import Task from '@/types/task';
+import State from '@/types/state';
+import TaskIdToEdit from '@/types/taskIdToEdit';
 
 export const taskModule = {
   namespaced: true,
 
-  state: () => ({
+  state: (): State => ({
     tasks: [],
     taskId: null,
     selectedSort: '',
@@ -28,33 +30,33 @@ export const taskModule = {
   }),
 
   mutations: {
-    setTasks(state, payload) {
+    setTasks(state: State, payload: State) {
       if (payload && payload.tasks) {
         state.tasks = payload.tasks;
       }
     },
 
-    setLoading(state, payload) {
+    setLoading(state: State, payload: boolean) {
       state.isLoading = payload
     },
 
-    setError(state, payload) {
+    setError(state: State, payload: boolean) {
       state.isError = payload
     },
 
-    setSelectedSort(state, payload) {
+    setSelectedSort(state: State, payload: string) {
       state.selectedSort = payload
     },
 
-    setSearchQuery(state, payload) {
+    setSearchQuery(state: State, payload: string) {
       state.searchQuery = payload
     },
 
-    setRouteState(state) {
+    setRouteState(state: State) {
       state.isRouted = true
     },
 
-    async addTask(state, payload) {
+    async addTask(state: State, payload: Task) {
       state.tasks.push(payload);
       try {
         await new Promise((resolve) => {
@@ -64,12 +66,12 @@ export const taskModule = {
           }, 1000)
         });
       } catch (e) {
-        this.setError( true);
+        this.setError(state, true);
         console.log(e.message)
       }
     },
 
-    async setTaskIdToEdit(state, payload) {
+    async setTaskIdToEdit(state: State, payload: TaskIdToEdit) {
       state.taskId = payload.id;
       if (payload.setState) {
         try {
@@ -80,13 +82,13 @@ export const taskModule = {
             }, 1000)
           });
         } catch (e) {
-          this.setError( true);
+          this.setError(state, true);
           console.log(e.message)
         }
       }
     },
 
-    async editTask(state, payload) {
+    async editTask(state: State, payload: Task) {
       const modifiedTaskIndex = [...state.tasks].findIndex(item => item.id === payload.id);
       state.tasks[modifiedTaskIndex] = payload;
       try {
@@ -97,12 +99,12 @@ export const taskModule = {
           }, 1000)
         });
       } catch (e) {
-        this.setError( true);
+        this.setError(state, true);
         console.log(e.message)
       }
     },
 
-    async deleteTask(state, payload) {
+    async deleteTask(state: State, payload: number) {
       state.tasks = state.tasks.filter(item => item.id !== payload);
       try {
         await new Promise((resolve) => {
@@ -112,7 +114,7 @@ export const taskModule = {
           }, 1000)
         });
       } catch (e) {
-        this.setError( true);
+        this.setError(state, true);
         console.log(e.message)
       }
     },
@@ -120,8 +122,9 @@ export const taskModule = {
 
   getters: {
     // computed свойства, кешируемые, вычисляемые значение
-    getSortedTasks(state) {
+    getSortedTasks(state: State): Task[] {
       return [...state.tasks].sort((task1: Task, task2: Task) => {
+        console.log(state.selectedSort)
         if (typeof task1[state.selectedSort] === 'number') {
           return task1[state.selectedSort] - task2[state.selectedSort]
         } else {
@@ -130,11 +133,11 @@ export const taskModule = {
       })
     },
 
-    getRouteState (state) {
+    getRouteState (state: State): boolean {
       return state.isRouted;
     },
 
-    getTaskById(state) {
+    getTaskById(state: State): Task {
       return [...state.tasks].filter((task) => task.id === state.taskId)[0];
     },
 
@@ -142,7 +145,7 @@ export const taskModule = {
     //   return [...state.tasks].filter((task) => task.id === id)[0];
     // },
 
-    getSortedAndSearchedTasks(state, getters) {
+    getSortedAndSearchedTasks(state: State, getters): Task[] {
       return getters.getSortedTasks.filter((task) => task.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
     },
   },
@@ -162,7 +165,7 @@ export const taskModule = {
               commit('setRouteState');
             }
             if (returnObj && returnObj.taskId ) {
-              commit('setTaskIdToEdit', {id: returnObj.taskId, setState: false});
+              commit('setTaskIdToEdit', {id: returnObj.taskId, setState: false} as TaskIdToEdit);
             }
             resolve(1)
           }, 1000)

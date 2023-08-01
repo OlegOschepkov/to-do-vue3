@@ -24,7 +24,8 @@ import {computed, defineComponent, PropType} from 'vue';
 import { useRouter } from 'vue-router'
 import store from '@/store';
 import task from '@/types/task';
-import DateObjTypes from '@/types/dateobjtypes';
+import DateObjTypes from '@/types/dateObjTypes';
+import TaskIdToEdit from '@/types/taskIdToEdit';
 
 export default defineComponent({
   name: 'my-task',
@@ -39,25 +40,24 @@ export default defineComponent({
   setup(props) {
     const router = useRouter();
 
-    const prettifyDate = (computed(() => {
-      const date = new Date(props.task.date);
+    const prettifyDate = (computed((): DateObjTypes => {
+      const date = new Date(props.task.date as Date);
 
-      const dateObj: DateObjTypes = {
+      return {
         year: date.toLocaleString('ru-RU', { year: 'numeric'}),
         month: date.toLocaleString('ru-RU', { month: 'short'}),
         weekday: date.toLocaleString('ru-RU', { weekday: 'short' }),
         day: date.toLocaleString('ru-RU', { day: 'numeric' }),
         time: date.toLocaleString('ru-RU', {hour: '2-digit', minute: '2-digit' }),
       };
-      return dateObj;
     }))
 
-    const isOverdue = (computed(() => {
+    const isOverdue = (computed((): boolean => {
       return Date.now() > new Date(props.task.date).getTime()
     }))
 
     const setTaskIdToEdit = (id: number) => {
-      store.commit('task/setTaskIdToEdit', {id, setState: true});
+      store.commit('task/setTaskIdToEdit', {id, setState: true} as TaskIdToEdit);
       router.push(`/edit-task/${id}`)
     }
 

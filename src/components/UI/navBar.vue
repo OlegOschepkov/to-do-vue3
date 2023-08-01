@@ -13,7 +13,7 @@
 <script lang="ts">
 import svgIcon from '@/components/UI/svgIcon.vue';
 import {defineComponent} from 'vue';
-import HeaderLinks from '@/types/header-links';
+import HeaderLinks from '@/types/headerLinks';
 import links from '@/_config';
 
 export default defineComponent({
@@ -26,7 +26,7 @@ export default defineComponent({
   setup() {
     const headerLinks: HeaderLinks[] = links;
 
-    let floatingText;
+    let floatingText: HTMLElement;
 
     const mouseOver = (e: Event) => {
       const target = e.target as HTMLElement;
@@ -35,7 +35,7 @@ export default defineComponent({
     }
 
     const mouseLeave = () => {
-      floatingText.style.maxWidth = 0;
+      floatingText.style.maxWidth = '';
     }
 
     return {

@@ -39,7 +39,7 @@ import mySelect from '@/components/UI/mySelect.vue';
 import {useStore} from 'vuex';
 import {computed, defineComponent, ref} from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-import task from '@/types/task';
+import Task from '@/types/task';
 const { useGetters, useActions, useMutations } = createNamespacedHelpers( 'task'); // specific module name
 
 export default defineComponent({
@@ -52,9 +52,9 @@ export default defineComponent({
   },
 
   setup() {
-    const state = ref<task[]>(null);
+    const state = ref<Task[]>(null);
     const store = useStore();
-    const taskState = store.state.task;
+    const taskState = store.state.task; // достаем именованный стейт
     const { fetchTasks } = useActions(['fetchTasks']);
     const { getSortedAndSearchedTasks } = useGetters(['getSortedAndSearchedTasks']);
     const { setSelectedSort, setSearchQuery, addTask } = useMutations(['setSelectedSort', 'setSearchQuery', 'addTask']);
@@ -63,11 +63,11 @@ export default defineComponent({
       state.value = await fetchTasks()
     }
 
-    const isLoading = computed(() => taskState.isLoading);
-    const isError = computed(() => taskState.isError);
-    const selectedSort = computed(() => taskState.selectedSort);
-    const searchQuery = computed(() => taskState.searchQuery);
-    const sortOptions = computed(() => taskState.sortOptions);
+    const isLoading = computed((): boolean => taskState.isLoading);
+    const isError = computed((): boolean => taskState.isError);
+    const selectedSort = computed((): string => taskState.selectedSort);
+    const searchQuery = computed((): string => taskState.searchQuery);
+    const sortOptions = computed((): string[] => taskState.sortOptions);
 
     getTasks();
 

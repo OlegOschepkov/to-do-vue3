@@ -13,7 +13,7 @@
 <script lang="ts">
 import Multiselect from '@vueform/multiselect';
 import {defineComponent, PropType} from 'vue';
-import SortOptions from '@/types/sort-options';
+import SortOptions from '@/types/sortOptions';
 
 export default defineComponent({
   name: 'my-select',

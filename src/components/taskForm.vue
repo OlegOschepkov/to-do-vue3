@@ -20,6 +20,7 @@ import myDatepicker from '@/components/UI/myDatepicker.vue';
 import myButton from '@/components/UI/myButton.vue';
 import {defineComponent, PropType, reactive} from 'vue';
 import EditTask from '@/types/editTask';
+import Task from '@/types/task';
 
 export default defineComponent({
   name: 'task-form',
@@ -32,8 +33,7 @@ export default defineComponent({
 
   props: {
     initialData: {
-      type: Object as PropType<EditTask>,
-      required: false,
+      type: Object as PropType<EditTask>
     },
   },
 
@@ -49,8 +49,8 @@ export default defineComponent({
     const addTask = () => {
       if (!props.initialData) {
         if (formData.date && formData.title.length > 0) {
-          let newTask = {
-            id: new Date(Date.now()),
+          let newTask: Task = {
+            id: Date.now(),
             date: formData.date,
             title: formData.title
           }
@@ -62,8 +62,7 @@ export default defineComponent({
           formData.title = '';
         }
       } else {
-
-        let editingTask = {
+        let editingTask: Task = {
           id: formData.id,
           date: formData.date,
           title: formData.title
