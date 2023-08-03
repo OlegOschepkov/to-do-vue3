@@ -10,10 +10,10 @@ export const useTasks = () => {
       await new Promise((resolve) => {
         setTimeout(() => {
           let returnObj;
-          if (!localStorage["todovue3tasks"]) {
+          if (!localStorage['todovue3tasks']) {
             localStorage.setItem('todovue3tasks', '');
           } else {
-            returnObj = JSON.parse(localStorage.getItem("todovue3tasks"));
+            returnObj = JSON.parse(localStorage.getItem('todovue3tasks'));
             tasks.value = returnObj.tasks;
           }
           resolve(1)

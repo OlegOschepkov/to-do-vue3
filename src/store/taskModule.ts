@@ -1,13 +1,15 @@
 import Task from '@/types/task';
 import State from '@/types/state';
-import TaskIdToEdit from '@/types/taskIdToEdit';
+import db from '@/firebase';
+import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc } from 'firebase/firestore';
+const stateCollectionRef = collection(db, "State");
 
 export const taskModule = {
   namespaced: true,
 
   state: (): State => ({
     tasks: [],
-    taskId: null,
+    taskId: '',
     selectedSort: '',
     searchQuery: '',
     isLoading: true,
@@ -56,75 +58,28 @@ export const taskModule = {
       state.isRouted = true
     },
 
-    async addTask(state: State, payload: Task) {
+    setTaskIdToEdit (state: State, payload: string) {
+      state.taskId = payload
+    },
+
+    addTaskToState(state: State, payload: Task) {
       state.tasks.push(payload);
-      try {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            localStorage.setItem("todovue3tasks", JSON.stringify(state));
-            resolve(1)
-          }, 1000)
-        });
-      } catch (e) {
-        this.setError(state, true);
-        console.log(e.message)
-      }
     },
 
-    async setTaskIdToEdit(state: State, payload: TaskIdToEdit) {
-      state.taskId = payload.id;
-      if (payload.setState) {
-        try {
-          await new Promise((resolve) => {
-            setTimeout(() => {
-              localStorage.setItem("todovue3tasks", JSON.stringify(state));
-              resolve(1)
-            }, 1000)
-          });
-        } catch (e) {
-          this.setError(state, true);
-          console.log(e.message)
-        }
-      }
-    },
-
-    async editTask(state: State, payload: Task) {
+    modifyTaskInState(state: State, payload: Task) {
       const modifiedTaskIndex = [...state.tasks].findIndex(item => item.id === payload.id);
       state.tasks[modifiedTaskIndex] = payload;
-      try {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            localStorage.setItem("todovue3tasks", JSON.stringify(state));
-            resolve(1)
-          }, 1000)
-        });
-      } catch (e) {
-        this.setError(state, true);
-        console.log(e.message)
-      }
     },
 
-    async deleteTask(state: State, payload: number) {
-      state.tasks = state.tasks.filter(item => item.id !== payload);
-      try {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            localStorage.setItem("todovue3tasks", JSON.stringify(state));
-            resolve(1)
-          }, 1000)
-        });
-      } catch (e) {
-        this.setError(state, true);
-        console.log(e.message)
-      }
-    },
+    deleteTaskFromState(state: State, payload: Task) {
+      state.tasks = state.tasks.filter(item => item.id !== payload.id);
+    }
   },
 
   getters: {
     // computed свойства, кешируемые, вычисляемые значение
     getSortedTasks(state: State): Task[] {
       return [...state.tasks].sort((task1: Task, task2: Task) => {
-        console.log(state.selectedSort)
         if (typeof task1[state.selectedSort] === 'number') {
           return task1[state.selectedSort] - task2[state.selectedSort]
         } else {
@@ -138,6 +93,7 @@ export const taskModule = {
     },
 
     getTaskById(state: State): Task {
+      console.log(state.taskId)
       return [...state.tasks].filter((task) => task.id === state.taskId)[0];
     },
 
@@ -152,24 +108,25 @@ export const taskModule = {
 
   actions: {
     // функции вызывающие мутации, сами они не должны менять state
-    async fetchTasks({commit}) { //  {state, commit, ...}  = context
+    async fetchTasks({commit, dispatch}) { //  {state, commit, ...}  = context
       try {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            let returnObj;
-            if (!localStorage["todovue3tasks"]) {
-              localStorage.setItem('todovue3tasks', '');
-            } else {
-              returnObj = JSON.parse(localStorage.getItem("todovue3tasks"));
-              commit('setTasks', returnObj);
-              commit('setRouteState');
-            }
-            if (returnObj && returnObj.taskId ) {
-              commit('setTaskIdToEdit', {id: returnObj.taskId, setState: false} as TaskIdToEdit);
-            }
-            resolve(1)
-          }, 1000)
+        const querySnapshot = await getDocs(stateCollectionRef);
+        const tempObjForTasks = {
+          tasks: [] as Task[]
+        };
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          const tempTask: Task = {
+            id: doc.id,
+            date: doc.data().date.toDate(),
+            title: doc.data().title
+          }
+          tempObjForTasks.tasks.push(tempTask);
         });
+
+        commit('setTasks', tempObjForTasks);
+        commit('setRouteState');
+        dispatch('startListener');
       } catch (e) {
         commit('setError', true);
         console.log(e.message)
@@ -177,5 +134,72 @@ export const taskModule = {
         commit('setLoading', false);
       }
     },
+
+    startListener({state, commit}) {
+      let startListening = false;
+      state.unsubscribe = onSnapshot(stateCollectionRef, { includeMetadataChanges: false }, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          const tempTask: Task = {
+            id: change.doc.id,
+            date: change.doc.data().date.toDate(),
+            title: change.doc.data().title
+          }
+          if (startListening) {
+            if (change.type === "added") {
+              commit('addTaskToState', tempTask);
+            }
+            if (change.type === "modified") {
+              commit('modifyTaskInState', tempTask);
+            }
+            if (change.type === "removed") {
+              commit('deleteTaskFromState', tempTask);
+            }
+          }
+        });
+        startListening = true
+        // TODO добавить Loading
+      });
+    },
+
+    stopListener({state}) {
+      state.unsubscribe();
+    },
+
+    async addTask({ commit, state }, payload: Task) {
+      try {
+        await addDoc(stateCollectionRef, {
+          title: payload.title,
+          date: payload.date,
+        });
+        // TODO добавить Loading
+      } catch (e) {
+        this.setError(state, true);
+        console.log(e.message)
+      }
+    },
+
+    async deleteTask({ commit, state }, payload: string) {
+      try {
+        await deleteDoc(doc(stateCollectionRef, payload));
+        // TODO добавить Loading
+      } catch (e) {
+        this.setError(state, true);
+        console.log(e.message)
+      }
+    },
+
+    async editTask({ commit, state }, payload: Task) {
+      try {
+        const modifiedTask = doc(stateCollectionRef, payload.id);
+        await updateDoc(modifiedTask, {
+          date: payload.date,
+          title: payload.title
+        });
+      } catch (e) {
+        this.setError(state, true);
+        console.log(e.message)
+      }
+    },
+
   }
 }

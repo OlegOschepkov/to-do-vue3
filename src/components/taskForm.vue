@@ -21,6 +21,7 @@ import myButton from '@/components/UI/myButton.vue';
 import {defineComponent, PropType, reactive} from 'vue';
 import EditTask from '@/types/editTask';
 import Task from '@/types/task';
+// import { v4 as uuidv4 } from "uuid";
 
 export default defineComponent({
   name: 'task-form',
@@ -49,8 +50,9 @@ export default defineComponent({
     const addTask = () => {
       if (!props.initialData) {
         if (formData.date && formData.title.length > 0) {
+          // const date =  firebase.firestore.Timestamp.fromDate (formData.date);
           let newTask: Task = {
-            id: Date.now(),
+            id: 'temporal-will-be-rewritten-by-firebase',
             date: formData.date,
             title: formData.title
           }

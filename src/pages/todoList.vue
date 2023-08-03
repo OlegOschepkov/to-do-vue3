@@ -37,7 +37,7 @@ import tasksList from '@/components/tasksList.vue';
 import taskForm from '@/components/taskForm.vue';
 import mySelect from '@/components/UI/mySelect.vue';
 import {useStore} from 'vuex';
-import {computed, defineComponent, ref} from 'vue';
+import {computed, defineComponent, onUnmounted, ref} from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 import Task from '@/types/task';
 const { useGetters, useActions, useMutations } = createNamespacedHelpers( 'task'); // specific module name
@@ -55,9 +55,9 @@ export default defineComponent({
     const state = ref<Task[]>(null);
     const store = useStore();
     const taskState = store.state.task; // достаем именованный стейт
-    const { fetchTasks } = useActions(['fetchTasks']);
+    const { fetchTasks, addTask, stopListener } = useActions(['fetchTasks', 'addTask', 'stopListener']);
     const { getSortedAndSearchedTasks } = useGetters(['getSortedAndSearchedTasks']);
-    const { setSelectedSort, setSearchQuery, addTask } = useMutations(['setSelectedSort', 'setSearchQuery', 'addTask']);
+    const { setSelectedSort, setSearchQuery } = useMutations(['setSelectedSort', 'setSearchQuery']);
 
     const getTasks = async () => {
       state.value = await fetchTasks()
@@ -70,6 +70,10 @@ export default defineComponent({
     const sortOptions = computed((): string[] => taskState.sortOptions);
 
     getTasks();
+
+    onUnmounted(() => {
+      stopListener()
+    });
 
     return {
       selectedSort,

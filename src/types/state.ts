@@ -3,7 +3,7 @@ import SortOptions from '@/types/sortOptions';
 
 interface State {
   tasks: Task[],
-  taskId: number,
+  taskId: string,
   selectedSort: string,
   searchQuery: string,
   isLoading: boolean,

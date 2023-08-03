@@ -16,10 +16,11 @@ import {useStore} from 'vuex';
 import {computed, defineComponent, ref} from 'vue';
 import {createNamespacedHelpers} from 'vuex-composition-helpers';
 import Task from '@/types/task';
-const { useGetters, useActions } = createNamespacedHelpers( 'task'); // specific module name
+const { useGetters, useActions, useMutations } = createNamespacedHelpers( 'task'); // specific module name
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
-  name: "editTask",
+  name: 'editTask',
 
   components: {
     taskForm
@@ -27,20 +28,25 @@ export default defineComponent({
 
   setup() {
     const state = ref<Task>(null);
-    const btnTitle = "Изменить";
+    const route = useRoute();
+    const btnTitle = 'Изменить';
     const store = useStore();
     const { getTaskById, getRouteState } = useGetters(['getTaskById', 'getRouteState']);
-    const { fetchTasks } = useActions(['fetchTasks']);
+    const { fetchTasks, editTask } = useActions(['fetchTasks', 'editTask']);
+    const { setTaskIdToEdit } = useMutations(['setTaskIdToEdit']);
 
     const getTasks = async () => {
       state.value = await fetchTasks()
     }
 
     // access a mutation
-    const editTask = (task: Task) => {
-      store.commit('task/editTask', task);
-      // тут надо сообщение вывести что ок.
-    };
+    // const editTask1 = (task: Task) => {
+    //   console.log(task)
+    //   editTask(task)
+    //   // TODO тут надо сообщение вывести что ок.
+    // };
+
+    setTaskIdToEdit(route.params.taskId);
 
     // access a state in computed function / access a getter in computed function
     const isLoading = computed((): boolean => store.state.task.isLoading);

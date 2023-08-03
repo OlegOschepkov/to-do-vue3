@@ -20,4 +20,4 @@ import '@/assets/scss/style.scss';
 app
   .use(router)
   .use(store)
-  .mount("#app");
+  .mount('#app');

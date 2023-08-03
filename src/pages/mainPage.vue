@@ -26,7 +26,7 @@
     <p class="text">Ветки и их особенности</p>
     <ul class="list">
       <li class="list__element">main - основная ветка, в ней лежит последняя версия.</li>
-      <li class="list__element"><span>options-api&nbsp;<svg-icon name="check-icon" width="16" height="16"/>&nbsp;&#8594; composition-api&nbsp;<svg-icon name="check-icon" width="16" height="16"/>&nbsp;&#8594; typescript&nbsp;<svg-icon name="check-icon" width="16" height="16"/>&nbsp;&#8594; firebase(TODO) &#8594; testing(TODO ?) названия говорят сами за себя</span></li>
+      <li class="list__element"><span>options-api&nbsp;<svg-icon name="check-icon" width="16" height="16"/>&nbsp;&#8594; composition-api&nbsp;<svg-icon name="check-icon" width="16" height="16"/>&nbsp;&#8594; typescript&nbsp;<svg-icon name="check-icon" width="16" height="16"/>&nbsp;&#8594; firebase(TODO) &#8594; testing(TODO) &#8594; vite (TODO) &#8594; refactor (вероятно будет нужен) &#8594; GraphQL(если смогу настроить бекенд) названия говорят сами за себя</span></li>
       <li class="list__element">improvement(TODO) - различные улучшения, оптимизации, редизайн.</li>
     </ul>
     <p class="text">Что было реализовано в приложении</p>

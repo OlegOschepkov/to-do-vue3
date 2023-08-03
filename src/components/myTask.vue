@@ -11,10 +11,10 @@
       </div>
       <p class="task-list__year">{{prettifyDate.year}}</p>
     </div>
-    <p class="task-list__title">{{task.title}}</p>
+    <p class="task-list__title">{{task.title}} - {{ task.id}}</p>
     <div class="task-list__btns">
       <button class="btn" type="button" @click="$emit('deleteTask', task.id)">Удалить</button>
-      <button class="btn" type="button" @click="setTaskIdToEdit(task.id)">Редактировать</button>
+      <button class="btn" type="button" @click="gotToTaskEditPage(task.id)">Редактировать</button>
     </div>
   </li>
 </template>
@@ -22,10 +22,10 @@
 <script lang="ts">
 import {computed, defineComponent, PropType} from 'vue';
 import { useRouter } from 'vue-router'
-import store from '@/store';
 import task from '@/types/task';
 import DateObjTypes from '@/types/dateObjTypes';
-import TaskIdToEdit from '@/types/taskIdToEdit';
+import {createNamespacedHelpers} from 'vuex-composition-helpers';
+const { useMutations } = createNamespacedHelpers( 'task'); // specific module name
 
 export default defineComponent({
   name: 'my-task',
@@ -39,6 +39,7 @@ export default defineComponent({
 
   setup(props) {
     const router = useRouter();
+    const { setTaskIdToEdit } = useMutations(['setTaskIdToEdit']);
 
     const prettifyDate = (computed((): DateObjTypes => {
       const date = new Date(props.task.date as Date);
@@ -56,15 +57,15 @@ export default defineComponent({
       return Date.now() > new Date(props.task.date).getTime()
     }))
 
-    const setTaskIdToEdit = (id: number) => {
-      store.commit('task/setTaskIdToEdit', {id, setState: true} as TaskIdToEdit);
+    const gotToTaskEditPage = (id: string) => {
+      setTaskIdToEdit(id)
       router.push(`/edit-task/${id}`)
     }
 
     return {
       prettifyDate,
       isOverdue,
-      setTaskIdToEdit
+      gotToTaskEditPage
     }
   }
 

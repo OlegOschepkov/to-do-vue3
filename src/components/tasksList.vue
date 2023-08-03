@@ -14,9 +14,10 @@
 
 <script lang="ts">
 import myTask from '@/components/myTask.vue';
-import { useStore } from 'vuex'
 import {PropType} from 'vue';
 import task from '@/types/task';
+import {createNamespacedHelpers} from 'vuex-composition-helpers';
+const { useActions } = createNamespacedHelpers( 'task'); // specific module name
 
 export default {
   name: "tasks-list",
@@ -33,8 +34,7 @@ export default {
   },
 
   setup() {
-    const store = useStore();
-    const deleteTask = (id: number) => store.commit('task/deleteTask', id);
+    const { deleteTask } = useActions(['deleteTask']);
 
     return {
       deleteTask
