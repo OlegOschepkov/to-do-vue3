@@ -11,8 +11,17 @@
       </div>
       <p class="task-list__year">{{prettifyDate.year}}</p>
     </div>
-    <p class="task-list__title">{{task.title}} - {{ task.id}}</p>
+    <div class="task-list__text-wrapper">
+      <p class="task-list__title">{{task.title}}</p>
+      <p class="task-list__title">{{ task.id}}</p>
+      <p class="task-list__importance">{{task.importance}}</p>
+    </div>
     <div class="task-list__btns">
+      <my-checkbox
+        :id="checkboxDescription.id"
+        :checked=false
+        :label="checkboxDescription.label"
+      />
       <button class="btn" type="button" @click="$emit('deleteTask', task.id)">Удалить</button>
       <button class="btn" type="button" @click="gotToTaskEditPage(task.id)">Редактировать</button>
     </div>
@@ -21,18 +30,24 @@
 
 <script lang="ts">
 import {computed, defineComponent, PropType} from 'vue';
+import myCheckbox from '@/components/UI/basicCheckbox.vue';
 import { useRouter } from 'vue-router'
-import task from '@/types/task';
+import Task from '@/types/task';
 import DateObjTypes from '@/types/dateObjTypes';
 import {createNamespacedHelpers} from 'vuex-composition-helpers';
 const { useMutations } = createNamespacedHelpers( 'task'); // specific module name
+import { v4 as uuidv4 } from "uuid";
 
 export default defineComponent({
-  name: 'my-task',
+  name: 'basicTask',
+
+  components: {
+    myCheckbox
+  },
 
   props: {
     task: {
-      type: Object as PropType<task>,
+      type: Object as PropType<Task>,
       required: true
     }
   },
@@ -40,6 +55,12 @@ export default defineComponent({
   setup(props) {
     const router = useRouter();
     const { setTaskIdToEdit } = useMutations(['setTaskIdToEdit']);
+
+    const checkboxDescription = {
+      label: 'готово',
+      id: uuidv4(),
+      name: 'checkbox'
+    }
 
     const prettifyDate = (computed((): DateObjTypes => {
       const date = new Date(props.task.date as Date);
@@ -63,6 +84,7 @@ export default defineComponent({
     }
 
     return {
+      checkboxDescription,
       prettifyDate,
       isOverdue,
       gotToTaskEditPage
@@ -174,8 +196,12 @@ export default defineComponent({
     line-height: 150%;
   }
 
-  &__title {
+  &__text-wrapper {
     width: 100%;
+  }
+
+  &__importance {
+    font-style: italic;
   }
 }
 

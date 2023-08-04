@@ -1,35 +1,53 @@
 <template>
-  <form @submit.prevent>
-    <my-datepicker
-        id="taskDate"
-        label="Дата:"
+  <form
+    @submit.prevent
+  >
+    <fieldset>
+      <legend>{{groupLabel}}</legend>
+      <basicDatepicker
+        :id="datepicker.id"
+        :label="datepicker.label"
         v-model="formData.date"
-    />
-    <my-input
-        id="taskName"
-        label="Описание:"
-        v-model="formData.title"
-        placeholder="Введите описание"/>
-    <my-button type="submit" @click="addTask">{{ btnTitle }}</my-button>
+      />
+      <basicTextInput
+        :name="input.name"
+        :id="input.id"
+        :label="input.label"
+        v-model="formData.title"/>
+    </fieldset>
+    <fieldset>
+      <legend>{{ radio.groupLabel }}</legend>
+      <basicRadio
+        v-for="el in radio.group"
+        :id="el.id"
+        :value="el.value"
+        :label="el.label"
+        :name="el.name"
+        :key="el.id"
+        v-model="formData.importance"/>
+    </fieldset>
+    <basicButton type="submit" @click="addTask">{{ btnTitle }}</basicButton>
   </form>
 </template>
 
 <script lang="ts">
-import myInput from '@/components/UI/myInput.vue';
-import myDatepicker from '@/components/UI/myDatepicker.vue';
-import myButton from '@/components/UI/myButton.vue';
-import {defineComponent, PropType, reactive} from 'vue';
+import basicTextInput from '@/components/UI/basicTextInput.vue';
+import basicRadio from '@/components/UI/basicRadio.vue';
+import basicDatepicker from '@/components/UI/basicDatepicker.vue';
+import basicButton from '@/components/UI/basicButton.vue';
+import {defineComponent, PropType, reactive, toRefs} from 'vue';
 import EditTask from '@/types/editTask';
 import Task from '@/types/task';
-// import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 export default defineComponent({
   name: 'task-form',
 
   components: {
-    myInput,
-    myButton,
-    myDatepicker
+    basicTextInput,
+    basicRadio,
+    basicButton,
+    basicDatepicker
   },
 
   props: {
@@ -43,18 +61,55 @@ export default defineComponent({
       id: props.initialData && props.initialData.id ? props.initialData.id : null,
       date: props.initialData && props.initialData.date ? props.initialData.date : new Date(Date.now()),
       title: props.initialData && props.initialData.title ? props.initialData.title : '',
+      importance: props.initialData && props.initialData.importance ? props.initialData.importance : '',
     });
+
+    const formDescription = {
+      groupLabel: 'ВВедите время и описание',
+      datepicker: {
+        label: 'Дата:',
+        id: uuidv4(),
+      },
+      input: {
+        label: 'Описание:',
+        id: uuidv4(),
+        name: 'taskName',
+      },
+      radio: {
+        groupLabel: 'Важность',
+        group: [
+          {
+            label: 'Высокая',
+            id: uuidv4(),
+            name: 'importance',
+            value: '2'
+          },
+          {
+            label: 'Средняя',
+            id: uuidv4(),
+            name: 'importance',
+            value: '1'
+          },
+          {
+            label: 'Низкая',
+            id: uuidv4(),
+            name: 'importance',
+            value:  '0'
+          },
+        ]
+      }
+    }
 
     const btnTitle = props.initialData && props.initialData.btnTitle ? props.initialData.btnTitle : 'Создать';
 
     const addTask = () => {
       if (!props.initialData) {
         if (formData.date && formData.title.length > 0) {
-          // const date =  firebase.firestore.Timestamp.fromDate (formData.date);
           let newTask: Task = {
             id: 'temporal-will-be-rewritten-by-firebase',
             date: formData.date,
-            title: formData.title
+            title: formData.title,
+            importance: formData.importance
           }
 
           emit('addTask', newTask);
@@ -67,7 +122,8 @@ export default defineComponent({
         let editingTask: Task = {
           id: formData.id,
           date: formData.date,
-          title: formData.title
+          title: formData.title,
+          importance: formData.importance
         }
 
         emit('editTask', editingTask);
@@ -75,10 +131,10 @@ export default defineComponent({
     }
 
     return {
+      ...toRefs(formDescription),
       btnTitle,
       formData,
       addTask
-      // ...toRefs(task) получить доступ к отдельным свойствам
     }
 
     // data () {

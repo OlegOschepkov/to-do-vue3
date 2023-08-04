@@ -4,7 +4,7 @@
     <p class="text">Список Задач позволяет создавать, редактировать и удалять задачи. Предусмотрена возможность фильтрации по названию и сортировки по дате или названию. Просроченные задачи автоматически закрепляются вверху списка</p>
     <p class="text">При написании проекта был применен ряд, как мне кажется, "лишних" приемов, или просто написан, но не применен, это вызвано тем что проект учебный и ставит перед собой цель изучение Vue3, а не написание коммерческого приложения. Также накладывает свой отпечаток отсутствие наставника или какого-то курса, который полностью ответил бы на все мои вопросы.</p>
     <p class="text">Проект подготовлен по материалам youtube(<a href="https://www.youtube.com/@UlbiTV">UlbiTV</a>, <a
-      href="https://www.youtube.com/@NetNinja">NetNinja</a> и другие), stackoverflow, <a href="https://www.vuemastery.com">vueMastery</a>, документации и пр.</p>
+      href="https://www.youtube.com/@NetNinja">NetNinja</a> и другие), stackoverflow, <a href="https://medium.com">https://medium.com</a>, <a href="https://www.vuemastery.com">vueMastery</a>, документации и пр.</p>
     <p class="text">Какие технологии и плагины использовались</p>
     <ul class="list">
       <li class="list__element">Vue3</li>

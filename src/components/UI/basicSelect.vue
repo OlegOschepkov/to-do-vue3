@@ -16,7 +16,7 @@ import {defineComponent, PropType} from 'vue';
 import SortOptions from '@/types/sortOptions';
 
 export default defineComponent({
-  name: 'my-select',
+  name: 'basicSelect',
 
   components: {
     Multiselect

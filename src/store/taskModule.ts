@@ -119,7 +119,8 @@ export const taskModule = {
           const tempTask: Task = {
             id: doc.id,
             date: doc.data().date.toDate(),
-            title: doc.data().title
+            title: doc.data().title,
+            importance: doc.data().importance
           }
           tempObjForTasks.tasks.push(tempTask);
         });
@@ -142,7 +143,8 @@ export const taskModule = {
           const tempTask: Task = {
             id: change.doc.id,
             date: change.doc.data().date.toDate(),
-            title: change.doc.data().title
+            title: change.doc.data().title,
+            importance: change.doc.data().importance
           }
           if (startListening) {
             if (change.type === "added") {
@@ -170,6 +172,7 @@ export const taskModule = {
         await addDoc(stateCollectionRef, {
           title: payload.title,
           date: payload.date,
+          importance: payload.importance
         });
         // TODO добавить Loading
       } catch (e) {
@@ -193,7 +196,8 @@ export const taskModule = {
         const modifiedTask = doc(stateCollectionRef, payload.id);
         await updateDoc(modifiedTask, {
           date: payload.date,
-          title: payload.title
+          title: payload.title,
+          importance: payload.importance
         });
       } catch (e) {
         this.setError(state, true);

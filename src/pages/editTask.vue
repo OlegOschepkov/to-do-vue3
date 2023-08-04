@@ -6,7 +6,7 @@
     <h2 class="title title--h2" v-if="isLoading">
       Идет загрузка...
     </h2>
-    <task-form v-else :initialData="{id: getTaskById.id, date: getTaskById.date, title: getTaskById.title, btnTitle}" @editTask="editTask"/>
+    <task-form v-else :initialData="{id: getTaskById.id, date: getTaskById.date, title: getTaskById.title, importance: getTaskById.importance, btnTitle}" @editTask="editTask"/>
   </div>
 </template>
 

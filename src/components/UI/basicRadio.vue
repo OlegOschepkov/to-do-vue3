@@ -1,16 +1,17 @@
 <template>
-  <div class="input-element">
-    <label
-        :for="id"
+  <div class="radio-element">
+    <input
+      type="radio"
+      v-bind="$attrs"
+      :id="id"
+      :value="value"
+      :checked="modelValue === value"
+      @change="updateInput"
     >
-      <input
-          :id="id"
-          :value="modelValue"
-          @input="updateInput"
-          placeholder=""
-          type="text">
-
-      <span class="input-element__label">{{ label }}</span>
+    <label v-if="label"
+      :for="id"
+    >
+    {{ label }}
     </label>
   </div>
 </template>
@@ -19,12 +20,16 @@
 import {defineComponent} from 'vue';
 
 export default defineComponent({
-  name: 'my-input',
+  name: 'basicRadio',
 
   props: {
     modelValue: {
       type: [String, Number],
       default: '',
+    },
+    value: {
+      type: [String, Number],
+      required: true,
     },
     id: {
       type: String,
@@ -32,14 +37,14 @@ export default defineComponent({
     },
     label: {
       type: String,
-      required: true,
+      default: '',
     }
   },
 
   setup(_, {emit}) {
     const updateInput = (e: Event) => {
       const el = e.target as HTMLInputElement;
-      emit('update:modelValue', el.value as String);
+      emit('update:modelValue', el.value);
     }
 
     return {

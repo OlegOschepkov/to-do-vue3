@@ -13,7 +13,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
-  name: 'my-datepicker',
+  name: 'basicDatepicker',
 
   components: {
     VueDatePicker

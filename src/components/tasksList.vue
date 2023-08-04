@@ -2,7 +2,7 @@
   <h1 class="title">Список задач</h1>
   <ul class="tasks-list">
     <transition-group name="task-list">
-      <my-task
+      <basicTask
           v-for="task in tasks"
           :task="task"
           :key="task.id"
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import myTask from '@/components/myTask.vue';
+import basicTask from '@/components/basicTask.vue';
 import {PropType} from 'vue';
 import task from '@/types/task';
 import {createNamespacedHelpers} from 'vuex-composition-helpers';
@@ -23,7 +23,7 @@ export default {
   name: "tasks-list",
 
   components: {
-    myTask
+    basicTask
   },
 
   props: {

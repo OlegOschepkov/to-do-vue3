@@ -1,12 +1,12 @@
 <template>
   <div class="page">
-    <my-input
+    <basicTextInput
         id="search"
         label="поиск"
         :model-value="searchQuery"
         @update:model-value="setSearchQuery"
     />
-    <my-select
+    <basicSelect
         :model-value="selectedSort"
         @update:model-value="setSelectedSort"
         :options="sortOptions"
@@ -35,7 +35,7 @@
 <script lang="ts">
 import tasksList from '@/components/tasksList.vue';
 import taskForm from '@/components/taskForm.vue';
-import mySelect from '@/components/UI/mySelect.vue';
+import basicSelect from '@/components/UI/basicSelect.vue';
 import {useStore} from 'vuex';
 import {computed, defineComponent, onUnmounted, ref} from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
@@ -47,7 +47,7 @@ export default defineComponent({
 
   components: {
     tasksList,
-    mySelect,
+    basicSelect,
     taskForm
   },
 
