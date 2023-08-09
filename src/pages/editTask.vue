@@ -1,5 +1,9 @@
 <template>
   <div class="page">
+    <h2 class="title title--h2">
+      Редактирование задачи
+    </h2>
+
     <h2 class="title title--h2 error" v-if="isError">
       Произошла ошибка, попробуйте еще раз
     </h2>

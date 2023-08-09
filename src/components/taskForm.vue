@@ -1,32 +1,32 @@
 <template>
   <form
-    @submit.prevent
+    @submit="onSubmit"
   >
     <fieldset>
       <legend>{{groupLabel}}</legend>
       <basicDatepicker
         :id="datepicker.id"
         :label="datepicker.label"
-        v-model="formData.date"
+        :name="datepicker.name"
       />
       <basicTextInput
         :name="input.name"
         :id="input.id"
-        :label="input.label"
-        v-model="formData.title"/>
+        :label="input.label"/>
     </fieldset>
     <fieldset>
       <legend>{{ radio.groupLabel }}</legend>
       <basicRadio
         v-for="el in radio.group"
         :id="el.id"
-        :value="el.value"
+        :radiovalue="el.value"
         :label="el.label"
         :name="el.name"
         :key="el.id"
-        v-model="formData.importance"/>
+      />
+      <ErrorMessage class="error" :name="radio.group[0].name" />
     </fieldset>
-    <basicButton type="submit" @click="addTask">{{ btnTitle }}</basicButton>
+    <basicButton type="submit">{{ btnTitle }}</basicButton>
   </form>
 </template>
 
@@ -39,6 +39,8 @@ import {defineComponent, PropType, reactive, toRefs} from 'vue';
 import EditTask from '@/types/editTask';
 import Task from '@/types/task';
 import { v4 as uuidv4 } from "uuid";
+import { useForm, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
 
 export default defineComponent({
   name: 'task-form',
@@ -46,6 +48,7 @@ export default defineComponent({
   components: {
     basicTextInput,
     basicRadio,
+    ErrorMessage,
     basicButton,
     basicDatepicker
   },
@@ -60,20 +63,32 @@ export default defineComponent({
     const formData = reactive<EditTask>({
       id: props.initialData && props.initialData.id ? props.initialData.id : null,
       date: props.initialData && props.initialData.date ? props.initialData.date : new Date(Date.now()),
-      title: props.initialData && props.initialData.title ? props.initialData.title : '',
-      importance: props.initialData && props.initialData.importance ? props.initialData.importance : '',
+      title: props.initialData && props.initialData.title ? props.initialData.title : null,
+      importance: props.initialData && props.initialData.importance ? props.initialData.importance : null,
+    });
+
+    console.log(formData)
+
+    const { handleSubmit, errors, values } = useForm({
+      validationSchema: yup.object({
+        title: yup.string().min(3, 'Слишком короткое название').max(255, 'Слишком длинное название').required('Обязательное поле'),
+        importance: yup.number().nonNullable().required('Обязательное поле'),
+        date: yup.date().min(new Date(Date.now() + 3600),"Задачу надо создавать заранее!").required('Обязательное поле'),
+      }),
+      initialValues: formData,
     });
 
     const formDescription = {
-      groupLabel: 'ВВедите время и описание',
+      groupLabel: 'Введите время и описание',
       datepicker: {
         label: 'Дата:',
         id: uuidv4(),
+        name: 'date',
       },
       input: {
         label: 'Описание:',
         id: uuidv4(),
-        name: 'taskName',
+        name: 'title',
       },
       radio: {
         groupLabel: 'Важность',
@@ -82,19 +97,19 @@ export default defineComponent({
             label: 'Высокая',
             id: uuidv4(),
             name: 'importance',
-            value: '2'
+            value: 3
           },
           {
             label: 'Средняя',
             id: uuidv4(),
             name: 'importance',
-            value: '1'
+            value: 2
           },
           {
             label: 'Низкая',
             id: uuidv4(),
             name: 'importance',
-            value:  '0'
+            value: 1
           },
         ]
       }
@@ -102,28 +117,30 @@ export default defineComponent({
 
     const btnTitle = props.initialData && props.initialData.btnTitle ? props.initialData.btnTitle : 'Создать';
 
-    const addTask = () => {
+    const onSubmit = handleSubmit((values) => {
+      addTask(values);
+    });
+
+    const addTask = (values) => {
       if (!props.initialData) {
-        if (formData.date && formData.title.length > 0) {
+        if (values.date && values.title.length > 0) {
+          console.log(111)
+
           let newTask: Task = {
             id: 'temporal-will-be-rewritten-by-firebase',
-            date: formData.date,
-            title: formData.title,
-            importance: formData.importance
+            date: values.date,
+            title: values.title,
+            importance: values.importance
           }
 
           emit('addTask', newTask);
-
-          formData.id = null;
-          formData.date = new Date(Date.now());
-          formData.title = '';
         }
       } else {
         let editingTask: Task = {
           id: formData.id,
-          date: formData.date,
-          title: formData.title,
-          importance: formData.importance
+          date: values.date,
+          title: values.title,
+          importance: values.importance
         }
 
         emit('editTask', editingTask);
@@ -134,7 +151,10 @@ export default defineComponent({
       ...toRefs(formDescription),
       btnTitle,
       formData,
-      addTask
+      addTask,
+      errors,
+      values,
+      onSubmit
     }
 
     // data () {

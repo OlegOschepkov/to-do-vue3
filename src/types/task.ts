@@ -2,7 +2,7 @@ interface Task {
   id: string,
   title: string,
   date: Date,
-  importance: number | string
+  importance: number
 }
 
 export default Task

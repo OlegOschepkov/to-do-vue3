@@ -3,14 +3,23 @@
     <p>
       {{ label }}
     </p>
-    <VueDatePicker :model-value="date" @update:model-value="updateDate"></VueDatePicker>
+    <VueDatePicker :model-value="value" @update:model-value="updateDate" :name="name" :id="id"></VueDatePicker>
+    <span
+      class="error"
+      id="`${id}-error`"
+      aria-live="assertive"
+      role="alert"
+    >
+        {{ errorMessage }}
+      </span>
   </div>
 </template>
 
 <script lang="ts">
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
+import {useField} from 'vee-validate';
 
 export default defineComponent({
   name: 'basicDatepicker',
@@ -32,20 +41,25 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    name: {
+      type: String,
+      required: true,
+    }
   },
 
-  setup(props, {emit}) {
-    const date = ref<Date>();
-
-    date.value = props.modelValue as Date ? props.modelValue : new Date(Date.now());
+  setup(props) {
+    const { value, errors, errorMessage, handleChange } = useField(props.name, {
+      initialValue: props.modelValue,
+      valueProp: props.modelValue
+    });
 
     const updateDate = (e: Date) => {
-      date.value = e;
-      emit('update:modelValue', e);
+      handleChange(e, true)
     }
 
     return {
-      date,
+      errors, errorMessage,
+      value,
       updateDate
     }
   }

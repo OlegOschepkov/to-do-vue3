@@ -1,18 +1,15 @@
 <template>
   <div class="input-element">
-    <label v-if="label"
-      :for="id"
-    >
+    <label :for="id">
       <input
         type="text"
-        v-bind="$attrs"
+        v-model="value"
         :id="id"
         :name="name"
-        :value="modelValue"
-        @input="updateInput"
+        @blur="$emit('blur')"
         :placeholder="placeholder"
-        :aria-describedby="error ? `${id}-error` : null"
-        :aria-invalid="error ? true : null"
+        :aria-describedby="errorMessage ? `${id}-error` : null"
+        :aria-invalid="errorMessage ? true : null"
       />
 
       <span
@@ -23,11 +20,11 @@
       </span>
       <span
         class="error"
-        v-if="error"
         :id="`${id}-error`"
         aria-live="assertive"
+        role="alert"
       >
-        {{ error }}
+        {{ errorMessage }}
       </span>
     </label>
   </div>
@@ -35,15 +32,12 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+import { useField } from 'vee-validate';
 
 export default defineComponent({
   name: 'basicTextInput',
 
   props: {
-    modelValue: {
-      type: [String, Number],
-      default: '',
-    },
     placeholder: {
       type: String,
       default: ''
@@ -59,21 +53,15 @@ export default defineComponent({
     label: {
       type: String,
       required: true,
-    },
-    error: {
-      type: String,
-      default: ''
     }
   },
 
-  setup(_, {emit}) {
-    const updateInput = (e: Event) => {
-      const el = e.target as HTMLInputElement;
-      emit('update:modelValue', el.value as String);
-    }
+  setup(props) {
+    const { value, errorMessage } = useField(() => props.name);
 
     return {
-      updateInput
+      value,
+      errorMessage
     }
   }
 

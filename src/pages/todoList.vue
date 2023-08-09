@@ -2,6 +2,7 @@
   <div class="page">
     <basicTextInput
         id="search"
+        name="search"
         label="поиск"
         :model-value="searchQuery"
         @update:model-value="setSearchQuery"
@@ -28,7 +29,7 @@
         />
       </div>
     </div>
-    <task-form @addTask="addTask"/>
+    <taskForm @addTask="addTask"/>
   </div>
 </template>
 
@@ -36,6 +37,7 @@
 import tasksList from '@/components/tasksList.vue';
 import taskForm from '@/components/taskForm.vue';
 import basicSelect from '@/components/UI/basicSelect.vue';
+import basicTextInput from '@/components/UI/basicTextInput.vue'
 import {useStore} from 'vuex';
 import {computed, defineComponent, onUnmounted, ref} from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
@@ -47,6 +49,7 @@ export default defineComponent({
 
   components: {
     tasksList,
+    basicTextInput,
     basicSelect,
     taskForm
   },

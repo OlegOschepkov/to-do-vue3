@@ -3,9 +3,10 @@
     <input
       type="radio"
       v-bind="$attrs"
+      v-model="value"
       :id="id"
-      :value="value"
-      :checked="modelValue === value"
+      :value="radiovalue"
+      :checked="radiovalue === Number(value)"
       @change="updateInput"
     >
     <label v-if="label"
@@ -18,20 +19,21 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+import { useField } from 'vee-validate';
 
 export default defineComponent({
   name: 'basicRadio',
 
   props: {
-    modelValue: {
-      type: [String, Number],
-      default: '',
-    },
-    value: {
-      type: [String, Number],
+    radiovalue: {
+      type: Number,
       required: true,
     },
     id: {
+      type: String,
+      required: true,
+    },
+    name: {
       type: String,
       required: true,
     },
@@ -41,13 +43,18 @@ export default defineComponent({
     }
   },
 
-  setup(_, {emit}) {
+  setup(props) {
+    const { value, handleChange } = useField(props.name, {
+      initialValue: props.radiovalue,
+      valueProp: props.radiovalue
+    });
+
     const updateInput = (e: Event) => {
-      const el = e.target as HTMLInputElement;
-      emit('update:modelValue', el.value);
+      handleChange(e, true)
     }
 
     return {
+      value,
       updateInput
     }
   }
@@ -63,46 +70,58 @@ export default defineComponent({
 <style scoped lang="scss">
 @import '@/assets/scss/variables.scss';
 
-.input-element {
-  position: relative;
-  margin-top: 15px;
+.radio-element {
+  margin-top: 5px;
 
-  &__label {
-    position: absolute;
-    left: 9px;
-    top: 8px;
-    transform: scale(1);
+  label {
+    position: relative;
     font-size: 16px;
     line-height: 150%;
-    padding: 1px 10px;
-    border-radius: 8px;
-    background-color: $color-default-white;
-    transition: all $trans-default;
+    padding: 1px 10px 1px 30px;
+    cursor: pointer;
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      height: 15px;
+      width: 15px;
+      border-radius: 3px;
+      border: 2px solid $color-heather;
+      background-color: $color-default-white;
+      transition: all $trans-default;
+      z-index: 1;
+    }
+
+    &:hover:after,
+    &:active:after,
+    &:focus:after {
+      border-color: $color-juniper;
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      height: 9px;
+      width: 9px;
+      border-radius: 3px;
+      background-color: $color-juniper;
+      transition: all $trans-default;
+      z-index: 2;
+      opacity: 0;
+    }
   }
 
   input {
-    margin: 0;
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid $color-heather;
-    width: 100%;
-    transition: border-color 0.3s;
+    display: none;
 
-    &:hover,
-    &:active,
-    &:not(:placeholder-shown),
-    &:focus {
-      border-color: $color-juniper;
-
-      & + .input-element__label {
-        transform: translate(-10px, -20px) scale(.8);
-        background-color: $color-juniper;
-      }
-    }
-
-    &:focus-visible {
-      outline: none;
-      border-color: $color-juniper;
+    &:checked ~ label:before {
+      opacity: 1;
     }
   }
 }

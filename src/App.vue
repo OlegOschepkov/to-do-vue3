@@ -54,4 +54,8 @@ export default {
   flex-direction: column;
   min-height: 100vh;
 }
+
+.error {
+  color: $color-cardinal;
+}
 </style>
