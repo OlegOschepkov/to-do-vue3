@@ -1,3 +1,35 @@
+<script setup lang="ts">
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+import { defineProps } from 'vue';
+import {useField} from 'vee-validate';
+
+const props = defineProps({
+  modelValue: {
+    type: Date,
+    default: new Date(Date.now()),
+  },
+  id: {
+    type: String,
+  },
+  label: {
+    type: String,
+  },
+  name: {
+    type: String,
+  }
+})
+
+const { value, errorMessage, handleChange } = useField(props.name, {
+  initialValue: props.modelValue,
+  valueProp: props.modelValue
+});
+
+const updateDate = (e: Date) => {
+  handleChange(e, true)
+}
+</script>
+
 <template>
   <div class="datepicker-element">
     <p>
@@ -14,78 +46,6 @@
       </span>
   </div>
 </template>
-
-<script lang="ts">
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
-import { defineComponent } from 'vue';
-import {useField} from 'vee-validate';
-
-export default defineComponent({
-  name: 'basicDatepicker',
-
-  components: {
-    VueDatePicker
-  },
-
-  props: {
-    modelValue: {
-      type: Date,
-      default: new Date(Date.now()),
-    },
-    id: {
-      type: String,
-      required: true,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    }
-  },
-
-  setup(props) {
-    const { value, errors, errorMessage, handleChange } = useField(props.name, {
-      initialValue: props.modelValue,
-      valueProp: props.modelValue
-    });
-
-    const updateDate = (e: Date) => {
-      handleChange(e, true)
-    }
-
-    return {
-      errors, errorMessage,
-      value,
-      updateDate
-    }
-  }
-});
-
-  // data() {
-  //   return {
-  //     date: '',
-  //   };
-  // },
-  //
-  // mounted() {
-  //   this.setInitialDate()
-  // },
-  //
-  // methods: {
-  //   setInitialDate() {
-  //     this.date = this.modelValue ? this.modelValue : Date.now();
-  //   },
-  //
-  //   updateDate(e) {
-  //     this.date = e;
-  //     this.$emit('update:modelValue', e.getTime());
-  //   },
-  // }
-</script>
 
 <style lang="scss">
 @import '@/assets/scss/variables.scss';

@@ -1,69 +1,39 @@
+<script setup lang="ts">
+import svgIcon from '@/components/UI/svgIcon.vue';
+import HeaderLinks from '@/types/headerLinks';
+import links from '@/_config';
+import {defineComponent} from 'vue';
+
+const headerLinks: HeaderLinks[] = links;
+
+let floatingText: HTMLElement;
+
+const components = defineComponent({
+  svgIcon
+})
+
+const mouseOver = (e: Event) => {
+  const target = e.target as HTMLElement;
+  floatingText = target.querySelector('[data-float-text]') as HTMLElement;
+  floatingText.style.maxWidth = floatingText.scrollWidth + 'px';
+}
+
+const mouseLeave = () => {
+  floatingText.style.maxWidth = '';
+}
+</script>
+
 <template>
   <div class="navbar">
     <div class="navbar__wrapper container">
-      <svg-icon name="logo-icon" width="64" height="64"/>
+      <svgIcon name="logo-icon" width="64" height="64"/>
       <router-link v-for="link in headerLinks" :key="link.key" :to="link.url" class="navbar__link" @mouseover.self="mouseOver" @mouseleave="mouseLeave" data-float-parent >
-        <svg-icon :name="link.icon" width="64" height="64"/>
+        <svgIcon :name="link.icon" width="64" height="64"/>
         <span class="navbar__text-wrapper" data-float-text><span class="navbar__text">{{ link.text }}</span></span>
       </router-link>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import svgIcon from '@/components/UI/svgIcon.vue';
-import {defineComponent} from 'vue';
-import HeaderLinks from '@/types/headerLinks';
-import links from '@/_config';
-
-export default defineComponent({
-  name: 'nav-bar',
-
-  components: {
-    svgIcon
-  },
-
-  setup() {
-    const headerLinks: HeaderLinks[] = links;
-
-    let floatingText: HTMLElement;
-
-    const mouseOver = (e: Event) => {
-      const target = e.target as HTMLElement;
-      floatingText = target.querySelector('[data-float-text]') as HTMLElement;
-      floatingText.style.maxWidth = floatingText.scrollWidth + 'px';
-    }
-
-    const mouseLeave = () => {
-      floatingText.style.maxWidth = '';
-    }
-
-    return {
-      headerLinks,
-      mouseOver,
-      mouseLeave
-    }
-  }
-
-  // data() {
-  //   return {
-  //     links: links,
-  //   }
-  // },
-  //
-  // methods: {
-  //   mouseOver(e) {
-  //     const floatingText = e.target.querySelector('[data-float-text]');
-  //     floatingText.style.maxWidth = floatingText.scrollWidth + 'px';
-  //   },
-  //
-  //   mouseLeave(e) {
-  //     const floatingText = e.target.querySelector('[data-float-text]');
-  //     floatingText.style.maxWidth = 0;
-  //   }
-  // }
-})
-</script>
 
 <style lang="scss">
 @import '@/assets/scss/variables.scss';

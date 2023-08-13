@@ -1,35 +1,14 @@
+<script setup lang="ts">
+import { defineProps, defineAsyncComponent } from 'vue';
+import { computed } from 'vue';
+
+const props = defineProps<{ // Так нет нужды описывать сами пропсы. Можно заменить интерфейсом. defineProps - Compiler Macro
+  name: string
+}>()
+
+const dynamicComponent = computed((): [ReturnType<typeof defineAsyncComponent>] => defineAsyncComponent(() => import(`@/assets/svg/${props.name}.vue`)));
+</script>
+
 <template>
   <component :is="dynamicComponent" class="svg-icon"/>
 </template>
-
-<script lang="ts">
-import { defineComponent, defineAsyncComponent } from 'vue';
-import { computed } from 'vue';
-
-export default defineComponent({
-  name: "svg-icon",
-
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
-  },
-
-  setup(props) {
-    const dynamicComponent = computed((): [ReturnType<typeof defineAsyncComponent>] => defineAsyncComponent(() => import(`@/assets/svg/${props.name}.vue`)));
-
-    return {
-      dynamicComponent
-    }
-  }
-
-  // computed: {
-  //   dynamicComponent() {
-  //     const name = this.name;
-  //
-  //     return defineAsyncComponent(() => import(`@/assets/svg/${name}.vue`));
-  //   },
-  // },
-});
-</script>

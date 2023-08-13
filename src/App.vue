@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import navBar from '@/components/UI/navBar';
+</script>
+
 <template>
   <div id="app">
     <div class="page-container">
@@ -12,17 +16,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import navBar from '@/components/UI/navBar';
-
-export default {
-  name: 'App',
-  components: {
-    navBar
-  }
-}
-</script>
 
 <style lang="scss">
 @import '@/assets/scss/variables.scss';

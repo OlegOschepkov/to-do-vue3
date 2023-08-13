@@ -1,15 +1,13 @@
-<template>
-    <button class="btn">
-      <slot>
-      </slot>
-    </button>
-</template>
+<script setup lang="ts">
 
-<script>
-export default {
-  name: 'basicButton'
-}
 </script>
+
+<template>
+  <button class="btn">
+    <slot>
+    </slot>
+  </button>
+</template>
 
 <style lang="scss">
 @import '@/assets/scss/variables.scss';

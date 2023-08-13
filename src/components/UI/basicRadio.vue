@@ -1,3 +1,24 @@
+<script setup lang="ts">
+import { defineProps } from 'vue';
+import { useField } from 'vee-validate';
+
+const props = defineProps<{
+  radiovalue: number,
+  id: string,
+  name: string,
+  label: string
+}>()
+
+const { value, handleChange } = useField(props.name, {
+  initialValue: props.radiovalue,
+  valueProp: props.radiovalue
+});
+
+const updateInput = (e: Event) => {
+  handleChange(e, true)
+}
+</script>
+
 <template>
   <div class="radio-element">
     <input
@@ -10,62 +31,12 @@
       @change="updateInput"
     >
     <label v-if="label"
-      :for="id"
+           :for="id"
     >
-    {{ label }}
+      {{ label }}
     </label>
   </div>
 </template>
-
-<script lang="ts">
-import {defineComponent} from 'vue';
-import { useField } from 'vee-validate';
-
-export default defineComponent({
-  name: 'basicRadio',
-
-  props: {
-    radiovalue: {
-      type: Number,
-      required: true,
-    },
-    id: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    label: {
-      type: String,
-      default: '',
-    }
-  },
-
-  setup(props) {
-    const { value, handleChange } = useField(props.name, {
-      initialValue: props.radiovalue,
-      valueProp: props.radiovalue
-    });
-
-    const updateInput = (e: Event) => {
-      handleChange(e, true)
-    }
-
-    return {
-      value,
-      updateInput
-    }
-  }
-
-  // methods: {
-  //   updateInput(e) {
-  //     this.$emit('update:modelValue', e.target.value);
-  //   }
-  // }
-})
-</script>
 
 <style scoped lang="scss">
 @import '@/assets/scss/variables.scss';

@@ -1,66 +1,36 @@
+<script setup lang="ts">
+import Multiselect from '@vueform/multiselect';
+import { defineEmits, defineProps, PropType } from 'vue';
+import SortOptions from '@/types/sortOptions';
+
+interface foo {
+  modelValue: string | number,
+}
+
+const props = defineProps<{
+  modelValue: string | number,
+  options: SortOptions[]
+}>()
+
+const emit = defineEmits<{
+  (event: 'update:modelValue', value: SortOptions): void;
+}>()
+
+const selectedOption = (value: SortOptions) => { // Ограничиваем возможности выбора указанными в SortOptions
+  emit('update:modelValue', value)
+}
+</script>
+
 <template>
   <div class="select-element">
     <Multiselect
-        :value="modelValue"
-        @change="selectedOption"
-        placeholder="Select one"
-        :options="options">
+      :value="modelValue"
+      @change="selectedOption"
+      placeholder="Select one"
+      :options="options">
     </Multiselect>
   </div>
 </template>
-
-
-<script lang="ts">
-import Multiselect from '@vueform/multiselect';
-import {defineComponent, PropType} from 'vue';
-import SortOptions from '@/types/sortOptions';
-
-export default defineComponent({
-  name: 'basicSelect',
-
-  components: {
-    Multiselect
-  },
-
-  props: {
-    modelValue: {
-      type: [String, Number]
-    },
-    options: {
-      type: Array as PropType<SortOptions[]>,
-      default: () => {},
-      required: true
-    }
-  },
-
-  setup(_, {emit}) {
-    const selectedOption = (value: SortOptions) => { // Ограничиваем возможности выбора указанными в SortOptions
-      emit('update:modelValue', value)
-    }
-
-    return {
-      selectedOption
-    }
-  }
-
-  // props: {
-  //   modelValue: {
-  //     type: [String, Number]
-  //   },
-  //   options: {
-  //     type: Array,
-  //     default: () => {},
-  //     required: true
-  //   }
-  // },
-  //
-  // methods: {
-  //   selectedOption(value) {
-  //     this.$emit('update:modelValue', value)
-  //   }
-  // }
-})
-</script>
 
 <style scoped lang="scss">
 @import "@vueform/multiselect/themes/default.css";

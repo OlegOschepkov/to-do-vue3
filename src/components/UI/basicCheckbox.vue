@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { defineProps, defineEmits } from 'vue';
+
+const props = defineProps<{
+  modelValue: boolean,
+  id: string,
+  label: string
+}>()
+
+const emit = defineEmits<{
+  (event: 'update:modelValue', checked: boolean): void;
+}>()
+</script>
+
 <template>
   <div class="checkbox-element">
     <input
@@ -5,55 +19,15 @@
       v-bind="$attrs"
       :id="id"
       :checked="modelValue"
-      @change="updateInput"
+      @change="emit('update:modelValue', $event.target.checked)"
     >
     <label v-if="label"
-      :for="id"
+           :for="id"
     >
-    {{ label }}
+      {{ label }}
     </label>
   </div>
 </template>
-
-<script lang="ts">
-import {defineComponent} from 'vue';
-
-export default defineComponent({
-  name: 'basicCheckbox',
-
-  props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
-    id: {
-      type: String,
-      required: true,
-    },
-    label: {
-      type: String,
-      default: '',
-    }
-  },
-
-  setup(_, {emit}) {
-    const updateInput = (e: Event) => {
-      const el = e.target as HTMLInputElement;
-      emit('update:modelValue', el.checked as Boolean);
-    }
-
-    return {
-      updateInput
-    }
-  }
-
-  // methods: {
-  //   updateInput(e) {
-  //     this.$emit('update:modelValue', e.target.value);
-  //   }
-  // }
-})
-</script>
 
 <style scoped lang="scss">
 @import '@/assets/scss/variables.scss';

@@ -1,53 +1,30 @@
+<script setup lang="ts">
+import basicTask from '@/components/basicTask.vue';
+import { defineProps } from 'vue';
+import Task from '@/types/task';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
+const { useActions } = createNamespacedHelpers( 'task'); // specific module name
+
+const props = defineProps<{
+  tasks: Task[]
+}>()
+
+const { deleteTask } = useActions(['deleteTask']);
+</script>
+
 <template>
   <h1 class="title">Список задач</h1>
   <ul class="tasks-list">
     <transition-group name="task-list">
       <basicTask
-          v-for="task in tasks"
-          :task="task"
-          :key="task.id"
-          @deleteTask="deleteTask"
+        v-for="task in tasks"
+        :task="task"
+        :key="task.id"
+        @deleteTask="deleteTask"
       />
     </transition-group>
   </ul>
 </template>
-
-<script lang="ts">
-import basicTask from '@/components/basicTask.vue';
-import {PropType} from 'vue';
-import task from '@/types/task';
-import {createNamespacedHelpers} from 'vuex-composition-helpers';
-const { useActions } = createNamespacedHelpers( 'task'); // specific module name
-
-export default {
-  name: "tasks-list",
-
-  components: {
-    basicTask
-  },
-
-  props: {
-    tasks: {
-      type: Array as PropType<task[]>,
-      required: true
-    }
-  },
-
-  setup() {
-    const { deleteTask } = useActions(['deleteTask']);
-
-    return {
-      deleteTask
-    }
-  }
-
-  // methods: {
-  //   ...mapMutations({
-  //     deleteTask: 'task/deleteTask'
-  //   }),
-  // }
-}
-</script>
 
 <style lang="scss">
 @import '@/assets/scss/mixins.scss';

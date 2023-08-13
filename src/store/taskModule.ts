@@ -80,7 +80,7 @@ export const taskModule = {
     // computed свойства, кешируемые, вычисляемые значение
     getSortedTasks(state: State): Task[] {
       return [...state.tasks].sort((task1: Task, task2: Task) => {
-        if (typeof task1[state.selectedSort] === 'number') {
+        if (task1[state.selectedSort] instanceof Date) {
           return task1[state.selectedSort] - task2[state.selectedSort]
         } else {
           return task1[state.selectedSort]?.localeCompare(task2[state.selectedSort])
@@ -93,7 +93,6 @@ export const taskModule = {
     },
 
     getTaskById(state: State): Task {
-      console.log(state.taskId)
       return [...state.tasks].filter((task) => task.id === state.taskId)[0];
     },
 

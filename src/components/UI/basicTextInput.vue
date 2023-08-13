@@ -1,12 +1,36 @@
+<script setup lang="ts">
+import {defineEmits, defineProps} from 'vue';
+import { useField } from 'vee-validate';
+import SortOptions from '@/types/sortOptions';
+
+const props = defineProps<{
+  placeholder?: string,
+  id: string,
+  name: string,
+  label: string
+}>()
+
+const emit = defineEmits<{
+  (event: 'update:modelValue', value: String): void;
+}>()
+
+const { value, errorMessage } = useField(() => props.name);
+
+const onChange = () => {
+  emit('update:modelValue', value.value as String);
+}
+
+</script>
+
 <template>
-  <div class="input-element">
+  <div class="input-element" :class="value ? 'not-empty' : ''">
     <label :for="id">
       <input
         type="text"
         v-model="value"
         :id="id"
         :name="name"
-        @blur="$emit('blur')"
+        @input="onChange"
         :placeholder="placeholder"
         :aria-describedby="errorMessage ? `${id}-error` : null"
         :aria-invalid="errorMessage ? true : null"
@@ -30,55 +54,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import {defineComponent} from 'vue';
-import { useField } from 'vee-validate';
-
-export default defineComponent({
-  name: 'basicTextInput',
-
-  props: {
-    placeholder: {
-      type: String,
-      default: ''
-    },
-    id: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    label: {
-      type: String,
-      required: true,
-    }
-  },
-
-  setup(props) {
-    const { value, errorMessage } = useField(() => props.name);
-
-    return {
-      value,
-      errorMessage
-    }
-  }
-
-  // methods: {
-  //   updateInput(e) {
-  //     this.$emit('update:modelValue', e.target.value);
-  //   }
-  // }
-})
-</script>
-
 <style scoped lang="scss">
 @import '@/assets/scss/variables.scss';
 
 .input-element {
   position: relative;
   margin-top: 15px;
+
+  &.not-empty input {
+    border-color: $color-juniper;
+
+    & + .input-element__label {
+      transform: translate(-10px, -20px) scale(.8);
+      background-color: $color-juniper;
+    }
+  }
 
   &__label {
     position: absolute;
@@ -101,9 +91,9 @@ export default defineComponent({
     width: 100%;
     transition: border-color 0.3s;
 
+    .not-empty &,
     &:hover,
     &:active,
-    &:not(:placeholder-shown),
     &:focus {
       border-color: $color-juniper;
 
