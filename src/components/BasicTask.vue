@@ -3,26 +3,16 @@ import { computed, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 import Task from '@/types/task';
 import DateObjTypes from '@/types/dateObjTypes';
-import {createNamespacedHelpers} from 'vuex-composition-helpers';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
 const { useMutations } = createNamespacedHelpers( 'task'); // specific module name
-import basicButton from '@/components/UI/basicButton.vue';
-import svgIcon from '@/components/UI/svgIcon.vue';
+import BasicButton from '@/components/UI/BasicButton.vue';
 
 const props = defineProps<{
   task: Task
-}>()
-
-const components = {
-  basicButton,
-  svgIcon
-}
+}>();
 
 const router = useRouter();
 const { setTaskIdToEdit } = useMutations(['setTaskIdToEdit']);
-
-// const emit = defineEmits<{
-//   (event: 'deleteTask', taskId: number): void; // можно несколько разных емитов описать
-// }>()
 
 const prettifyDate = (computed((): DateObjTypes => {
   const date = new Date(props.task.date as Date);
@@ -34,16 +24,16 @@ const prettifyDate = (computed((): DateObjTypes => {
     day: date.toLocaleString('ru-RU', { day: 'numeric' }),
     time: date.toLocaleString('ru-RU', {hour: '2-digit', minute: '2-digit' }),
   };
-}))
+}));
 
 const isOverdue = (computed((): boolean => {
   return Date.now() > new Date(props.task.date).getTime()
-}))
+}));
 
 const gotToTaskEditPage = (id: string) => {
   setTaskIdToEdit(id)
   router.push(`/edit-task/${id}`)
-}
+};
 </script>
 
 <template>
@@ -61,12 +51,11 @@ const gotToTaskEditPage = (id: string) => {
     </div>
     <div class="task-list__text-wrapper">
       <p class="task-list__title">{{task.title}}</p>
-      <p class="task-list__title">{{ task.id}}</p>
-      <p class="task-list__importance">{{task.importance}}</p>
+      <p class="task-list__importance">Важность: {{task.importance}}</p>
     </div>
     <div class="task-list__btns">
-      <basicButton @click="$emit('deleteTask', task.id)">Удалить</basicButton>
-      <basicButton class="btn" type="button" @click="gotToTaskEditPage(task.id)">Редактировать</basicButton>
+      <BasicButton @click="$emit('deleteTask', task.id)">Удалить</BasicButton>
+      <BasicButton class="btn" type="button" @click="gotToTaskEditPage(task.id)">Редактировать</BasicButton>
     </div>
   </li>
 </template>
@@ -150,9 +139,17 @@ const gotToTaskEditPage = (id: string) => {
 
   &__text-wrapper {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__title {
+    @include reset-item;
   }
 
   &__importance {
+    @include reset-item;
     font-style: italic;
   }
 }

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import basicTextInput from '@/components/UI/basicTextInput.vue';
-import basicRadio from '@/components/UI/basicRadio.vue';
-import basicDatepicker from '@/components/UI/basicDatepicker.vue';
-import basicButton from '@/components/UI/basicButton.vue';
-import {defineEmits, defineProps, reactive, toRefs} from 'vue';
+import BasicTextInput from '@/components/UI/BasicTextInput.vue';
+import BasicRadio from '@/components/UI/BasicRadio.vue';
+import BasicDatepicker from '@/components/UI/BasicDatepicker.vue';
+import BasicButton from '@/components/UI/BasicButton.vue';
+import { defineEmits, defineProps, reactive } from 'vue';
 import EditTask from '@/types/editTask';
 import Task from '@/types/task';
 import { v4 as uuidv4 } from "uuid";
@@ -12,12 +12,12 @@ import * as yup from 'yup';
 
 const props = defineProps<{
   initialData?: EditTask
-}>()
+}>();
 
 const emit = defineEmits<{
   (event: 'addTask', newTask: Task): void;
   (event: 'editTask', editingTask: Task): void;
-}>()
+}>();
 
 const formData = reactive<EditTask>({
   id: props.initialData && props.initialData.id ? props.initialData.id : null,
@@ -71,12 +71,13 @@ const formDescription = {
       },
     ]
   }
-}
+};
 
 const { groupLabel, datepicker, input, radio } = formDescription;
 
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit((values, { resetForm }) => {
   addTask(values);
+  resetForm();
 });
 
 const addTask = (values) => {
@@ -99,7 +100,7 @@ const addTask = (values) => {
 
     emit('editTask', editingTask);
   }
-}
+};
 </script>
 
 <template>
@@ -108,19 +109,19 @@ const addTask = (values) => {
   >
     <fieldset>
       <legend>{{groupLabel}}</legend>
-      <basicDatepicker
+      <BasicDatepicker
         :id="datepicker.id"
         :label="datepicker.label"
         :name="datepicker.name"
       />
-      <basicTextInput
+      <BasicTextInput
         :name="input.name"
         :id="input.id"
         :label="input.label"/>
     </fieldset>
     <fieldset>
       <legend>{{ radio.groupLabel }}</legend>
-      <basicRadio
+      <BasicRadio
         v-for="el in radio.group"
         :id="el.id"
         :radiovalue="el.value"
@@ -130,7 +131,7 @@ const addTask = (values) => {
       />
       <ErrorMessage class="error" :name="radio.group[0].name" />
     </fieldset>
-    <basicButton type="submit">{{ formData.btnTitle }}</basicButton>
+    <BasicButton type="submit">{{ formData.btnTitle }}</BasicButton>
   </form>
 </template>
 

@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import {defineEmits, defineProps} from 'vue';
+import { defineEmits, defineProps } from 'vue';
 import { useField } from 'vee-validate';
-import SortOptions from '@/types/sortOptions';
 
 const props = defineProps<{
   placeholder?: string,
   id: string,
   name: string,
   label: string
-}>()
+}>();
 
 const emit = defineEmits<{
   (event: 'update:modelValue', value: String): void;
-}>()
+}>();
 
 const { value, errorMessage } = useField(() => props.name);
 
 const onChange = () => {
   emit('update:modelValue', value.value as String);
-}
-
+};
 </script>
 
 <template>

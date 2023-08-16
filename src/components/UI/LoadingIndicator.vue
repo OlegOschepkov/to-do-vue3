@@ -1,0 +1,86 @@
+<template>
+  <div class="lds-ellipsis">
+    <div class="lds-ellipsis__background"></div>
+    <div class="lds-ellipsis__wrapper">
+      <div class="lds-ellipsis__element"></div>
+      <div class="lds-ellipsis__element"></div>
+      <div class="lds-ellipsis__element"></div>
+      <div class="lds-ellipsis__element"></div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+</script>
+
+<style scoped lang="scss">
+.lds-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 180px;
+
+  &__wrapper {
+    position: relative;
+    width: 80px;
+    height: 180px;
+  }
+
+  &__element {
+    position: absolute;
+    top: calc(50% - 6px);
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #31c292;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+
+    &:nth-child(1) {
+      left: 8px;
+      animation: lds-ellipsis1 0.6s infinite;
+    }
+
+    &:nth-child(2) {
+      left: 8px;
+      animation: lds-ellipsis2 0.6s infinite;
+    }
+
+    &:nth-child(3) {
+      left: 32px;
+      animation: lds-ellipsis2 0.6s infinite;
+    }
+
+    &:nth-child(4) {
+      left: 56px;
+      animation: lds-ellipsis3 0.6s infinite;
+    }
+  }
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+</style>

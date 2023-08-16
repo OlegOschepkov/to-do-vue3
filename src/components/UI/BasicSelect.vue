@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect';
-import { defineEmits, defineProps, PropType } from 'vue';
+import { defineEmits, defineProps } from 'vue';
 import SortOptions from '@/types/sortOptions';
 
 interface foo {
@@ -10,15 +10,15 @@ interface foo {
 const props = defineProps<{
   modelValue: string | number,
   options: SortOptions[]
-}>()
+}>();
 
 const emit = defineEmits<{
   (event: 'update:modelValue', value: SortOptions): void;
-}>()
+}>();
 
 const selectedOption = (value: SortOptions) => { // Ограничиваем возможности выбора указанными в SortOptions
   emit('update:modelValue', value)
-}
+};
 </script>
 
 <template>

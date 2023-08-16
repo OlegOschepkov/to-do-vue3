@@ -1,21 +1,21 @@
-import basicButton from '@/components/UI/basicButton.vue';
-import basicTextInput from '@/components/UI/basicTextInput.vue';
-import basicCheckbox from '@/components/UI/basicCheckbox.vue';
-import basicRadio from '@/components/UI/basicRadio.vue';
-import basicDatepicker from '@/components/UI/basicDatepicker.vue';
-import navBar from '@/components/UI/navBar.vue';
-import basicSelect from '@/components/UI/basicSelect.vue';
-import svgIcon from '@/components/UI/svgIcon.vue';
+import BasicButton from '@/components/UI/BasicButton.vue';
+import BasicTextInput from '@/components/UI/BasicTextInput.vue';
+import basicCheckbox from '@/components/UI/BasicCheckbox.vue';
+import BasicRadio from '@/components/UI/BasicRadio.vue';
+import BasicDatepicker from '@/components/UI/BasicDatepicker.vue';
+import NavBar from '@/components/UI/NavBar.vue';
+import BasicSelect from '@/components/UI/BasicSelect.vue';
+import SvgIcon from '@/components/UI/SvgIcon.vue';
 
 export default [
-  basicButton,
-  basicTextInput,
+  BasicButton,
+  BasicTextInput,
   basicCheckbox,
-  basicRadio,
-  basicDatepicker,
-  basicSelect,
-  navBar,
-  svgIcon
+  BasicRadio,
+  BasicDatepicker,
+  BasicSelect,
+  NavBar,
+  SvgIcon
 ]
 
 //and other UIs

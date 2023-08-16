@@ -1,35 +1,18 @@
-import {ref, onMounted} from 'vue';
+import { computed } from 'vue';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
+const { useActions } = createNamespacedHelpers( 'task'); // specific module name
 
-export const useTasks = () => {
-  const tasks = ref([]);
-  const isLoading = ref(true);
-  const isError = ref(false);
+export function useTasks(state, store) {
+  const { fetchTasks } = useActions(['fetchTasks']);
 
-  const fetching = async () => {
-    try {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          let returnObj;
-          if (!localStorage['todovue3tasks']) {
-            localStorage.setItem('todovue3tasks', '');
-          } else {
-            returnObj = JSON.parse(localStorage.getItem('todovue3tasks'));
-            tasks.value = returnObj.tasks;
-          }
-          resolve(1)
-        }, 1000)
-      });
-    } catch (e) {
-      isError.value = true;
-      console.log(e.message)
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  const getTasks = async () => {
+    state.value = await fetchTasks();
+  };
 
-  onMounted(fetching)
+  const isLoading = computed((): boolean => store.state.task.isLoading);
+  const isError = computed((): boolean => store.state.task.isError);
 
   return {
-    tasks, isLoading, isError
+    getTasks, isLoading, isError
   }
 }

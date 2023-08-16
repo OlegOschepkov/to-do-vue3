@@ -1,8 +1,8 @@
 import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router/dist/vue-router';
-import mainPage from '@/pages/mainPage.vue';
-import todoList from '@/pages/todoList.vue';
-import editTask from '@/pages/editTask.vue';
-import notFound from '@/pages/notFound.vue';
+import mainPage from '@/views/MainPage.vue';
+import todoList from '@/views/TodoList.vue';
+import editTask from '@/views/EditTask.vue';
+import notFound from '@/views/NotFound.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -27,11 +27,11 @@ const routes: Array<RouteRecordRaw> = [
     name: '404',
     component: notFound
   },
-]
+];
 
 const router = createRouter({
   routes,
   history: createWebHistory(process.env.BASE_URL)
-})
+});
 
-export default router
+export default router;

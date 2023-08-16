@@ -1,34 +1,29 @@
 <script setup lang="ts">
-import svgIcon from '@/components/UI/svgIcon.vue';
+import SvgIcon from '@/components/UI/SvgIcon.vue';
 import HeaderLinks from '@/types/headerLinks';
 import links from '@/_config';
-import {defineComponent} from 'vue';
 
 const headerLinks: HeaderLinks[] = links;
 
 let floatingText: HTMLElement;
 
-const components = defineComponent({
-  svgIcon
-})
-
 const mouseOver = (e: Event) => {
   const target = e.target as HTMLElement;
   floatingText = target.querySelector('[data-float-text]') as HTMLElement;
   floatingText.style.maxWidth = floatingText.scrollWidth + 'px';
-}
+};
 
 const mouseLeave = () => {
   floatingText.style.maxWidth = '';
-}
+};
 </script>
 
 <template>
   <div class="navbar">
     <div class="navbar__wrapper container">
-      <svgIcon name="logo-icon" width="64" height="64"/>
+      <SvgIcon name="logo-icon" width="64" height="64"/>
       <router-link v-for="link in headerLinks" :key="link.key" :to="link.url" class="navbar__link" @mouseover.self="mouseOver" @mouseleave="mouseLeave" data-float-parent >
-        <svgIcon :name="link.icon" width="64" height="64"/>
+        <SvgIcon :name="link.icon" width="64" height="64"/>
         <span class="navbar__text-wrapper" data-float-text><span class="navbar__text">{{ link.text }}</span></span>
       </router-link>
     </div>
@@ -51,6 +46,11 @@ const mouseLeave = () => {
 }
 
 .navbar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 100;
   padding: 10px;
   background-color: $color-straw;
 

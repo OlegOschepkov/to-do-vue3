@@ -7,7 +7,7 @@ const props = defineProps<{
   id: string,
   name: string,
   label: string
-}>()
+}>();
 
 const { value, handleChange } = useField(props.name, {
   initialValue: props.radiovalue,
@@ -16,7 +16,7 @@ const { value, handleChange } = useField(props.name, {
 
 const updateInput = (e: Event) => {
   handleChange(e, true)
-}
+};
 </script>
 
 <template>

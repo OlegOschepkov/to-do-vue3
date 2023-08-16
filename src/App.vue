@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import navBar from '@/components/UI/navBar';
+import NavBar from '@/components/UI/NavBar.vue';
 </script>
 
 <template>
   <div id="app">
     <div class="page-container">
-      <navBar/>
+      <NavBar/>
       <div class="container container--animation">
         <router-view v-slot="{ Component }">
           <transition name="route" mode="out-in" appear>
@@ -40,6 +40,11 @@ import navBar from '@/components/UI/navBar';
 
 .container--animation {
   overflow: hidden;
+}
+
+.page {
+  min-height: calc(100vh - 104px);
+  padding: 180px 0;
 }
 
 .page-container {

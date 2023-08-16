@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css'
+import '@vuepic/vue-datepicker/dist/main.css';
 import { defineProps } from 'vue';
-import {useField} from 'vee-validate';
+import { useField } from 'vee-validate';
 
 const props = defineProps({
   modelValue: {
@@ -18,7 +18,7 @@ const props = defineProps({
   name: {
     type: String,
   }
-})
+});
 
 const { value, errorMessage, handleChange } = useField(props.name, {
   initialValue: props.modelValue,
@@ -27,7 +27,7 @@ const { value, errorMessage, handleChange } = useField(props.name, {
 
 const updateDate = (e: Date) => {
   handleChange(e, true)
-}
+};
 </script>
 
 <template>

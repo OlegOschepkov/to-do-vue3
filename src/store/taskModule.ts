@@ -1,7 +1,8 @@
 import Task from '@/types/task';
 import State from '@/types/state';
 import db from '@/firebase';
-import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
+import router from '@/router';
 const stateCollectionRef = collection(db, "State");
 
 export const taskModule = {
@@ -39,7 +40,11 @@ export const taskModule = {
     },
 
     setLoading(state: State, payload: boolean) {
-      state.isLoading = payload
+      if (payload) {
+        state.isLoading = payload
+      } else {
+        setTimeout(() => state.isLoading = payload, 300) // Убираю мигание при быстром ответе от сервера
+      }
     },
 
     setError(state: State, payload: boolean) {
@@ -96,10 +101,6 @@ export const taskModule = {
       return [...state.tasks].filter((task) => task.id === state.taskId)[0];
     },
 
-    // getTaskById: state => id => { Другой вариант. Внимание! двойная стрелочка
-    //   return [...state.tasks].filter((task) => task.id === id)[0];
-    // },
-
     getSortedAndSearchedTasks(state: State, getters): Task[] {
       return getters.getSortedTasks.filter((task) => task.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
     },
@@ -137,6 +138,7 @@ export const taskModule = {
 
     startListener({state, commit}) {
       let startListening = false;
+      commit('setLoading', true);
       state.unsubscribe = onSnapshot(stateCollectionRef, { includeMetadataChanges: false }, (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           const tempTask: Task = {
@@ -157,8 +159,8 @@ export const taskModule = {
             }
           }
         });
-        startListening = true
-        // TODO добавить Loading
+        startListening = true;
+        commit('setLoading', false);
       });
     },
 
@@ -168,41 +170,45 @@ export const taskModule = {
 
     async addTask({ commit, state }, payload: Task) {
       try {
+        commit('setLoading', true);
         await addDoc(stateCollectionRef, {
           title: payload.title,
           date: payload.date,
           importance: payload.importance
         });
-        // TODO добавить Loading
+        commit('setLoading', false);
       } catch (e) {
-        this.setError(state, true);
-        console.log(e.message)
+        commit('setError', true);
+        console.log(e.message);
       }
     },
 
     async deleteTask({ commit, state }, payload: string) {
       try {
+        commit('setLoading', true);
         await deleteDoc(doc(stateCollectionRef, payload));
-        // TODO добавить Loading
+        commit('setLoading', false);
       } catch (e) {
-        this.setError(state, true);
-        console.log(e.message)
+        commit('setError', true);
+        console.log(e.message);
       }
     },
 
     async editTask({ commit, state }, payload: Task) {
       try {
         const modifiedTask = doc(stateCollectionRef, payload.id);
+        commit('setLoading', true);
         await updateDoc(modifiedTask, {
           date: payload.date,
           title: payload.title,
           importance: payload.importance
         });
+        commit('setLoading', false);
+        router.push('/todo-list');
       } catch (e) {
-        this.setError(state, true);
-        console.log(e.message)
+        commit('setError', true);
+        console.log(e.message);
       }
     },
-
   }
 }

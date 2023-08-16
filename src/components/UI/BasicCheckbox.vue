@@ -5,11 +5,11 @@ const props = defineProps<{
   modelValue: boolean,
   id: string,
   label: string
-}>()
+}>();
 
 const emit = defineEmits<{
   (event: 'update:modelValue', checked: boolean): void;
-}>()
+}>();
 </script>
 
 <template>
