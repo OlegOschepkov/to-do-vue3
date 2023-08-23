@@ -30,8 +30,9 @@ const updateInput = (e: Event) => {
       :checked="radiovalue === Number(value)"
       @change="updateInput"
     >
-    <label v-if="label"
-           :for="id"
+    <label
+      v-if="label"
+      :for="id"
     >
       {{ label }}
     </label>
@@ -69,7 +70,7 @@ const updateInput = (e: Event) => {
     &:hover:after,
     &:active:after,
     &:focus:after {
-      border-color: $color-juniper;
+      border-color: $color-dodger;
     }
 
     &:before {
@@ -81,7 +82,7 @@ const updateInput = (e: Event) => {
       height: 9px;
       width: 9px;
       border-radius: 3px;
-      background-color: $color-juniper;
+      background-color: $color-dodger;
       transition: all $trans-default;
       z-index: 2;
       opacity: 0;

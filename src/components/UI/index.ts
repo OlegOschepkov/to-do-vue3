@@ -3,9 +3,9 @@ import BasicTextInput from '@/components/UI/BasicTextInput.vue';
 import basicCheckbox from '@/components/UI/BasicCheckbox.vue';
 import BasicRadio from '@/components/UI/BasicRadio.vue';
 import BasicDatepicker from '@/components/UI/BasicDatepicker.vue';
-import NavBar from '@/components/UI/NavBar.vue';
+import TheNavBar from '@/components/UI/TheNavBar.vue';
 import BasicSelect from '@/components/UI/BasicSelect.vue';
-import SvgIcon from '@/components/UI/SvgIcon.vue';
+import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
 
 export default [
   BasicButton,
@@ -14,8 +14,8 @@ export default [
   BasicRadio,
   BasicDatepicker,
   BasicSelect,
-  NavBar,
-  SvgIcon
+  TheNavBar,
+  BasicSvgIcon
 ]
 
 //and other UIs

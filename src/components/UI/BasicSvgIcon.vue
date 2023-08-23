@@ -10,5 +10,8 @@ const dynamicComponent = computed((): [ReturnType<typeof defineAsyncComponent>] 
 </script>
 
 <template>
-  <component :is="dynamicComponent" class="svg-icon"/>
+  <component
+    :is="dynamicComponent"
+    class="svg-icon"
+  />
 </template>

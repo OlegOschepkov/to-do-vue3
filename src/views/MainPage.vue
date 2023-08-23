@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SvgIcon from '@/components/UI/SvgIcon.vue';
+import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
 </script>
 
 <template>
@@ -43,7 +43,7 @@ import SvgIcon from '@/components/UI/SvgIcon.vue';
     <p class="text">Ветки и их особенности</p>
     <ul class="list">
       <li class="list__element">main - основная ветка, в ней лежит последняя версия.</li>
-      <li class="list__element"><span>options-api&nbsp;<SvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; composition-api&nbsp;<SvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; typescript&nbsp;<SvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; firebase&nbsp;<SvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; forms&nbsp;<SvgIcon name="check-icon" width="16" height="16"/>&nbsp;названия говорят сами за себя</span></li>
+      <li class="list__element"><span>options-api&nbsp;<BasicSvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; composition-api&nbsp;<BasicSvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; typescript&nbsp;<BasicSvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; firebase&nbsp;<BasicSvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; forms&nbsp;<BasicSvgIcon name="check-icon" width="16" height="16"/>&nbsp;названия говорят сами за себя</span></li>
       <li class="list__element">improvement(TODO) - различные улучшения, оптимизации, редизайн.</li>
     </ul>
 

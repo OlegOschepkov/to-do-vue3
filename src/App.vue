@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import NavBar from '@/components/UI/NavBar.vue';
+import TheNavBar from '@/components/UI/TheNavBar.vue';
 </script>
 
 <template>
   <div id="app">
     <div class="page-container">
-      <NavBar/>
+      <TheNavBar/>
       <div class="container container--animation">
         <router-view v-slot="{ Component }">
           <transition name="route" mode="out-in" appear>
@@ -23,7 +23,7 @@ import NavBar from '@/components/UI/NavBar.vue';
 #app {
   min-height: 100vh;
   //width: 100vw;
-  background-color: $color-white-lilac;
+  background-color: $color-snow;
 }
 .route-enter-from {
   opacity: 0;

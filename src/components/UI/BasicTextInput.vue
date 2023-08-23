@@ -21,7 +21,10 @@ const onChange = () => {
 </script>
 
 <template>
-  <div class="input-element" :class="value ? 'not-empty' : ''">
+  <div
+    class="input-element"
+    :class="value ? 'not-empty' : ''"
+  >
     <label :for="id">
       <input
         type="text"
@@ -33,7 +36,6 @@ const onChange = () => {
         :aria-describedby="errorMessage ? `${id}-error` : null"
         :aria-invalid="errorMessage ? true : null"
       />
-
       <span
         v-if="label"
         class="input-element__label"
@@ -60,11 +62,12 @@ const onChange = () => {
   margin-top: 15px;
 
   &.not-empty input {
-    border-color: $color-juniper;
+    border-color: $color-dodger;
 
     & + .input-element__label {
       transform: translate(-10px, -20px) scale(.8);
-      background-color: $color-juniper;
+      background-color: $color-dodger;
+      color: $color-default-white;
     }
   }
 
@@ -88,22 +91,24 @@ const onChange = () => {
     border: 2px solid $color-heather;
     width: 100%;
     transition: border-color 0.3s;
+    color: $color-nero;
 
     .not-empty &,
     &:hover,
     &:active,
     &:focus {
-      border-color: $color-juniper;
+      border-color: $color-dodger;
 
       & + .input-element__label {
         transform: translate(-10px, -20px) scale(.8);
-        background-color: $color-juniper;
+        background-color: $color-dodger;
+        color: $color-default-white;
       }
     }
 
     &:focus-visible {
       outline: none;
-      border-color: $color-juniper;
+      border-color: $color-dodger;
     }
   }
 }

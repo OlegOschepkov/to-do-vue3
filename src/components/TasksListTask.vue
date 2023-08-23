@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
-import Task from '@/types/task';
+import { Task } from '@/types/task';
+import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
 import DateObjTypes from '@/types/dateObjTypes';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 const { useMutations } = createNamespacedHelpers( 'task'); // specific module name
@@ -51,11 +52,19 @@ const gotToTaskEditPage = (id: string) => {
     </div>
     <div class="task-list__text-wrapper">
       <p class="task-list__title">{{task.title}}</p>
+      <p class="task-list__title">{{ task.completed ? 'true' : 'false'}}</p>
       <p class="task-list__importance">Важность: {{task.importance}}</p>
     </div>
     <div class="task-list__btns">
-      <BasicButton @click="$emit('deleteTask', task.id)">Удалить</BasicButton>
-      <BasicButton class="btn" type="button" @click="gotToTaskEditPage(task.id)">Редактировать</BasicButton>
+      <BasicButton @click="$emit('deleteTask', task.id)" title="Удалить" class="btn--delete">
+        <BasicSvgIcon name="delete-icon" width="48" height="48"/>
+      </BasicButton>
+      <BasicButton type="button" @click="gotToTaskEditPage(task.id)" title="Редактировать" class="btn--edit">
+        <BasicSvgIcon name="edit-icon" width="48" height="48"/>
+      </BasicButton>
+      <BasicButton type="button" @click="$emit('completeTask', task.id)" title="Завершить" class="btn--complete">
+        <BasicSvgIcon name="check-icon" width="48" height="48"/>
+      </BasicButton>
     </div>
   </li>
 </template>
@@ -68,10 +77,10 @@ const gotToTaskEditPage = (id: string) => {
   &__element {
     padding: 15px;
     border-radius: 8px;
-    border: 1px solid $color-san-marino;
+    border: 2px solid $color-heather;
     display: flex;
     flex-wrap: nowrap;
-    background-color: $color-cadet-blue;
+    background-color: $color-default-white;
     gap: 20px;
 
     &.task-list__element--overdue {
@@ -84,13 +93,22 @@ const gotToTaskEditPage = (id: string) => {
   &__btns {
     display: flex;
     flex-direction: column;
+    gap: 10px;
 
     .btn {
-      margin: 0;
-      width: 100%;
+      @include reset-item;
+      background-color: transparent;
 
-      &:not(:first-of-type) {
-        margin-top: 15px;
+      &--edit svg {
+        fill: $color-amber;
+      }
+
+      &--delete svg {
+        fill: $color-punch;
+      }
+
+      &--complete svg {
+        fill: $color-emerald;
       }
     }
   }

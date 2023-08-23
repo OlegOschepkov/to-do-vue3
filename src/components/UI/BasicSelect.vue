@@ -27,7 +27,8 @@ const selectedOption = (value: SortOptions) => { // Ограничиваем в�
       :value="modelValue"
       @change="selectedOption"
       placeholder="Select one"
-      :options="options">
+      :options="options"
+    >
     </Multiselect>
   </div>
 </template>

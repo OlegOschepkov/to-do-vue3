@@ -1,4 +1,4 @@
-import Task from '@/types/task';
+import { Task } from '@/types/task';
 import SortOptions from '@/types/sortOptions';
 
 interface State {

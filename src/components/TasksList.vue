@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import BasicTask from '@/components/BasicTask.vue';
+import TasksListTask from '@/components/TasksListTask.vue';
 import LoadingIndicator from '@/components/UI/LoadingIndicator.vue';
 import { defineProps } from 'vue';
-import Task from '@/types/task';
+import { Task } from '@/types/task';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 const { useActions } = createNamespacedHelpers( 'task'); // specific module name
 
@@ -11,18 +11,19 @@ const props = defineProps<{
   isLoading: boolean
 }>();
 
-const { deleteTask } = useActions(['deleteTask']);
+const { deleteTask, completeTask } = useActions(['deleteTask', 'completeTask'],);
 </script>
 
 <template>
   <h1 class="title">Список задач</h1>
   <ul class="tasks-list">
     <transition-group name="task-list">
-      <BasicTask
+      <TasksListTask
         v-for="task in tasks"
         :task="task"
         :key="task.id"
         @deleteTask="deleteTask"
+        @completeTask="completeTask"
       />
       <LoadingIndicator v-if="isLoading"/>
     </transition-group>
@@ -40,7 +41,7 @@ const { deleteTask } = useActions(['deleteTask']);
   gap: 20px;
   padding: 20px 10px 20px;
   margin: 0 0 40px;
-  border: 1px solid $color-san-marino;
+  box-shadow: 1px 5px 8px 0 rgba($color-matterhorn, 0.4);
   border-radius: 8px;
   position: relative;
 

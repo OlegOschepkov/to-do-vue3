@@ -6,8 +6,8 @@ import BasicTextInput from '@/components/UI/BasicTextInput.vue';
 import { useStore } from 'vuex';
 import { computed, onUnmounted, ref } from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-import Task from '@/types/task';
-import {useTasks} from '@/hooks/useTasks';
+import { Task } from '@/types/task';
+import { useTasks } from '@/hooks/useTasks';
 const { useGetters, useActions, useMutations } = createNamespacedHelpers( 'task'); // specific module name
 
 const state = ref<Task[]>(null);

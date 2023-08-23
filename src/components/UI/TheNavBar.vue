@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SvgIcon from '@/components/UI/SvgIcon.vue';
+import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
 import HeaderLinks from '@/types/headerLinks';
 import links from '@/_config';
 
@@ -21,10 +21,33 @@ const mouseLeave = () => {
 <template>
   <div class="navbar">
     <div class="navbar__wrapper container">
-      <SvgIcon name="logo-icon" width="64" height="64"/>
-      <router-link v-for="link in headerLinks" :key="link.key" :to="link.url" class="navbar__link" @mouseover.self="mouseOver" @mouseleave="mouseLeave" data-float-parent >
-        <SvgIcon :name="link.icon" width="64" height="64"/>
-        <span class="navbar__text-wrapper" data-float-text><span class="navbar__text">{{ link.text }}</span></span>
+      <BasicSvgIcon
+        name="logo-icon"
+        width="64"
+        height="64"
+      />
+      <router-link
+        v-for="link in headerLinks"
+        :key="link.key"
+        :to="link.url"
+        class="navbar__link"
+        @mouseover.self="mouseOver"
+        @mouseleave="mouseLeave"
+        data-float-parent
+      >
+        <BasicSvgIcon
+          :name="link.icon"
+          width="64"
+          height="64"
+        />
+        <span
+          class="navbar__text-wrapper"
+          data-float-text
+        >
+          <span class="navbar__text">
+            {{ link.text }}
+          </span>
+        </span>
       </router-link>
     </div>
   </div>
@@ -52,7 +75,7 @@ const mouseLeave = () => {
   width: 100%;
   z-index: 100;
   padding: 10px;
-  background-color: $color-straw;
+  background-color: $color-dodger;
 
   &__wrapper {
     display: flex;
@@ -88,11 +111,11 @@ const mouseLeave = () => {
     padding: 10px 10px 10px 44px;
     border-top-right-radius: 42px;
     border-bottom-right-radius: 42px;
-    background-color: $color-willow;
+    background-color: $color-anakiwa;
   }
 
   &__link {
-    background-color: $color-willow;
+    background-color: $color-anakiwa;
     display: flex;
     align-items: center;
     justify-content: center;

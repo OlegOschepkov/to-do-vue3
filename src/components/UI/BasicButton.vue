@@ -18,15 +18,15 @@
   padding: 15px;
   border: none;
   cursor: pointer;
-  color: white;
-  background-color: teal;
+  color: $color-default-white;
+  background-color: $color-azure;
   opacity: 1;
   transition: all 0.3s;
   text-decoration: none;
-}
+  border-radius: 8px;
 
-.btn:hover {
-  opacity: 0.7
+  &:hover {
+    opacity: 0.7
+  }
 }
-
 </style>

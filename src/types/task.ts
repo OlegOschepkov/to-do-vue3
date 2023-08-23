@@ -2,7 +2,12 @@ interface Task {
   id: string,
   title: string,
   date: Date,
-  importance: number
+  importance: number,
+  completed: boolean
 }
 
-export default Task
+const taskDefaults: Pick<Task, 'completed'> = {
+  completed: false
+}
+
+export {Task, taskDefaults}

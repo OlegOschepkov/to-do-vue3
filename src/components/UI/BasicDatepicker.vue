@@ -35,7 +35,12 @@ const updateDate = (e: Date) => {
     <p>
       {{ label }}
     </p>
-    <VueDatePicker :model-value="value" @update:model-value="updateDate" :name="name" :id="id"></VueDatePicker>
+    <VueDatePicker
+      :model-value="value"
+      @update:model-value="updateDate"
+      :name="name"
+      :id="id"
+    ></VueDatePicker>
     <span
       class="error"
       id="`${id}-error`"
@@ -49,18 +54,21 @@ const updateDate = (e: Date) => {
 
 <style lang="scss">
 @import '@/assets/scss/variables.scss';
+@import '@/assets/scss/mixins.scss';
 
-select {
-  margin-left: 15px;
-}
+.datepicker-element {
+  .dp__input {
+    border-radius: 8px;
+    border: 2px solid $color-heather;
+    transition: border-color $trans-default;
 
-.dp__input {
-  border-radius: 8px;
-  border: 2px solid $color-heather;
-  transition: border-color $trans-default;
+    &:hover {
+      border-color: $color-dodger;
+    }
+  }
 
-  &:hover {
-    border-color: $color-juniper;
+  p {
+    @include reset-item;
   }
 }
 </style>

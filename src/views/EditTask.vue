@@ -4,10 +4,10 @@ import LoadingIndicator from '@/components/UI/LoadingIndicator.vue'
 import { useStore } from 'vuex';
 import { ref } from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-import Task from '@/types/task';
+import { Task } from '@/types/task';
 const { useGetters, useActions, useMutations } = createNamespacedHelpers( 'task'); // specific module name
 import { useRoute } from 'vue-router'
-import {useTasks} from '@/hooks/useTasks';
+import { useTasks } from '@/hooks/useTasks';
 
 const state = ref<Task>(null);
 const route = useRoute();

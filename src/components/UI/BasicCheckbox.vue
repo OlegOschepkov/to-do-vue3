@@ -21,8 +21,9 @@ const emit = defineEmits<{
       :checked="modelValue"
       @change="emit('update:modelValue', $event.target.checked)"
     >
-    <label v-if="label"
-           :for="id"
+    <label
+      v-if="label"
+      :for="id"
     >
       {{ label }}
     </label>
@@ -65,13 +66,13 @@ const emit = defineEmits<{
 
       & + .input-element__label {
         transform: translate(-10px, -20px) scale(.8);
-        background-color: $color-juniper;
+        background-color: $color-dodger;
       }
     }
 
     &:focus-visible {
       outline: none;
-      border-color: $color-juniper;
+      border-color: $color-dodger;
     }
   }
 }

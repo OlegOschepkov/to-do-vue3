@@ -5,7 +5,7 @@ import BasicDatepicker from '@/components/UI/BasicDatepicker.vue';
 import BasicButton from '@/components/UI/BasicButton.vue';
 import { defineEmits, defineProps, reactive } from 'vue';
 import EditTask from '@/types/editTask';
-import Task from '@/types/task';
+import { Task, taskDefaults } from '@/types/task';
 import { v4 as uuidv4 } from "uuid";
 import { useForm, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
@@ -24,7 +24,8 @@ const formData = reactive<EditTask>({
   date: props.initialData && props.initialData.date ? props.initialData.date : new Date(Date.now()),
   title: props.initialData && props.initialData.title ? props.initialData.title : null,
   importance: props.initialData && props.initialData.importance ? props.initialData.importance : null,
-  btnTitle: props.initialData && props.initialData.btnTitle ? props.initialData.btnTitle : 'Создать'
+  btnTitle: props.initialData && props.initialData.btnTitle ? props.initialData.btnTitle : 'Создать',
+  ...taskDefaults
 });
 
 const { handleSubmit } = useForm({
@@ -86,7 +87,8 @@ const addTask = (values) => {
       id: 'temporal-will-be-rewritten-by-firebase',
       date: values.date,
       title: values.title,
-      importance: values.importance
+      importance: values.importance,
+      ...taskDefaults
     }
 
     emit('addTask', newTask);
@@ -95,7 +97,8 @@ const addTask = (values) => {
       id: formData.id,
       date: values.date,
       title: values.title,
-      importance: values.importance
+      importance: values.importance,
+      ...taskDefaults
     }
 
     emit('editTask', editingTask);
@@ -104,9 +107,7 @@ const addTask = (values) => {
 </script>
 
 <template>
-  <form
-    @submit="onSubmit"
-  >
+  <form @submit="onSubmit" class="form">
     <fieldset>
       <legend>{{groupLabel}}</legend>
       <BasicDatepicker
@@ -129,12 +130,42 @@ const addTask = (values) => {
         :name="el.name"
         :key="el.id"
       />
-      <ErrorMessage class="error" :name="radio.group[0].name" />
+      <ErrorMessage
+        class="error"
+        :name="radio.group[0].name"
+      />
     </fieldset>
-    <BasicButton type="submit">{{ formData.btnTitle }}</BasicButton>
+    <BasicButton
+      type="submit"
+    >
+      {{ formData.btnTitle }}
+    </BasicButton>
   </form>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import '@/assets/scss/mixins.scss';
+@import '@/assets/scss/variables.scss';
 
+.form {
+  box-shadow: 1px 5px 8px 0 rgba($color-matterhorn, 0.4);
+  border-radius: 8px;
+  padding: 20px 10px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  fieldset {
+    border-radius: 8px;
+  }
+
+  legend {
+    padding: 5px;
+    background-color: $color-snow;
+  }
+
+  [type="submit"] {
+    align-self: flex-start;
+  }
+}
 </style>

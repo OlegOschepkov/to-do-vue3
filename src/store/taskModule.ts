@@ -1,4 +1,4 @@
-import Task from '@/types/task';
+import { Task } from '@/types/task';
 import State from '@/types/state';
 import db from '@/firebase';
 import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
@@ -120,7 +120,8 @@ export const taskModule = {
             id: doc.id,
             date: doc.data().date.toDate(),
             title: doc.data().title,
-            importance: doc.data().importance
+            importance: doc.data().importance,
+            completed: doc.data().completed
           }
           tempObjForTasks.tasks.push(tempTask);
         });
@@ -145,7 +146,8 @@ export const taskModule = {
             id: change.doc.id,
             date: change.doc.data().date.toDate(),
             title: change.doc.data().title,
-            importance: change.doc.data().importance
+            importance: change.doc.data().importance,
+            completed: change.doc.data().completed
           }
           if (startListening) {
             if (change.type === "added") {
@@ -174,7 +176,8 @@ export const taskModule = {
         await addDoc(stateCollectionRef, {
           title: payload.title,
           date: payload.date,
-          importance: payload.importance
+          importance: payload.importance,
+          completed: payload.completed
         });
         commit('setLoading', false);
       } catch (e) {
@@ -194,6 +197,21 @@ export const taskModule = {
       }
     },
 
+    async completeTask({ commit, state }, payload: string) {
+      try {
+        commit('setLoading', true);
+        const modifiedTask = doc(stateCollectionRef, payload);
+        console.log(payload);
+        await updateDoc(modifiedTask, {
+          completed: true
+        });
+        commit('setLoading', false);
+      } catch (e) {
+        commit('setError', true);
+        console.log(e.message);
+      }
+    },
+
     async editTask({ commit, state }, payload: Task) {
       try {
         const modifiedTask = doc(stateCollectionRef, payload.id);
@@ -201,7 +219,8 @@ export const taskModule = {
         await updateDoc(modifiedTask, {
           date: payload.date,
           title: payload.title,
-          importance: payload.importance
+          importance: payload.importance,
+          completed: payload.completed
         });
         commit('setLoading', false);
         router.push('/todo-list');
