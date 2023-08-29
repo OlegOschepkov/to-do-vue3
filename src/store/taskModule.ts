@@ -3,8 +3,8 @@ import State from '@/types/state';
 import db from '@/firebase';
 import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc, query, where, limit } from 'firebase/firestore';
 import router from '@/router';
+import { defaultSortOptions } from '@/types/sortOptions';
 const stateCollectionRef = collection(db, "State");
-const LIMIT = 5;
 
 export const taskModule = {
   namespaced: true,
@@ -18,20 +18,7 @@ export const taskModule = {
     isLoading: true,
     isError: false,
     isRouted: false,
-    sortOptions: [
-      {
-        value: '',
-        label: 'Без сортировки'
-      },
-      {
-        value: 'title',
-        label: 'По названию'
-      },
-      {
-        value: 'date',
-        label: 'По дате'
-      },
-    ]
+    sortOptions: defaultSortOptions
   }),
 
   mutations: {
@@ -87,7 +74,7 @@ export const taskModule = {
     // computed свойства, кешируемые, вычисляемые значение
     getSortedTasks(state: State): Task[] {
       return [...state.tasks].sort((task1: Task, task2: Task) => {
-        if (task1[state.selectedSort] instanceof Date) {
+        if (task1[state.selectedSort] instanceof Date || typeof task1[state.selectedSort] === 'number') {
           return task1[state.selectedSort] - task2[state.selectedSort]
         } else {
           return task1[state.selectedSort]?.localeCompare(task2[state.selectedSort])
@@ -127,7 +114,8 @@ export const taskModule = {
             date: doc.data().date.toDate(),
             title: doc.data().title,
             importance: doc.data().importance,
-            completed: doc.data().completed
+            completed: doc.data().completed,
+            completedAt: doc.data().completedAt?.toDate()
           }
           tempObjForTasks.tasks.push(tempTask);
         });
@@ -153,7 +141,8 @@ export const taskModule = {
             date: change.doc.data().date.toDate(),
             title: change.doc.data().title,
             importance: change.doc.data().importance,
-            completed: change.doc.data().completed
+            completed: change.doc.data().completed,
+            completedAt: change.doc.data().completedAt?.toDate()
           }
           if (startListening) {
             if (change.type === "added") {
@@ -208,7 +197,8 @@ export const taskModule = {
         commit('setLoading', true);
         const modifiedTask = doc(stateCollectionRef, payload.id);
         await updateDoc(modifiedTask, {
-          completed: !payload.completed
+          completed: !payload.completed,
+          completedAt: new Date(Date.now())
         });
         commit('setLoading', false);
       } catch (e) {

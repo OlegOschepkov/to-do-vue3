@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BasicTextInput from '@/components/UI/BasicTextInput.vue';
+import BasicTextarea from '@/components/UI/BasicTextarea.vue';
 import BasicRadio from '@/components/UI/BasicRadio.vue';
 import BasicDatepicker from '@/components/UI/BasicDatepicker.vue';
 import BasicButton from '@/components/UI/BasicButton.vue';
@@ -32,7 +32,7 @@ const { handleSubmit } = useForm({
   validationSchema: yup.object({
     title: yup.string().min(3, 'Слишком короткое название').max(255, 'Слишком длинное название').required('Обязательное поле'),
     importance: yup.number().nonNullable().required('Обязательное поле'),
-    date: yup.date().min(new Date(Date.now() + 3600),"Задачу надо создавать заранее!").required('Обязательное поле'),
+    date: yup.date().min(new Date(Date.now() + 3600),"Задачу надо не позднее чем за час!").required('Обязательное поле'),
   }),
   initialValues: formData,
 });
@@ -83,6 +83,7 @@ const onSubmit = handleSubmit((values, { resetForm }) => {
 
 const addTask = (values) => {
   if (!props.initialData) {
+    console.log(values.date)
     let newTask: Task = {
       id: 'temporal-will-be-rewritten-by-firebase',
       date: values.date,
@@ -107,7 +108,11 @@ const addTask = (values) => {
 </script>
 
 <template>
-  <form @submit="onSubmit" class="form">
+  <form
+    class="form"
+    @submit="onSubmit"
+  >
+    <h3 class="title title--h3">Создание задачи</h3>
     <fieldset>
       <legend>{{groupLabel}}</legend>
       <BasicDatepicker
@@ -115,7 +120,7 @@ const addTask = (values) => {
         :label="datepicker.label"
         :name="datepicker.name"
       />
-      <BasicTextInput
+      <BasicTextarea
         :name="input.name"
         :id="input.id"
         :label="input.label"/>
@@ -135,15 +140,13 @@ const addTask = (values) => {
         :name="radio.group[0].name"
       />
     </fieldset>
-    <BasicButton
-      type="submit"
-    >
+    <BasicButton type="submit">
       {{ formData.btnTitle }}
     </BasicButton>
   </form>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import '@/assets/scss/mixins.scss';
 @import '@/assets/scss/variables.scss';
 
@@ -154,6 +157,7 @@ const addTask = (values) => {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 20px;
 
   fieldset {
     border-radius: 8px;

@@ -3,7 +3,8 @@ interface Task {
   title: string,
   date: Date,
   importance: number,
-  completed: boolean
+  completed: boolean,
+  completedAt?: Date
 }
 
 const taskDefaults: Pick<Task, 'completed'> = {

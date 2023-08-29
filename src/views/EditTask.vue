@@ -27,16 +27,24 @@ if (!getRouteState.value) {
 </script>
 
 <template>
-  <div class="page">
+  <div class="container container--animation">
     <h2 class="title title--h2">
       Редактирование задачи
     </h2>
 
-    <h2 class="title title--h2 error" v-if="isError">
+    <h2
+      class="title title--h2 error"
+      v-if="isError"
+    >
       Произошла ошибка, попробуйте еще раз
     </h2>
-    <LoadingIndicator v-if="isLoading"/>
-    <TaskForm v-else :initialData="{id: getTaskById.id, date: getTaskById.date, title: getTaskById.title, importance: getTaskById.importance, btnTitle}" @editTask="editTask"/>
+    <LoadingIndicator
+      v-if="isLoading"
+    />
+    <TaskForm
+      v-else
+      :initialData="{id: getTaskById.id, date: getTaskById.date, title: getTaskById.title, importance: getTaskById.importance, btnTitle}" @editTask="editTask"
+    />
   </div>
 </template>
 

@@ -1,4 +1,9 @@
-type SortOptions = [
+type SortOption = {
+  value: string,
+  label: string
+}
+
+const defaultSortOptions: SortOption[] = [
   {
     value: '',
     label: 'Без сортировки'
@@ -11,6 +16,10 @@ type SortOptions = [
     value: 'date',
     label: 'По дате'
   },
+  {
+    value: 'importance',
+    label: 'По важности'
+  },
 ]
 
-export default SortOptions
+export { defaultSortOptions, SortOption }

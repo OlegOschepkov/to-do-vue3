@@ -31,41 +31,67 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="page">
-    <div class="form">
-      <BasicTextInput
-        id="search"
-        name="search"
-        label="поиск"
-        :model-value="searchQuery"
-        @update:model-value="setSearchQuery"
-      />
-      <BasicSelect
-        :model-value="selectedSort"
-        @update:model-value="setSelectedSort"
-        :options="sortOptions"
-      />
-    </div>
+  <div class="container container--animation container--wide">
+    <div class="tasks-page">
+      <aside class="aside aside--left">
+        <div class="form">
+          <h3 class="title title--h3">Фильтрация</h3>
 
-    <h1 class="title">Список задач</h1>
+          <BasicTextInput
+            id="search"
+            name="search"
+            label="поиск"
+            :model-value="searchQuery"
+            @update:model-value="setSearchQuery"
+          />
+          <BasicSelect
+            :model-value="selectedSort"
+            @update:model-value="setSelectedSort"
+            :options="sortOptions"
+          />
+        </div>
+      </aside>
 
-    <div class="tasks-container">
-      <TasksList
-        :is-loading="isLoading"
-        :is-error="isError"
-        :tasks="getSortedAndSearchedActiveTasks"
-      />
-      <TasksList
-        :is-loading="isLoading"
-        :is-error="isError"
-        :completed="true"
-        :tasks="getSortedAndSearchedCompletedTasks"
-      />
+      <div class="container">
+        <h1 class="title">Список задач</h1>
+
+        <div class="tasks-container">
+          <TasksList
+            :is-loading="isLoading"
+            :is-error="isError"
+            :tasks="getSortedAndSearchedActiveTasks"
+          />
+          <TasksList
+            :is-loading="isLoading"
+            :is-error="isError"
+            :completed="true"
+            :tasks="getSortedAndSearchedCompletedTasks"
+          />
+        </div>
+      </div>
+
+      <aside class="aside aside--right">
+        <TaskForm
+          @addTask="addTask"
+        />
+      </aside>
     </div>
-    <TaskForm @addTask="addTask"/>
   </div>
 </template>
 
 <style scoped lang="scss">
+.tasks-page {
+  display: flex;
+  min-height: calc(100vh - 104px);
+}
 
+.aside {
+  width: 100%;
+  max-width: 250px;
+  padding-top: 25px;
+
+  .input-element:first-of-type {
+    margin-top: 0;
+  }
+}
 </style>

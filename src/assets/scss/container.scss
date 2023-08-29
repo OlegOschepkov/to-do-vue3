@@ -4,6 +4,10 @@
   max-width: 1000px;
   padding: 0 32px;
 
+  &--wide {
+    max-width: 1600px;
+  }
+
   @include vp-767 {
     padding: 0 16px;
   }

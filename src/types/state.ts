@@ -1,5 +1,5 @@
 import { Task } from '@/types/task';
-import SortOptions from '@/types/sortOptions';
+import { SortOption } from '@/types/sortOptions';
 
 interface State {
   tasks: Task[],
@@ -10,7 +10,7 @@ interface State {
   isLoading: boolean,
   isError: boolean,
   isRouted: boolean,
-  sortOptions: SortOptions
+  sortOptions: SortOption[]
 }
 
 export default State

@@ -6,10 +6,18 @@ import TheNavBar from '@/components/UI/TheNavBar.vue';
   <div id="app">
     <div class="page-container">
       <TheNavBar/>
-      <div class="container container--animation">
-        <router-view v-slot="{ Component }">
-          <transition name="route" mode="out-in" appear>
-            <component :is="Component" />
+      <div class="page">
+        <router-view
+          v-slot="{ Component }"
+        >
+          <transition
+            name="route"
+            mode="out-in"
+            appear
+          >
+            <component
+              :is="Component"
+            />
           </transition>
         </router-view>
       </div>
@@ -22,7 +30,6 @@ import TheNavBar from '@/components/UI/TheNavBar.vue';
 
 #app {
   min-height: 100vh;
-  //width: 100vw;
   background-color: $color-snow;
 }
 .route-enter-from {
@@ -43,8 +50,8 @@ import TheNavBar from '@/components/UI/TheNavBar.vue';
 }
 
 .page {
-  min-height: calc(100vh - 104px);
-  padding: 180px 0;
+  min-height: calc(100vh - 180px);
+  padding-top: 180px;
 }
 
 .page-container {
@@ -62,6 +69,10 @@ import TheNavBar from '@/components/UI/TheNavBar.vue';
 
   &--h2 {
     margin: 15px 0;
+  }
+
+  &--h3 {
+    margin: 0;
   }
 }
 </style>

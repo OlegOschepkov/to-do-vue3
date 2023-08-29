@@ -18,24 +18,28 @@ const { deleteTask, completeTask, returnTask } = useActions(['deleteTask', 'comp
 
 <template>
   <div class="tasks-list">
-    <h2 class="title title--h2"
-        v-if="!completed"
+    <h2
+      class="title title--h2"
+      v-if="!completed"
     >
       Текущие задачи
     </h2>
-    <h2 class="title title--h2"
-        v-else
+    <h2
+      class="title title--h2"
+      v-else
     >
       Завершенные задачи
     </h2>
-    <h2 class="title title--h2 error"
-        v-if="isError"
+    <h2
+      class="title title--h2 error"
+      v-if="isError"
     >
       Произошла ошибка, попробуйте еще раз
     </h2>
 
-    <h2 class="title title--h2"
-        v-else-if="tasks.length === 0 && isLoading === false"
+    <h2
+      class="title title--h2"
+      v-else-if="tasks.length === 0 && isLoading === false"
     >
       Создайте задачу или измените условия фильтрации
     </h2>

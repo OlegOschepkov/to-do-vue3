@@ -3,7 +3,7 @@ import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
 </script>
 
 <template>
-  <div class="page">
+  <div class="container container--animation">
     <h1 class="title">Главная страница</h1>
     <p class="text">Что было реализовано в приложении</p>
     <ul class="list">
@@ -46,7 +46,6 @@ import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
       <li class="list__element"><span>options-api&nbsp;<BasicSvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; composition-api&nbsp;<BasicSvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; typescript&nbsp;<BasicSvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; firebase&nbsp;<BasicSvgIcon name="check-icon" width="16" height="16"/>&nbsp;&#8594; forms&nbsp;<BasicSvgIcon name="check-icon" width="16" height="16"/>&nbsp;названия говорят сами за себя</span></li>
       <li class="list__element">improvement(TODO) - различные улучшения, оптимизации, редизайн.</li>
     </ul>
-
   </div>
 </template>
 
