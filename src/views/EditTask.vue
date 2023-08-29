@@ -14,15 +14,15 @@ const route = useRoute();
 const btnTitle = 'Изменить';
 const store = useStore();
 const { getTaskById, getRouteState } = useGetters(['getTaskById', 'getRouteState']);
-const { fetchTasks, editTask } = useActions(['fetchTasks', 'editTask']);
+const { editTask } = useActions(['editTask']);
 const { setTaskIdToEdit } = useMutations(['setTaskIdToEdit']);
 
 setTaskIdToEdit(route.params.taskId);
 
-const { isLoading, isError, getTasks } = useTasks(state, store);
+const { isLoading, isError, getTasksFromDB } = useTasks(state, store);
 
 if (!getRouteState.value) {
-  getTasks();
+  getTasksFromDB();
 }
 </script>
 

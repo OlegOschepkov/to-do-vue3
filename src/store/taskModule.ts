@@ -1,15 +1,17 @@
 import { Task } from '@/types/task';
 import State from '@/types/state';
 import db from '@/firebase';
-import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc, query, where, limit } from 'firebase/firestore';
 import router from '@/router';
 const stateCollectionRef = collection(db, "State");
+const LIMIT = 5;
 
 export const taskModule = {
   namespaced: true,
 
   state: (): State => ({
     tasks: [],
+    completedTasks: [],
     taskId: '',
     selectedSort: '',
     searchQuery: '',
@@ -67,16 +69,16 @@ export const taskModule = {
       state.taskId = payload
     },
 
-    addTaskToState(state: State, payload: Task) {
+    setNewTaskToState(state: State, payload: Task) {
       state.tasks.push(payload);
     },
 
-    modifyTaskInState(state: State, payload: Task) {
+    setModifiedTaskInState(state: State, payload: Task) {
       const modifiedTaskIndex = [...state.tasks].findIndex(item => item.id === payload.id);
       state.tasks[modifiedTaskIndex] = payload;
     },
 
-    deleteTaskFromState(state: State, payload: Task) {
+    setDeleteTaskFromState(state: State, payload: Task) {
       state.tasks = state.tasks.filter(item => item.id !== payload.id);
     }
   },
@@ -101,8 +103,12 @@ export const taskModule = {
       return [...state.tasks].filter((task) => task.id === state.taskId)[0];
     },
 
-    getSortedAndSearchedTasks(state: State, getters): Task[] {
-      return getters.getSortedTasks.filter((task) => task.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
+    getSortedAndSearchedActiveTasks(state: State, getters): Task[] {
+      return getters.getSortedTasks.filter(item => item.completed === false).filter(task => task.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
+    },
+
+    getSortedAndSearchedCompletedTasks(state: State, getters): Task[] {
+      return getters.getSortedTasks.filter(item => item.completed === true).filter((task) => task.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
     },
   },
 
@@ -151,13 +157,13 @@ export const taskModule = {
           }
           if (startListening) {
             if (change.type === "added") {
-              commit('addTaskToState', tempTask);
+              commit('setNewTaskToState', tempTask);
             }
             if (change.type === "modified") {
-              commit('modifyTaskInState', tempTask);
+              commit('setModifiedTaskInState', tempTask);
             }
             if (change.type === "removed") {
-              commit('deleteTaskFromState', tempTask);
+              commit('setDeleteTaskFromState', tempTask);
             }
           }
         });
@@ -170,7 +176,7 @@ export const taskModule = {
       state.unsubscribe();
     },
 
-    async addTask({ commit, state }, payload: Task) {
+    async addTask({ commit }, payload: Task) {
       try {
         commit('setLoading', true);
         await addDoc(stateCollectionRef, {
@@ -186,7 +192,7 @@ export const taskModule = {
       }
     },
 
-    async deleteTask({ commit, state }, payload: string) {
+    async deleteTask({ commit }, payload: string) {
       try {
         commit('setLoading', true);
         await deleteDoc(doc(stateCollectionRef, payload));
@@ -197,13 +203,12 @@ export const taskModule = {
       }
     },
 
-    async completeTask({ commit, state }, payload: string) {
+    async completeTask({ commit }, payload: Task) {
       try {
         commit('setLoading', true);
-        const modifiedTask = doc(stateCollectionRef, payload);
-        console.log(payload);
+        const modifiedTask = doc(stateCollectionRef, payload.id);
         await updateDoc(modifiedTask, {
-          completed: true
+          completed: !payload.completed
         });
         commit('setLoading', false);
       } catch (e) {
@@ -212,7 +217,7 @@ export const taskModule = {
       }
     },
 
-    async editTask({ commit, state }, payload: Task) {
+    async editTask({ commit }, payload: Task) {
       try {
         const modifiedTask = doc(stateCollectionRef, payload.id);
         commit('setLoading', true);

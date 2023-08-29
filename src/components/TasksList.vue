@@ -8,26 +8,56 @@ const { useActions } = createNamespacedHelpers( 'task'); // specific module name
 
 const props = defineProps<{
   tasks: Task[],
-  isLoading: boolean
+  isLoading: boolean,
+  isError: boolean,
+  completed?: boolean
 }>();
 
-const { deleteTask, completeTask } = useActions(['deleteTask', 'completeTask'],);
+const { deleteTask, completeTask, returnTask } = useActions(['deleteTask', 'completeTask', 'returnTask']);
 </script>
 
 <template>
-  <h1 class="title">Список задач</h1>
-  <ul class="tasks-list">
-    <transition-group name="task-list">
-      <TasksListTask
-        v-for="task in tasks"
-        :task="task"
-        :key="task.id"
-        @deleteTask="deleteTask"
-        @completeTask="completeTask"
-      />
-      <LoadingIndicator v-if="isLoading"/>
-    </transition-group>
-  </ul>
+  <div class="tasks-list">
+    <h2 class="title title--h2"
+        v-if="!completed"
+    >
+      Текущие задачи
+    </h2>
+    <h2 class="title title--h2"
+        v-else
+    >
+      Завершенные задачи
+    </h2>
+    <h2 class="title title--h2 error"
+        v-if="isError"
+    >
+      Произошла ошибка, попробуйте еще раз
+    </h2>
+
+    <h2 class="title title--h2"
+        v-else-if="tasks.length === 0 && isLoading === false"
+    >
+      Создайте задачу или измените условия фильтрации
+    </h2>
+
+    <ul class="tasks-list__list">
+      <transition-group
+        name="task-list"
+      >
+        <TasksListTask
+          v-for="task in tasks"
+          :task="task"
+          :key="task.id"
+          :completed="completed"
+          @deleteTask="deleteTask"
+          @completeTask="completeTask"
+        />
+        <LoadingIndicator
+          v-if="isLoading"
+        />
+      </transition-group>
+    </ul>
+  </div>
 </template>
 
 <style lang="scss">
@@ -35,14 +65,22 @@ const { deleteTask, completeTask } = useActions(['deleteTask', 'completeTask'],)
 @import '@/assets/scss/variables.scss';
 
 .tasks-list {
-  @include reset-list;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
   padding: 20px 10px 20px;
   margin: 0 0 40px;
   box-shadow: 1px 5px 8px 0 rgba($color-matterhorn, 0.4);
   border-radius: 8px;
+
+  .title--h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+  }
+}
+
+.tasks-list__list {
+  @include reset-list;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   position: relative;
 
   .lds-ellipsis {
@@ -64,6 +102,7 @@ const { deleteTask, completeTask } = useActions(['deleteTask', 'completeTask'],)
   }
 }
 
+// animation
 .task-list {
   display: inline-block;
   margin-right: 10px;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed, defineProps, defineEmits, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Task } from '@/types/task';
 import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
@@ -9,7 +9,8 @@ const { useMutations } = createNamespacedHelpers( 'task'); // specific module na
 import BasicButton from '@/components/UI/BasicButton.vue';
 
 const props = defineProps<{
-  task: Task
+  task: Task,
+  completed?: boolean,
 }>();
 
 const router = useRouter();
@@ -27,9 +28,29 @@ const prettifyDate = (computed((): DateObjTypes => {
   };
 }));
 
-const isOverdue = (computed((): boolean => {
-  return Date.now() > new Date(props.task.date).getTime()
-}));
+const isOverdue = (computed((): boolean => Date.now() > new Date(props.task.date).getTime()));
+
+const emit = defineEmits<{
+  (event: 'deleteTask', id: string): void;
+  (event: 'completeTask', Task): void;
+  (event: 'deleteTask', id: string): void;
+}>();
+
+const root = ref<HTMLElement | null>(null);
+
+const toggleModal = () => {
+  const modal = root.value?.querySelector('.modal');
+  modal.classList.toggle('is-active');
+}
+
+const deleteTask = (id) => {
+  emit('deleteTask', id);
+  toggleModal();
+}
+
+const completeTask = (task) => {
+  emit('completeTask', task);
+}
 
 const gotToTaskEditPage = (id: string) => {
   setTaskIdToEdit(id)
@@ -38,7 +59,10 @@ const gotToTaskEditPage = (id: string) => {
 </script>
 
 <template>
-  <li class="task-list__element" :class="{ 'task-list__element--overdue': isOverdue }">
+  <li class="task-list__element"
+    :class="{ 'task-list__element--overdue': isOverdue }"
+    ref="root"
+  >
     <div class="task-list__date">
       <div class="task-list__date-wrapper">
         <p class="task-list__day">{{prettifyDate.day}}</p>
@@ -55,16 +79,36 @@ const gotToTaskEditPage = (id: string) => {
       <p class="task-list__title">{{ task.completed ? 'true' : 'false'}}</p>
       <p class="task-list__importance">Важность: {{task.importance}}</p>
     </div>
-    <div class="task-list__btns">
-      <BasicButton @click="$emit('deleteTask', task.id)" title="Удалить" class="btn--delete">
-        <BasicSvgIcon name="delete-icon" width="48" height="48"/>
+    <div class="task-list__btns" v-if="!completed">
+      <BasicButton type="button" @click="toggleModal" title="Удалить" class="btn--red">
+        <BasicSvgIcon name="delete-icon" width="32" height="32"/>
       </BasicButton>
-      <BasicButton type="button" @click="gotToTaskEditPage(task.id)" title="Редактировать" class="btn--edit">
-        <BasicSvgIcon name="edit-icon" width="48" height="48"/>
+      <BasicButton type="button" @click="gotToTaskEditPage(task.id)" title="Редактировать" class="btn--yellow">
+        <BasicSvgIcon name="edit-icon" width="32" height="32"/>
       </BasicButton>
-      <BasicButton type="button" @click="$emit('completeTask', task.id)" title="Завершить" class="btn--complete">
-        <BasicSvgIcon name="check-icon" width="48" height="48"/>
+      <BasicButton type="button" @click="completeTask(task)" title="Завершить" class="btn--green">
+        <BasicSvgIcon name="check-icon" width="32" height="32"/>
       </BasicButton>
+    </div>
+    <div class="task-list__btns"  v-else>
+      <BasicButton type="button" @click="completeTask(task)" title="Вернуть в работу" class="btn--green">
+        <BasicSvgIcon name="redo-icon" width="32" height="32"/>
+      </BasicButton>
+    </div>
+    <div class="modal">
+      <div class="modal__wrapper">
+        <h4 class="modal__title">
+          Вы уверены?
+        </h4>
+        <div class="modal__btns">
+          <BasicButton type="button" @click="deleteTask(task.id)" class="btn--red">
+            Да!
+          </BasicButton>
+          <BasicButton type="button" @click="toggleModal" class="btn--green">
+            Нет
+          </BasicButton>
+        </div>
+      </div>
     </div>
   </li>
 </template>
@@ -82,6 +126,7 @@ const gotToTaskEditPage = (id: string) => {
     flex-wrap: nowrap;
     background-color: $color-default-white;
     gap: 20px;
+    position: relative;
 
     &.task-list__element--overdue {
       order: -1;
@@ -99,15 +144,15 @@ const gotToTaskEditPage = (id: string) => {
       @include reset-item;
       background-color: transparent;
 
-      &--edit svg {
+      &--yellow svg {
         fill: $color-amber;
       }
 
-      &--delete svg {
+      &--red svg {
         fill: $color-punch;
       }
 
-      &--complete svg {
+      &--green svg {
         fill: $color-emerald;
       }
     }
@@ -169,6 +214,49 @@ const gotToTaskEditPage = (id: string) => {
   &__importance {
     @include reset-item;
     font-style: italic;
+  }
+}
+
+.modal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color-cadet-blue, 0.8);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity $trans-default;
+  left: 0;
+  top: 0;
+  border-radius: 8px;
+
+  &__wrapper {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    gap: 15px;
+  }
+
+  &__title {
+    @include reset-item;
+    text-align: center;
+  }
+
+  &__btns {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+
+    .btn {
+      margin: 0;
+    }
+  }
+
+  &.is-active {
+    visibility: visible;
+    opacity: 1;
   }
 }
 

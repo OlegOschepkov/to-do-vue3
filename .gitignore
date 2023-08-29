@@ -2,7 +2,7 @@
 node_modules
 /dist
 README1.md
-
+/src/firebase/index.ts
 
 # local env files
 .env.local

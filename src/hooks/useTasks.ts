@@ -5,7 +5,7 @@ const { useActions } = createNamespacedHelpers( 'task'); // specific module name
 export function useTasks(state, store) {
   const { fetchTasks } = useActions(['fetchTasks']);
 
-  const getTasks = async () => {
+  const getTasksFromDB = async () => {
     state.value = await fetchTasks();
   };
 
@@ -13,6 +13,6 @@ export function useTasks(state, store) {
   const isError = computed((): boolean => store.state.task.isError);
 
   return {
-    getTasks, isLoading, isError
+    getTasksFromDB, isLoading, isError
   }
 }

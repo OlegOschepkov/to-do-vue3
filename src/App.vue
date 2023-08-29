@@ -56,4 +56,12 @@ import TheNavBar from '@/components/UI/TheNavBar.vue';
 .error {
   color: $color-cardinal;
 }
+
+.title {
+  margin: 25px 0;
+
+  &--h2 {
+    margin: 15px 0;
+  }
+}
 </style>

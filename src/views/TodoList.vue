@@ -13,17 +13,17 @@ const { useGetters, useActions, useMutations } = createNamespacedHelpers( 'task'
 const state = ref<Task[]>(null);
 const store = useStore();
 const taskState = store.state.task; // достаем именованный стейт
-const { fetchTasks, addTask, stopListener } = useActions(['fetchTasks', 'addTask', 'stopListener']);
-const { getSortedAndSearchedTasks } = useGetters(['getSortedAndSearchedTasks']);
+const { addTask, stopListener } = useActions(['addTask', 'stopListener']);
+const { getSortedAndSearchedActiveTasks, getSortedAndSearchedCompletedTasks } = useGetters(['getSortedAndSearchedActiveTasks', 'getSortedAndSearchedCompletedTasks']);
 const { setSelectedSort, setSearchQuery } = useMutations(['setSelectedSort', 'setSearchQuery']);
 
-const { isLoading, isError, getTasks } = useTasks(state, store);
+const { isLoading, isError, getTasksFromDB } = useTasks(state, store);
 
 const selectedSort = computed((): string => taskState.selectedSort);
 const searchQuery = computed((): string => taskState.searchQuery);
 const sortOptions = computed((): string[] => taskState.sortOptions);
 
-getTasks();
+getTasksFromDB();
 
 onUnmounted(() => {
   stopListener()
@@ -32,29 +32,34 @@ onUnmounted(() => {
 
 <template>
   <div class="page">
-    <BasicTextInput
-      id="search"
-      name="search"
-      label="поиск"
-      :model-value="searchQuery"
-      @update:model-value="setSearchQuery"
-    />
-    <BasicSelect
-      :model-value="selectedSort"
-      @update:model-value="setSelectedSort"
-      :options="sortOptions"
-    />
-    <h2 class="title title--h2 error" v-if="isError">
-      Произошла ошибка, попробуйте еще раз
-    </h2>
-    <h2 class="title title--h2" v-if="getSortedAndSearchedTasks.length === 0 && isLoading === false">
-      Создайте задачу или измените условия фильтрации
-    </h2>
+    <div class="form">
+      <BasicTextInput
+        id="search"
+        name="search"
+        label="поиск"
+        :model-value="searchQuery"
+        @update:model-value="setSearchQuery"
+      />
+      <BasicSelect
+        :model-value="selectedSort"
+        @update:model-value="setSelectedSort"
+        :options="sortOptions"
+      />
+    </div>
 
-    <div class="tasks-container" v-else>
+    <h1 class="title">Список задач</h1>
+
+    <div class="tasks-container">
       <TasksList
         :is-loading="isLoading"
-        :tasks="getSortedAndSearchedTasks"
+        :is-error="isError"
+        :tasks="getSortedAndSearchedActiveTasks"
+      />
+      <TasksList
+        :is-loading="isLoading"
+        :is-error="isError"
+        :completed="true"
+        :tasks="getSortedAndSearchedCompletedTasks"
       />
     </div>
     <TaskForm @addTask="addTask"/>

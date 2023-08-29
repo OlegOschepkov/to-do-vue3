@@ -28,5 +28,17 @@
   &:hover {
     opacity: 0.7
   }
+
+  &--yellow {
+    background-color: $color-amber;
+  }
+
+  &--red {
+    background-color: $color-punch;
+  }
+
+  &--green {
+    background-color: $color-emerald;
+  }
 }
 </style>
