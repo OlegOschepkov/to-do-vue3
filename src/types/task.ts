@@ -4,7 +4,8 @@ interface Task {
   date: Date,
   importance: number,
   completed: boolean,
-  completedAt?: Date
+  completedAt?: Date,
+  author?: string
 }
 
 const taskDefaults: Pick<Task, 'completed'> = {

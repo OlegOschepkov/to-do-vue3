@@ -1,15 +1,23 @@
 import { Task } from '@/types/task';
+import NewUser from '@/types/newUser';
+import LoginPayload from '@/types/loginPayload';
 import State from '@/types/state';
-import db from '@/firebase';
-import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc, query, where, limit } from 'firebase/firestore';
+import { db } from '@/firebase';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, setPersistence, browserSessionPersistence } from "firebase/auth";
+import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc, query, where } from 'firebase/firestore';
 import router from '@/router';
 import { defaultSortOptions } from '@/types/sortOptions';
+
 const stateCollectionRef = collection(db, "State");
+const auth = getAuth();
 
 export const taskModule = {
   namespaced: true,
 
   state: (): State => ({
+    user: {
+      data: {}
+    },
     tasks: [],
     completedTasks: [],
     taskId: '',
@@ -67,7 +75,17 @@ export const taskModule = {
 
     setDeleteTaskFromState(state: State, payload: Task) {
       state.tasks = state.tasks.filter(item => item.id !== payload.id);
-    }
+    },
+
+    setUser(state, payload) {
+      state.user.data = payload;
+    },
+
+    setClearState(state) {
+      console.log('setClearState')
+      state.tasks = [];
+      state.user.data = {}
+    },
   },
 
   getters: {
@@ -97,13 +115,32 @@ export const taskModule = {
     getSortedAndSearchedCompletedTasks(state: State, getters): Task[] {
       return getters.getSortedTasks.filter(item => item.completed === true).filter((task) => task.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
     },
+
+    getUser(state) {
+      return state.user
+    }
   },
 
   actions: {
     // функции вызывающие мутации, сами они не должны менять state
-    async fetchTasks({commit, dispatch}) { //  {state, commit, ...}  = context
+    async fetchTasks({state, commit, dispatch}) { //  {state, commit, ...}  = context
       try {
-        const querySnapshot = await getDocs(stateCollectionRef);
+        console.log("Fetch tasks")
+        // let loggedUser;
+        await auth.onAuthStateChanged(function(user) {
+          if (user) {
+            console.log(user)
+            commit('setUser', user)
+          }
+        });
+        // if (!loggedUser) return;
+        // commit('setUser', loggedUser)
+
+        const queryRef = query(
+          stateCollectionRef,
+          where("author", "==", state.user.data.uid ? state.user.data.uid : 'all')
+        );
+        const querySnapshot = await getDocs(queryRef);
         const tempObjForTasks = {
           tasks: [] as Task[]
         };
@@ -115,7 +152,7 @@ export const taskModule = {
             title: doc.data().title,
             importance: doc.data().importance,
             completed: doc.data().completed,
-            completedAt: doc.data().completedAt?.toDate()
+            completedAt: doc.data().completedAt?.toDate(),
           }
           tempObjForTasks.tasks.push(tempTask);
         });
@@ -165,14 +202,15 @@ export const taskModule = {
       state.unsubscribe();
     },
 
-    async addTask({ commit }, payload: Task) {
+    async addTask({ state, commit }, payload: Task) {
       try {
         commit('setLoading', true);
         await addDoc(stateCollectionRef, {
           title: payload.title,
           date: payload.date,
           importance: payload.importance,
-          completed: payload.completed
+          completed: payload.completed,
+          author: state.user.data.uid,
         });
         commit('setLoading', false);
       } catch (e) {
@@ -224,5 +262,70 @@ export const taskModule = {
         console.log(e.message);
       }
     },
+
+    async registerNewUser({ commit }, payload: NewUser) {
+      try {
+        const response = await createUserWithEmailAndPassword(auth, payload.email, payload.password);
+        if (response) {
+          console.log(2)
+
+          commit('setUser', response.user)
+          await updateProfile(response.user, {
+            displayName: payload.name
+          });
+        }
+      } catch (e) {
+        commit('setError', true);
+        console.log(e.message);
+      }
+    },
+
+    async logIn({ commit }, payload: LoginPayload) {
+      try {
+        const response = await signInWithEmailAndPassword(auth, payload.email, payload.password)
+        if (response) {
+          console.log(payload)
+          console.log(response.user)
+
+          commit('setUser', response.user);
+          // router.push('/');
+        }
+      } catch (e) {
+        commit('setError', true);
+        console.log(e);
+        console.log(e.message);
+      }
+    },
+
+    async logOut({ commit }) {
+      try {
+        await signOut(auth)
+        console.log(4)
+
+        commit('setUser', null)
+        commit('setClearState', null)
+      } catch (e) {
+        commit('setError', true);
+        console.log(e.message);
+      }
+    },
+
+    async fetchUser({ commit }, user) {
+      try {
+        if (user) {
+          console.log(5)
+          console.log(user)
+
+          commit("setUser", user);
+        } else {
+          console.log(6)
+
+          commit("setUser", null);
+        }
+      } catch (e) {
+        commit('setError', true);
+        console.log(e.message);
+      }
+    }
   }
 }

@@ -11,6 +11,24 @@ const links = [
     text: 'Список задач',
     key: 321
   },
+  {
+    icon: 'tasks-icon',
+    url: '/register',
+    text: 'Регистрация',
+    key: 320
+  },
+  {
+    icon: 'tasks-icon',
+    url: '/login',
+    text: 'Войти',
+    key: 301
+  },
+  {
+    icon: 'tasks-icon',
+    url: '/profile',
+    text: 'Профиль',
+    key: 301
+  }
 ]
 
 export default links;

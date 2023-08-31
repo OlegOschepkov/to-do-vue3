@@ -83,7 +83,6 @@ const onSubmit = handleSubmit((values, { resetForm }) => {
 
 const addTask = (values) => {
   if (!props.initialData) {
-    console.log(values.date)
     let newTask: Task = {
       id: 'temporal-will-be-rewritten-by-firebase',
       date: values.date,
