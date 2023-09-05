@@ -61,7 +61,7 @@ const onChange = () => {
   position: relative;
   margin-top: 15px;
 
-  &.not-empty input {
+  &.not-empty textarea {
     border-color: $color-dodger;
 
     & + .input-element__label {
@@ -93,17 +93,10 @@ const onChange = () => {
     transition: border-color 0.3s;
     color: $color-nero;
 
-    .not-empty &,
     &:hover,
     &:active,
     &:focus {
       border-color: $color-dodger;
-
-      & + .input-element__label {
-        transform: translate(-10px, -20px) scale(.8);
-        background-color: $color-dodger;
-        color: $color-default-white;
-      }
     }
 
     &:focus-visible {

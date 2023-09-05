@@ -74,7 +74,6 @@ const toggleModalAndResetRightsError = () => {
 const deleteTask = (id) => {
   if (isHasRights.value) {
     emit('deleteTask', id);
-    toggleModal(modalProperties.delete.id);
   } else {
     toggleModalAndResetRightsError();
   }
@@ -83,7 +82,6 @@ const deleteTask = (id) => {
 const completeTask = (task) => {
   if (isHasRights.value) {
     emit('completeTask', task);
-    toggleModal(modalProperties.closeRightsError.id);
   } else {
     toggleModalAndResetRightsError();
   }
@@ -153,7 +151,7 @@ const gotToTaskEditPage = (id: string) => {
         class="btn--red"
         type="button"
         title="Удалить"
-        @click="deleteTask(task.id)"
+        @click="toggleModal(modalProperties.delete.id)"
       >
         <BasicSvgIcon
           name="delete-icon"
@@ -200,7 +198,7 @@ const gotToTaskEditPage = (id: string) => {
       <BasicButton
         class="btn--green"
         type="button"
-        @click="toggleModal"
+        @click="toggleModal(modalProperties.delete.id)"
       >
         Нет
       </BasicButton>
