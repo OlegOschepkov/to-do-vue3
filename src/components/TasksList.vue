@@ -4,7 +4,7 @@ import LoadingIndicator from '@/components/UI/LoadingIndicator.vue';
 import { defineProps } from 'vue';
 import { Task } from '@/types/task';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-const { useActions } = createNamespacedHelpers( 'task'); // specific module name
+const { useActions } = createNamespacedHelpers('taskModule'); // specific module name
 
 const props = defineProps<{
   tasks: Task[],
@@ -31,15 +31,8 @@ const { deleteTask, completeTask, returnTask } = useActions(['deleteTask', 'comp
       Завершенные задачи
     </h2>
     <h2
-      class="title title--h2 error"
-      v-if="isError"
-    >
-      Произошла ошибка, попробуйте еще раз
-    </h2>
-
-    <h2
       class="title title--h2"
-      v-else-if="tasks.length === 0 && isLoading === false"
+      v-if="tasks.length === 0 && isLoading === false"
     >
       Создайте задачу или измените условия фильтрации
     </h2>
@@ -53,6 +46,7 @@ const { deleteTask, completeTask, returnTask } = useActions(['deleteTask', 'comp
           :task="task"
           :key="task.id"
           :completed="completed"
+          :is-error="isError"
           @deleteTask="deleteTask"
           @completeTask="completeTask"
         />

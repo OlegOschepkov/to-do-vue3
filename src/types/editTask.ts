@@ -1,7 +1,8 @@
 import { Task } from '@/types/task';
 
 interface EditTask extends Task {
-  btnTitle?: string
+  btnTitle?: string,
+
 }
 
 export default EditTask

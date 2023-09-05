@@ -5,7 +5,8 @@ import { useStore } from 'vuex';
 import { ref } from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 import { Task } from '@/types/task';
-const { useGetters, useActions, useMutations } = createNamespacedHelpers( 'task'); // specific module name
+const taskModule = createNamespacedHelpers('taskModule'); // specific module name
+const authModule = createNamespacedHelpers('authModule'); // specific module name
 import { useRoute } from 'vue-router'
 import { useTasks } from '@/hooks/useTasks';
 
@@ -13,10 +14,12 @@ const state = ref<Task>(null);
 const route = useRoute();
 const btnTitle = 'Изменить';
 const store = useStore();
-const { getTaskById, getRouteState } = useGetters(['getTaskById', 'getRouteState']);
-const { editTask } = useActions(['editTask']);
-const { setTaskIdToEdit } = useMutations(['setTaskIdToEdit']);
+const { getTaskById, getRouteState } = taskModule.useGetters(['getTaskById', 'getRouteState']);
+const { editTask } = taskModule.useActions(['editTask']);
+const { setTaskIdToEdit } = taskModule.useMutations(['setTaskIdToEdit']);
+const { fetchUser } = authModule.useActions(['fetchUser']);
 
+fetchUser();
 setTaskIdToEdit(route.params.taskId);
 
 const { isLoading, isError, getTasksFromDB } = useTasks(state, store);
@@ -43,7 +46,15 @@ if (!getRouteState.value) {
     />
     <TaskForm
       v-else
-      :initialData="{id: getTaskById.id, date: getTaskById.date, title: getTaskById.title, importance: getTaskById.importance, btnTitle}" @editTask="editTask"
+      :initialData="{
+      id: getTaskById.id,
+      date: getTaskById.date,
+      title: getTaskById.title,
+      importance: getTaskById.importance,
+      access: getTaskById.access,
+      btnTitle
+    }"
+      @editTask="editTask"
     />
   </div>
 </template>

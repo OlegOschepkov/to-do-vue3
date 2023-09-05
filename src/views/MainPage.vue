@@ -49,9 +49,17 @@ import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
   </div>
 </template>
 
-<style scoped>
-  .list__element span {
+<style scoped lang="scss">
+@import '@/assets/scss/variables.scss';
+
+.list__element {
+  span {
     display: flex;
     align-items: center;
   }
+
+  svg {
+    fill: $color-emerald;
+  }
+}
 </style>

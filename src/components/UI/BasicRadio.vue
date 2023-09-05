@@ -6,7 +6,8 @@ const props = defineProps<{
   radiovalue: number,
   id: string,
   name: string,
-  label: string
+  label: string,
+  checked?: boolean,
 }>();
 
 const { value, handleChange } = useField(props.name, {
@@ -27,7 +28,7 @@ const updateInput = (e: Event) => {
       v-model="value"
       :id="id"
       :value="radiovalue"
-      :checked="radiovalue === Number(value)"
+      :checked="radiovalue === Number(value) || checked"
       @change="updateInput"
     >
     <label

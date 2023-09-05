@@ -1,28 +1,25 @@
 <script setup lang="ts">
-import BasicButton from '@/components/UI/BasicButton.vue';
+import {defineProps} from 'vue/dist/vue';
+
+const props = defineProps<{
+  title: string,
+  id: string,
+}>();
+
 </script>
 
 <template>
-  <div class="modal">
+  <div class="modal"
+    :id="id"
+  >
     <div class="modal__wrapper">
       <h4 class="modal__title">
-        Вы уверены?
+        {{ title }}
       </h4>
       <div class="modal__btns">
-        <BasicButton
-          class="btn--red"
-          type="button"
-          @click="$emit('delete')"
-        >
-          Да!
-        </BasicButton>
-        <BasicButton
-          class="btn--green"
-          type="button"
-          @click="$emit('close')"
-        >
-          Нет
-        </BasicButton>
+        <slot>
+
+        </slot>
       </div>
     </div>
   </div>

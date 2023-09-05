@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import TheNavBar from '@/components/UI/TheNavBar.vue';
+import {createNamespacedHelpers} from 'vuex-composition-helpers';
+const { useActions } = createNamespacedHelpers('authModule');
+
+const { fetchUser } = useActions(['fetchUser']);
+
+fetchUser();
 </script>
 
 <template>

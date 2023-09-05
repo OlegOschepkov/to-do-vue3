@@ -2,7 +2,10 @@
 import DynamicForm from "@/components/DynamicForm.vue";
 import * as yup from 'yup';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-const { useActions } = createNamespacedHelpers( 'task'); // specific module name
+const taskModule = createNamespacedHelpers('taskModule'); // specific module name
+const authModule = createNamespacedHelpers('authModule'); // specific module name
+
+const { getUser } = authModule.useGetters(['getUser']);
 
 const formSchema = {
   fields: [
@@ -45,13 +48,19 @@ const validationSchema = yup.object().shape({
   passwordConfirm: yup.string().min(6, 'Введите от 6 до 50 символов').max(50, 'Введите от 6 до 50 символов').oneOf([yup.ref('password')], 'Пароли должны совпадать').required('Обязательное поле'),
 });
 
-const { registerNewUser } = useActions(['registerNewUser']);
+const { registerNewUser } = authModule.useActions(['registerNewUser']);
 </script>
 
 <template>
   <div class="container container--animation">
     <h1 class="title">Регистрация</h1>
+    <div
+      v-if="getUser.data?.uid"
+    >
+      Вы уже зарегистрированы, чтобы создать нового пользователя выйдите из текущего профиля
+    </div>
     <DynamicForm
+      v-else
       @submitHandler="registerNewUser"
       :validation-schema="validationSchema"
       :schema="formSchema.fields"

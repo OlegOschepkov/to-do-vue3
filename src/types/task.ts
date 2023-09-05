@@ -5,7 +5,8 @@ interface Task {
   importance: number,
   completed: boolean,
   completedAt?: Date,
-  author?: string
+  author?: string,
+  access: string,
 }
 
 const taskDefaults: Pick<Task, 'completed'> = {

@@ -1,15 +1,22 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
+import { defineProps } from 'vue';
+import { useField } from 'vee-validate';
 
 const props = defineProps<{
-  modelValue: boolean,
+  checkboxvalue: string,
   id: string,
-  label: string
+  name: string,
+  label: string,
+  checked?: boolean,
 }>();
 
-const emit = defineEmits<{
-  (event: 'update:modelValue', checked: boolean): void;
-}>();
+
+const { checked, handleChange } = useField(props.name, undefined, {
+  type: 'checkbox',
+  checkedValue: props.checkboxvalue,
+  uncheckedValue: null
+});
+
 </script>
 
 <template>
@@ -18,8 +25,9 @@ const emit = defineEmits<{
       type="checkbox"
       v-bind="$attrs"
       :id="id"
-      :checked="modelValue"
-      @change="emit('update:modelValue', $event.target.checked)"
+      :value="checkboxvalue"
+      :checked="checked"
+      @change="handleChange(checkboxvalue)"
     >
     <label
       v-if="label"
@@ -33,46 +41,58 @@ const emit = defineEmits<{
 <style scoped lang="scss">
 @import '@/assets/scss/variables.scss';
 
-.input-element {
-  position: relative;
-  margin-top: 15px;
+.checkbox-element {
+  margin-top: 5px;
 
-  &__label {
-    position: absolute;
-    left: 9px;
-    top: 8px;
-    transform: scale(1);
+  label {
+    position: relative;
     font-size: 16px;
     line-height: 150%;
-    padding: 1px 10px;
-    border-radius: 8px;
-    background-color: $color-default-white;
-    transition: all $trans-default;
+    padding: 1px 10px 1px 30px;
+    cursor: pointer;
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      height: 15px;
+      width: 15px;
+      border-radius: 3px;
+      border: 2px solid $color-heather;
+      background-color: $color-default-white;
+      transition: all $trans-default;
+      z-index: 1;
+    }
+
+    &:hover:after,
+    &:active:after,
+    &:focus:after {
+      border-color: $color-dodger;
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      height: 9px;
+      width: 9px;
+      border-radius: 3px;
+      background-color: $color-dodger;
+      transition: all $trans-default;
+      z-index: 2;
+      opacity: 0;
+    }
   }
 
   input {
-    margin: 0;
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid $color-heather;
-    width: 100%;
-    transition: border-color 0.3s;
+    display: none;
 
-    &:hover,
-    &:active,
-    &:not(:placeholder-shown),
-    &:focus {
-      border-color: $color-juniper;
-
-      & + .input-element__label {
-        transform: translate(-10px, -20px) scale(.8);
-        background-color: $color-dodger;
-      }
-    }
-
-    &:focus-visible {
-      outline: none;
-      border-color: $color-dodger;
+    &:checked ~ label:before {
+      opacity: 1;
     }
   }
 }

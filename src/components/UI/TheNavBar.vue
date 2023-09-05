@@ -31,6 +31,7 @@ const mouseLeave = () => {
         :key="link.key"
         :to="link.url"
         class="navbar__link"
+        :class="{ 'navbar__link--profile' : link.url === '/profile' }"
         @mouseover.self="mouseOver"
         @mouseleave="mouseLeave"
         data-float-parent
@@ -112,6 +113,7 @@ const mouseLeave = () => {
     border-top-right-radius: 42px;
     border-bottom-right-radius: 42px;
     background-color: $color-anakiwa;
+
   }
 
   &__link {
@@ -122,6 +124,10 @@ const mouseLeave = () => {
     padding: 10px;
     position: relative;
     border-radius: 50%;
+
+    &--profile {
+      margin-left: auto;
+    }
 
     &.router-link-active {
       background-color: $color-white-lilac;

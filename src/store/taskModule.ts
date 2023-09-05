@@ -1,23 +1,16 @@
 import { Task } from '@/types/task';
-import NewUser from '@/types/newUser';
-import LoginPayload from '@/types/loginPayload';
-import State from '@/types/state';
+import TasksState from '@/types/tasksState';
 import { db } from '@/firebase';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, setPersistence, browserSessionPersistence } from "firebase/auth";
-import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc, query, where } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, deleteDoc, onSnapshot, updateDoc, query, where, or } from 'firebase/firestore';
 import router from '@/router';
 import { defaultSortOptions } from '@/types/sortOptions';
 
 const stateCollectionRef = collection(db, "State");
-const auth = getAuth();
 
 export const taskModule = {
   namespaced: true,
 
-  state: (): State => ({
-    user: {
-      data: {}
-    },
+  state: (): TasksState => ({
     tasks: [],
     completedTasks: [],
     taskId: '',
@@ -30,13 +23,13 @@ export const taskModule = {
   }),
 
   mutations: {
-    setTasks(state: State, payload: State) {
+    setTasks(state: TasksState, payload: TasksState) {
       if (payload && payload.tasks) {
         state.tasks = payload.tasks;
       }
     },
 
-    setLoading(state: State, payload: boolean) {
+    setLoading(state: TasksState, payload: boolean) {
       if (payload) {
         state.isLoading = payload
       } else {
@@ -44,53 +37,43 @@ export const taskModule = {
       }
     },
 
-    setError(state: State, payload: boolean) {
+    setError(state: TasksState, payload: boolean) {
       state.isError = payload
     },
 
-    setSelectedSort(state: State, payload: string) {
+    setSelectedSort(state: TasksState, payload: string) {
       state.selectedSort = payload
     },
 
-    setSearchQuery(state: State, payload: string) {
+    setSearchQuery(state: TasksState, payload: string) {
       state.searchQuery = payload
     },
 
-    setRouteState(state: State) {
+    setRouteState(state: TasksState) {
       state.isRouted = true
     },
 
-    setTaskIdToEdit (state: State, payload: string) {
+    setTaskIdToEdit (state: TasksState, payload: string) {
       state.taskId = payload
     },
 
-    setNewTaskToState(state: State, payload: Task) {
+    setNewTaskToState(state: TasksState, payload: Task) {
       state.tasks.push(payload);
     },
 
-    setModifiedTaskInState(state: State, payload: Task) {
+    setModifiedTaskInState(state: TasksState, payload: Task) {
       const modifiedTaskIndex = [...state.tasks].findIndex(item => item.id === payload.id);
       state.tasks[modifiedTaskIndex] = payload;
     },
 
-    setDeleteTaskFromState(state: State, payload: Task) {
+    setDeleteTaskFromState(state: TasksState, payload: Task) {
       state.tasks = state.tasks.filter(item => item.id !== payload.id);
-    },
-
-    setUser(state, payload) {
-      state.user.data = payload;
-    },
-
-    setClearState(state) {
-      console.log('setClearState')
-      state.tasks = [];
-      state.user.data = {}
     },
   },
 
   getters: {
     // computed свойства, кешируемые, вычисляемые значение
-    getSortedTasks(state: State): Task[] {
+    getSortedTasks(state: TasksState): Task[] {
       return [...state.tasks].sort((task1: Task, task2: Task) => {
         if (task1[state.selectedSort] instanceof Date || typeof task1[state.selectedSort] === 'number') {
           return task1[state.selectedSort] - task2[state.selectedSort]
@@ -100,45 +83,33 @@ export const taskModule = {
       })
     },
 
-    getRouteState (state: State): boolean {
+    getRouteState (state: TasksState): boolean {
       return state.isRouted;
     },
 
-    getTaskById(state: State): Task {
+    getTaskById(state: TasksState): Task {
       return [...state.tasks].filter((task) => task.id === state.taskId)[0];
     },
 
-    getSortedAndSearchedActiveTasks(state: State, getters): Task[] {
+    getSortedAndSearchedActiveTasks(state: TasksState, getters): Task[] {
       return getters.getSortedTasks.filter(item => item.completed === false).filter(task => task.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
     },
 
-    getSortedAndSearchedCompletedTasks(state: State, getters): Task[] {
+    getSortedAndSearchedCompletedTasks(state: TasksState, getters): Task[] {
       return getters.getSortedTasks.filter(item => item.completed === true).filter((task) => task.title.toLowerCase().includes(state.searchQuery.toLowerCase()))
     },
-
-    getUser(state) {
-      return state.user
-    }
   },
 
   actions: {
     // функции вызывающие мутации, сами они не должны менять state
-    async fetchTasks({state, commit, dispatch}) { //  {state, commit, ...}  = context
+    async fetchTasks({ commit, dispatch, rootState }) { //  {state, commit, ...}  = context
       try {
-        console.log("Fetch tasks")
-        // let loggedUser;
-        await auth.onAuthStateChanged(function(user) {
-          if (user) {
-            console.log(user)
-            commit('setUser', user)
-          }
-        });
-        // if (!loggedUser) return;
-        // commit('setUser', loggedUser)
-
         const queryRef = query(
           stateCollectionRef,
-          where("author", "==", state.user.data.uid ? state.user.data.uid : 'all')
+          or(
+            where("author", "==", rootState.authModule.user?.data?.uid ),
+            where("access", "==", 'all')
+          )
         );
         const querySnapshot = await getDocs(queryRef);
         const tempObjForTasks = {
@@ -153,6 +124,8 @@ export const taskModule = {
             importance: doc.data().importance,
             completed: doc.data().completed,
             completedAt: doc.data().completedAt?.toDate(),
+            author: doc.data().author,
+            access: doc.data().access
           }
           tempObjForTasks.tasks.push(tempTask);
         });
@@ -179,7 +152,9 @@ export const taskModule = {
             title: change.doc.data().title,
             importance: change.doc.data().importance,
             completed: change.doc.data().completed,
-            completedAt: change.doc.data().completedAt?.toDate()
+            completedAt: change.doc.data().completedAt?.toDate(),
+            author: change.doc.data().author,
+            access: change.doc.data().access
           }
           if (startListening) {
             if (change.type === "added") {
@@ -202,7 +177,7 @@ export const taskModule = {
       state.unsubscribe();
     },
 
-    async addTask({ state, commit }, payload: Task) {
+    async addTask({ state, commit, rootState }, payload: Task) {
       try {
         commit('setLoading', true);
         await addDoc(stateCollectionRef, {
@@ -210,7 +185,8 @@ export const taskModule = {
           date: payload.date,
           importance: payload.importance,
           completed: payload.completed,
-          author: state.user.data.uid,
+          author: rootState.authModule.user?.data?.uid,
+          access: payload.access
         });
         commit('setLoading', false);
       } catch (e) {
@@ -219,7 +195,7 @@ export const taskModule = {
       }
     },
 
-    async deleteTask({ commit }, payload: string) {
+    async deleteTask({ state, commit, getters, rootState }, payload: string) {
       try {
         commit('setLoading', true);
         await deleteDoc(doc(stateCollectionRef, payload));
@@ -230,7 +206,7 @@ export const taskModule = {
       }
     },
 
-    async completeTask({ commit }, payload: Task) {
+    async completeTask({ state, commit, getters, rootState }, payload: Task) {
       try {
         commit('setLoading', true);
         const modifiedTask = doc(stateCollectionRef, payload.id);
@@ -245,7 +221,7 @@ export const taskModule = {
       }
     },
 
-    async editTask({ commit }, payload: Task) {
+    async editTask({ state, commit, getters, rootState }, payload: Task) {
       try {
         const modifiedTask = doc(stateCollectionRef, payload.id);
         commit('setLoading', true);
@@ -253,7 +229,8 @@ export const taskModule = {
           date: payload.date,
           title: payload.title,
           importance: payload.importance,
-          completed: payload.completed
+          completed: payload.completed,
+          access: payload.access
         });
         commit('setLoading', false);
         router.push('/todo-list');
@@ -262,70 +239,5 @@ export const taskModule = {
         console.log(e.message);
       }
     },
-
-    async registerNewUser({ commit }, payload: NewUser) {
-      try {
-        const response = await createUserWithEmailAndPassword(auth, payload.email, payload.password);
-        if (response) {
-          console.log(2)
-
-          commit('setUser', response.user)
-          await updateProfile(response.user, {
-            displayName: payload.name
-          });
-        }
-      } catch (e) {
-        commit('setError', true);
-        console.log(e.message);
-      }
-    },
-
-    async logIn({ commit }, payload: LoginPayload) {
-      try {
-        const response = await signInWithEmailAndPassword(auth, payload.email, payload.password)
-        if (response) {
-          console.log(payload)
-          console.log(response.user)
-
-          commit('setUser', response.user);
-          // router.push('/');
-        }
-      } catch (e) {
-        commit('setError', true);
-        console.log(e);
-        console.log(e.message);
-      }
-    },
-
-    async logOut({ commit }) {
-      try {
-        await signOut(auth)
-        console.log(4)
-
-        commit('setUser', null)
-        commit('setClearState', null)
-      } catch (e) {
-        commit('setError', true);
-        console.log(e.message);
-      }
-    },
-
-    async fetchUser({ commit }, user) {
-      try {
-        if (user) {
-          console.log(5)
-          console.log(user)
-
-          commit("setUser", user);
-        } else {
-          console.log(6)
-
-          commit("setUser", null);
-        }
-      } catch (e) {
-        commit('setError', true);
-        console.log(e.message);
-      }
-    }
   }
 }

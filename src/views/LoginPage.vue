@@ -3,7 +3,12 @@ import DynamicForm from "@/components/DynamicForm.vue";
 import * as yup from 'yup';
 import NewUser from '@/types/newUser';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-const { useActions } = createNamespacedHelpers( 'task'); // specific module name
+import {useRouter} from 'vue-router';
+const { useActions, useGetters } = createNamespacedHelpers('authModule'); // specific module name
+
+const router = useRouter();
+
+const { getUser } = useGetters(['getUser']);
 
 const formSchema = {
   fields: [
@@ -36,7 +41,13 @@ const { logIn } = useActions(['logIn']);
 <template>
   <div class="container container--animation">
     <h1 class="title">Регистрация</h1>
+    <div
+      v-if="getUser.data?.uid"
+    >
+      Вы уже зарегистрированы, чтобы создать нового пользователя выйдите из профиля
+    </div>
     <DynamicForm
+      v-else
       @submitHandler="logIn"
       :validation-schema="validationSchema"
       :schema="formSchema.fields"

@@ -5,17 +5,20 @@ import { Task } from '@/types/task';
 import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
 import DateObjTypes from '@/types/dateObjTypes';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-const { useMutations } = createNamespacedHelpers( 'task'); // specific module name
+const taskModule = createNamespacedHelpers('taskModule'); // specific module name
+const authModule = createNamespacedHelpers('authModule'); // specific module name
 import BasicButton from '@/components/UI/BasicButton.vue';
 import TaskModal from '@/components/TaskModal.vue';
 
 const props = defineProps<{
   task: Task,
+  isError: boolean,
   completed?: boolean,
 }>();
 
 const router = useRouter();
-const { setTaskIdToEdit } = useMutations(['setTaskIdToEdit']);
+const { setTaskIdToEdit, setRightsError } = taskModule.useMutations(['setTaskIdToEdit', 'setRightsError']);
+const { getUser } = authModule.useGetters(['getUser']);
 
 const prettifyDateToObj = (somedate): DateObjTypes => {
   const date = new Date(somedate);
@@ -29,12 +32,27 @@ const prettifyDateToObj = (somedate): DateObjTypes => {
   };
 };
 
-const prettifyDateToStr = (somedate): string => new Date(somedate).toLocaleString();
+const prettifyDateToStr = (somedate: Date): string => new Date(somedate).toLocaleString();
 
 const prettifyCreationDate = (computed((): DateObjTypes => prettifyDateToObj(props.task.date)));
 const prettifyCompletionDate = (computed((): string => prettifyDateToStr(props.task.completedAt)));
-
 const isOverdue = (computed((): boolean => Date.now() > new Date(props.task.date).getTime()));
+const isHasRights = (computed((): boolean => getUser.value.data.uid === props.task.author));
+
+const modalProperties = {
+  delete: {
+    title: 'Вы уверены что хотите удалить задачу?',
+    id: 'deleteModal',
+  },
+  closeRightsError: {
+    title: 'У Вас нет доступа для этой операции',
+    id: 'closeRightsErrorModal',
+  },
+  closeError: {
+    title: 'Произошла ошибка, попробуйте еще раз',
+    id: 'closeErrorModal',
+  },
+};
 
 const emit = defineEmits<{
   (event: 'deleteTask', id: string): void;
@@ -44,23 +62,40 @@ const emit = defineEmits<{
 
 const root = ref<HTMLElement | null>(null);
 
-const toggleModal = () => {
-  const modal = root.value?.querySelector('.modal');
+const toggleModal = (id: string) => {
+  const modal = root.value?.querySelector(`#${id}`);
   modal.classList.toggle('is-active');
 }
 
+const toggleModalAndResetRightsError = () => {
+  toggleModal(modalProperties.closeRightsError.id);
+}
+
 const deleteTask = (id) => {
-  emit('deleteTask', id);
-  toggleModal();
+  if (isHasRights.value) {
+    emit('deleteTask', id);
+    toggleModal(modalProperties.delete.id);
+  } else {
+    toggleModalAndResetRightsError();
+  }
 }
 
 const completeTask = (task) => {
-  emit('completeTask', task);
+  if (isHasRights.value) {
+    emit('completeTask', task);
+    toggleModal(modalProperties.closeRightsError.id);
+  } else {
+    toggleModalAndResetRightsError();
+  }
 }
 
 const gotToTaskEditPage = (id: string) => {
-  setTaskIdToEdit(id)
-  router.push(`/edit-task/${id}`)
+  if (isHasRights.value) {
+    setTaskIdToEdit(id);
+    router.push(`/edit-task/${id}`)
+  } else {
+    toggleModalAndResetRightsError();
+  }
 };
 </script>
 
@@ -91,6 +126,9 @@ const gotToTaskEditPage = (id: string) => {
       </p>
       <p class="task-list__importance">Важность: {{task.importance}}</p>
     </div>
+    <div class="task-list__access" v-if="task.access">
+      Групповое
+    </div>
     <div
       class="task-list__btns"
       v-if="completed"
@@ -115,7 +153,7 @@ const gotToTaskEditPage = (id: string) => {
         class="btn--red"
         type="button"
         title="Удалить"
-        @click="toggleModal"
+        @click="deleteTask(task.id)"
       >
         <BasicSvgIcon
           name="delete-icon"
@@ -149,32 +187,48 @@ const gotToTaskEditPage = (id: string) => {
       </BasicButton>
     </div>
     <TaskModal
-      @delete="deleteTask(task.id)"
-      @close="toggleModal"
-    />
-<!--    <div class="modal">-->
-<!--      <div class="modal__wrapper">-->
-<!--        <h4 class="modal__title">-->
-<!--          Вы уверены?-->
-<!--        </h4>-->
-<!--        <div class="modal__btns">-->
-<!--          <BasicButton-->
-<!--            class="btn&#45;&#45;red"-->
-<!--            type="button"-->
-<!--            @click="deleteTask(task.id)"-->
-<!--          >-->
-<!--            Да!-->
-<!--          </BasicButton>-->
-<!--          <BasicButton-->
-<!--            class="btn&#45;&#45;green"-->
-<!--            type="button"-->
-<!--            @click="toggleModal"-->
-<!--          >-->
-<!--            Нет-->
-<!--          </BasicButton>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+      :title="modalProperties.delete.title"
+      :id="modalProperties.delete.id"
+    >
+      <BasicButton
+        class="btn--red"
+        type="button"
+        @click="deleteTask(task.id)"
+      >
+        Да!
+      </BasicButton>
+      <BasicButton
+        class="btn--green"
+        type="button"
+        @click="toggleModal"
+      >
+        Нет
+      </BasicButton>
+    </TaskModal>
+    <TaskModal
+      :title="modalProperties.closeRightsError.title"
+      :id="modalProperties.closeRightsError.id"
+    >
+      <BasicButton
+        class="btn--red"
+        type="button"
+        @click="toggleModalAndResetRightsError"
+      >
+        Понятно
+      </BasicButton>
+    </TaskModal>
+    <TaskModal
+      :title="modalProperties.closeError.title"
+      :id="modalProperties.closeError.id"
+    >
+      <BasicButton
+        class="btn--red"
+        type="button"
+        @click="toggleModal"
+      >
+        Понятно
+      </BasicButton>
+    </TaskModal>
   </li>
 </template>
 
@@ -184,13 +238,11 @@ const gotToTaskEditPage = (id: string) => {
 
 .task-list {
   &__element {
-    padding: 15px;
     border-radius: 8px;
     border: 2px solid $color-heather;
     display: flex;
     flex-wrap: nowrap;
     background-color: $color-default-white;
-    gap: 20px;
     position: relative;
 
     &--overdue {
@@ -207,11 +259,17 @@ const gotToTaskEditPage = (id: string) => {
   &__btns {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 10px;
+    padding: 15px 15px 15px 7px;
 
     .btn {
       @include reset-item;
       background-color: transparent;
+
+      svg {
+        pointer-events: none;
+      }
 
       &--yellow svg {
         fill: $color-amber;
@@ -231,16 +289,15 @@ const gotToTaskEditPage = (id: string) => {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-right: 10px;
     min-width: 120px;
     border-right: 1px solid $color-san-marino;
+    padding: 15px;
   }
 
   &__date-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
   }
 
   &__year,
@@ -274,6 +331,7 @@ const gotToTaskEditPage = (id: string) => {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 15px 7px 15px 15px;
   }
 
   &__title {
@@ -287,6 +345,19 @@ const gotToTaskEditPage = (id: string) => {
   &__importance {
     @include reset-item;
     font-style: italic;
+  }
+
+  &__access {
+    display: inline;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    text-align: center;
+    background-color: $color-emerald;
+    position: relative;
+    top: 0;
+    color: $color-default-white;
+    font-weight: bold;
+    padding: 15px 0;
   }
 }
 

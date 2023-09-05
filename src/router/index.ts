@@ -6,7 +6,7 @@ import NotFound from '@/views/NotFound.vue';
 import LoginPage from '@/views/LoginPage.vue';
 import RegisterPage from '@/views/RegisterPage.vue';
 import ProfilePage from '@/views/ProfilePage.vue';
-import { auth } from '@/firebase';
+import { auth, app } from '@/firebase';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -44,9 +44,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/profile',
     name: 'Profile',
     component: ProfilePage,
-    meta: {
-      requiresAuth: true,
-    },
   },
 
   // Always last!
@@ -62,33 +59,21 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL)
 });
 
-// router.beforeEach((to, from, next) => {
-//   const user = auth.currentUser;
-//
-//   console.log(user)
-//
-//   if (!user && from.path !== '/login') {
-//     next('/login')
-//   } else {
-//     next()
-//   }
-// });
-
-
-router.beforeEach((to, from) => {
-  const user = auth.currentUser;
-
-  // instead of having to check every route record with
-  // to.matched.some(record => record.meta.requiresAuth)
-  console.log(user)
-  if (to.meta.requiresAuth && !user) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
-    return {
-      path: '/login',
-      // save the location we were at to come back later
-      query: { redirect: to.fullPath },
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+      const unsubscribe = auth.onAuthStateChanged(user => {
+        unsubscribe();
+        resolve(user);
+      }, reject);
     }
+  )
+};
+
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.requiresAuth && !await getCurrentUser()) {
+    next('/profile')
+  } else {
+    next();
   }
 })
 

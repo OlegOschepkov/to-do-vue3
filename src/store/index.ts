@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
-import {taskModule} from '@/store/taskModule';
+import { taskModule } from '@/store/taskModule';
+import { authModule } from '@/store/authModule';
 
 export default new Vuex.Store({
   state: {
@@ -11,6 +12,7 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    task: taskModule
+    taskModule,
+    authModule,
   }
 })

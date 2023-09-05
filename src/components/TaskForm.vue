@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BasicTextarea from '@/components/UI/BasicTextarea.vue';
 import BasicRadio from '@/components/UI/BasicRadio.vue';
+import BasicCheckbox from '@/components/UI/BasicCheckbox.vue';
 import BasicDatepicker from '@/components/UI/BasicDatepicker.vue';
 import BasicButton from '@/components/UI/BasicButton.vue';
 import { defineEmits, defineProps, reactive } from 'vue';
@@ -24,6 +25,7 @@ const formData = reactive<EditTask>({
   date: props.initialData && props.initialData.date ? props.initialData.date : new Date(Date.now()),
   title: props.initialData && props.initialData.title ? props.initialData.title : null,
   importance: props.initialData && props.initialData.importance ? props.initialData.importance : null,
+  access: props.initialData && props.initialData.access ? props.initialData.access : null,
   btnTitle: props.initialData && props.initialData.btnTitle ? props.initialData.btnTitle : 'Создать',
   ...taskDefaults
 });
@@ -49,6 +51,16 @@ const formDescription = {
     id: uuidv4(),
     name: 'title',
   },
+  checkbox: {
+    groupLabel: 'Персональная (по умолчанию) или групповая задача',
+    group: {
+        label: 'Групповая',
+        id: uuidv4(),
+        name: 'access',
+        value: 'all',
+        checked: false
+      }
+  },
   radio: {
     groupLabel: 'Важность',
     group: [
@@ -56,7 +68,7 @@ const formDescription = {
         label: 'Высокая',
         id: uuidv4(),
         name: 'importance',
-        value: 3
+        value: 3,
       },
       {
         label: 'Средняя',
@@ -74,7 +86,7 @@ const formDescription = {
   }
 };
 
-const { groupLabel, datepicker, input, radio } = formDescription;
+const { groupLabel, datepicker, input, radio, checkbox } = formDescription;
 
 const onSubmit = handleSubmit((values, { resetForm }) => {
   addTask(values);
@@ -88,6 +100,7 @@ const addTask = (values) => {
       date: values.date,
       title: values.title,
       importance: values.importance,
+      access: values.access,
       ...taskDefaults
     }
 
@@ -98,6 +111,7 @@ const addTask = (values) => {
       date: values.date,
       title: values.title,
       importance: values.importance,
+      access: values.access,
       ...taskDefaults
     }
 
@@ -123,6 +137,21 @@ const addTask = (values) => {
         :name="input.name"
         :id="input.id"
         :label="input.label"/>
+    </fieldset>
+    <fieldset>
+      <legend>{{ checkbox.groupLabel }}</legend>
+      <BasicCheckbox
+        :id="checkbox.group.id"
+        :checkboxvalue="checkbox.group.value"
+        :checked="checkbox.group.checked"
+        :label="checkbox.group.label"
+        :name="checkbox.group.name"
+        :key="checkbox.group.id"
+      />
+      <ErrorMessage
+        class="error"
+        :name="radio.group[0].name"
+      />
     </fieldset>
     <fieldset>
       <legend>{{ radio.groupLabel }}</legend>
