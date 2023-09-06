@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import DynamicForm from "@/components/DynamicForm.vue";
 import * as yup from 'yup';
-import NewUser from '@/types/newUser';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-import {useRouter} from 'vue-router';
-const { useActions, useGetters } = createNamespacedHelpers('authModule'); // specific module name
+import { useRouter } from 'vue-router';
+const { useActions, useGetters } = createNamespacedHelpers('authModule');
 
 const router = useRouter();
 

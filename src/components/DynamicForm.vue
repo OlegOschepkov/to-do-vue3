@@ -18,7 +18,7 @@ const emit = defineEmits<{
   (event: 'submitHandler', values: object): void;
 }>();
 
-const onSubmit = (values) => {
+const onSubmit = (values: object) => {
   emit('submitHandler', values);
 }
 </script>

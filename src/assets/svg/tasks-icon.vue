@@ -1,3 +1,6 @@
+<script setup lang="ts">
+</script>
+
 <template>
   <svg fill="#000000" width="64px" height="64px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
     <g id="SVGRepo_bgCarrier" stroke-width="0"/>
@@ -8,12 +11,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: "tasks-icon"
-}
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 
 </style>

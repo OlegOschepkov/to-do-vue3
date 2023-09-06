@@ -4,24 +4,15 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import { defineProps } from 'vue';
 import { useField } from 'vee-validate';
 
-const props = defineProps({
-  modelValue: {
-    type: Date,
-    default: new Date(Date.now()),
-  },
-  id: {
-    type: String,
-  },
-  label: {
-    type: String,
-  },
-  name: {
-    type: String,
-  }
-});
+const props = defineProps<{
+  modelValue?: Date,
+  id: string,
+  name: string,
+  label: string,
+}>();
 
 const { value, errorMessage, handleChange } = useField(props.name, {
-  initialValue: props.modelValue,
+  initialValue: props.modelValue ? props.modelValue : new Date(Date.now()),
   valueProp: props.modelValue
 });
 

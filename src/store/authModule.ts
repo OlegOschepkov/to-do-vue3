@@ -16,17 +16,17 @@ export const authModule = {
   }),
 
   mutations: {
-    setUser(state, payload) {
+    setUser(state: UserState, payload: object) {
       state.user.data = payload;
     },
 
-    setClearState(state) {
+    setClearState(state: UserState) {
       state.user.data = {}
     },
   },
 
   getters: {
-    getUser(state) {
+    getUser(state: UserState) {
       return state.user
     }
   },
@@ -52,6 +52,8 @@ export const authModule = {
         const response = await signInWithEmailAndPassword(auth, payload.email, payload.password)
         if (response) {
           commit('setUser', response.user);
+          //TODO: срывается роутер
+
           router.push('/');
         }
       } catch (e) {

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
-import HeaderLinks from '@/types/headerLinks';
-import links from '@/_config';
+import { HeaderLinks, defaultHeaderLinks } from '@/types/headerLinks';
 
-const headerLinks: HeaderLinks[] = links;
+const headerLinks: HeaderLinks[] = defaultHeaderLinks;
 
 let floatingText: HTMLElement;
 

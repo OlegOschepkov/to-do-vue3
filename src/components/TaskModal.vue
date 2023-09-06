@@ -9,7 +9,8 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="modal"
+  <div
+    class="modal"
     :id="id"
   >
     <div class="modal__wrapper">

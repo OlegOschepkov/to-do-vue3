@@ -1,3 +1,5 @@
+<script setup lang="ts">
+</script>
 
 <template>
   <svg viewBox="-8 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -5,12 +7,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: "profile-icon"
-}
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 
 </style>

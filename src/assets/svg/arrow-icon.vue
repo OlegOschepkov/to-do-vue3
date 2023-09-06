@@ -1,3 +1,6 @@
+<script setup lang="ts">
+</script>
+
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="37px" height="24px" viewBox="0 0 36 24" version="1.1">
     <g id="surface1">
@@ -8,12 +11,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: "arrow-icon"
-}
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 
 </style>

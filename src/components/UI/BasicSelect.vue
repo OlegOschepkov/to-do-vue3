@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect';
 import { defineEmits, defineProps } from 'vue';
-import SortOptions from '@/types/sortOptions';
-
-interface foo {
-  modelValue: string | number,
-}
+import { SortOption, defaultSortOptions } from '@/types/sortOptions';
 
 const props = defineProps<{
-  modelValue: string | number,
-  options: SortOptions[]
+  modelValue: string | number | undefined,
+  options: SortOption[]
 }>();
 
 const emit = defineEmits<{
-  (event: 'update:modelValue', value: SortOptions): void;
+  (event: 'update:modelValue', value: string): void;
 }>();
 
-const selectedOption = (value: SortOptions) => { // Ограничиваем возможности выбора указанными в SortOptions
+const onSelect = (value: string) => {
   emit('update:modelValue', value)
 };
 </script>
@@ -25,8 +21,8 @@ const selectedOption = (value: SortOptions) => { // Ограничиваем в�
   <div class="select-element">
     <Multiselect
       :value="modelValue"
-      @change="selectedOption"
-      placeholder="Select one"
+      @change="onSelect"
+      placeholder="Без сортировки"
       :options="options"
     >
     </Multiselect>

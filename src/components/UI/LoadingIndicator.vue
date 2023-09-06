@@ -1,3 +1,6 @@
+<script setup lang="ts">
+</script>
+
 <template>
   <div class="lds-ellipsis">
     <div class="lds-ellipsis__background"></div>
@@ -9,9 +12,6 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-</script>
 
 <style scoped lang="scss">
 .lds-ellipsis {

@@ -1,3 +1,5 @@
+<script setup lang="ts">
+</script>
 
 <template>
   <svg fill="#000000" width="64px" height="64px" viewBox="0 -32 576 576" xmlns="http://www.w3.org/2000/svg">
@@ -9,12 +11,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: "home-icon"
-}
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 
 </style>

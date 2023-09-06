@@ -14,10 +14,6 @@ const { value, handleChange } = useField(props.name, {
   initialValue: props.radiovalue,
   valueProp: props.radiovalue
 });
-
-const updateInput = (e: Event) => {
-  handleChange(e, true)
-};
 </script>
 
 <template>
@@ -29,7 +25,7 @@ const updateInput = (e: Event) => {
       :id="id"
       :value="radiovalue"
       :checked="radiovalue === Number(value) || checked"
-      @change="updateInput"
+      @change="handleChange(radiovalue)"
     >
     <label
       v-if="label"

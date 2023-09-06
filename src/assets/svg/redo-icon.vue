@@ -1,3 +1,5 @@
+<script setup lang="ts">
+</script>
 
 <template>
   <svg height="48px" width="48px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 30.72 30.72" enable-background="new 0 0 512 512" xml:space="preserve">
@@ -5,12 +7,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: "redo-icon"
-}
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 
 </style>

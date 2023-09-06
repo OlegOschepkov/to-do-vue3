@@ -2,12 +2,12 @@
 import DynamicForm from "@/components/DynamicForm.vue";
 import * as yup from 'yup';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-const taskModule = createNamespacedHelpers('taskModule'); // specific module name
-const authModule = createNamespacedHelpers('authModule'); // specific module name
+import FormSchema from '@/types/formSchema';
+const { useGetters, useActions } = createNamespacedHelpers('authModule');
 
-const { getUser } = authModule.useGetters(['getUser']);
+const { getUser } = useGetters(['getUser']);
 
-const formSchema = {
+const formSchema: FormSchema = {
   fields: [
     {
       label: 'Введите имя',
@@ -48,7 +48,7 @@ const validationSchema = yup.object().shape({
   passwordConfirm: yup.string().min(6, 'Введите от 6 до 50 символов').max(50, 'Введите от 6 до 50 символов').oneOf([yup.ref('password')], 'Пароли должны совпадать').required('Обязательное поле'),
 });
 
-const { registerNewUser } = authModule.useActions(['registerNewUser']);
+const { registerNewUser } = useActions(['registerNewUser']);
 </script>
 
 <template>

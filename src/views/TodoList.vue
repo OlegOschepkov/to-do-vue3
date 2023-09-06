@@ -7,13 +7,14 @@ import { useStore } from 'vuex';
 import { computed, onUnmounted, ref } from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 import { Task } from '@/types/task';
+import { SortOption } from '@/types/sortOptions';
 import { useTasks } from '@/hooks/useTasks';
-const taskModule = createNamespacedHelpers('taskModule'); // specific module name
-const authModule = createNamespacedHelpers('authModule'); // specific module name
+const taskModule = createNamespacedHelpers('taskModule');
+const authModule = createNamespacedHelpers('authModule');
 
 const state = ref<Task[]>(null);
 const store = useStore();
-const taskState = store.state.taskModule; // достаем именованный стейт
+const taskState = store.state.taskModule;
 const { addTask, stopListener } = taskModule.useActions(['addTask', 'stopListener']);
 const { getSortedAndSearchedActiveTasks, getSortedAndSearchedCompletedTasks } = taskModule.useGetters(['getSortedAndSearchedActiveTasks', 'getSortedAndSearchedCompletedTasks']);
 const { setSelectedSort, setSearchQuery } = taskModule.useMutations(['setSelectedSort', 'setSearchQuery']);
@@ -23,7 +24,7 @@ const { isLoading, isError, getTasksFromDB } = useTasks(state, store);
 
 const selectedSort = computed((): string => taskState.selectedSort);
 const searchQuery = computed((): string => taskState.searchQuery);
-const sortOptions = computed((): string[] => taskState.sortOptions);
+const sortOptions = computed((): SortOption[] => taskState.sortOptions);
 
 fetchUser();
 getTasksFromDB();

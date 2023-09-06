@@ -1,3 +1,5 @@
+<script setup lang="ts">
+</script>
 
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="edit">
@@ -7,12 +9,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: "edit-icon"
-}
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 
 </style>

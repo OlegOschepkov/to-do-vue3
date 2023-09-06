@@ -4,7 +4,7 @@ import LoadingIndicator from '@/components/UI/LoadingIndicator.vue';
 import { defineProps } from 'vue';
 import { Task } from '@/types/task';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-const { useActions } = createNamespacedHelpers('taskModule'); // specific module name
+const { useActions } = createNamespacedHelpers('taskModule');
 
 const props = defineProps<{
   tasks: Task[],

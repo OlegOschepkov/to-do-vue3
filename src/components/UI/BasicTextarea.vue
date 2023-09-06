@@ -97,6 +97,12 @@ const onChange = () => {
     &:active,
     &:focus {
       border-color: $color-dodger;
+
+      & + .input-element__label {
+        transform: translate(-10px, -20px) scale(.8);
+        background-color: $color-dodger;
+        color: $color-default-white;
+      }
     }
 
     &:focus-visible {

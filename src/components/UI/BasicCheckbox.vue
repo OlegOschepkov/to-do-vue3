@@ -11,7 +11,7 @@ const props = defineProps<{
 }>();
 
 
-const { checked, handleChange } = useField(props.name, undefined, {
+const { handleChange } = useField(props.name, undefined, {
   type: 'checkbox',
   checkedValue: props.checkboxvalue,
   uncheckedValue: null

@@ -1,13 +1,9 @@
-type SortOption = {
+interface SortOption {
   value: string,
   label: string
 }
 
 const defaultSortOptions: SortOption[] = [
-  {
-    value: '',
-    label: 'Без сортировки'
-  },
   {
     value: 'title',
     label: 'По названию'

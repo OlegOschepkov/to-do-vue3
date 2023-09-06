@@ -5,10 +5,11 @@ import { Task } from '@/types/task';
 import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
 import DateObjTypes from '@/types/dateObjTypes';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-const taskModule = createNamespacedHelpers('taskModule'); // specific module name
-const authModule = createNamespacedHelpers('authModule'); // specific module name
+const taskModule = createNamespacedHelpers('taskModule');
+const authModule = createNamespacedHelpers('authModule');
 import BasicButton from '@/components/UI/BasicButton.vue';
 import TaskModal from '@/components/TaskModal.vue';
+import ModalDescription from '@/types/modalDescription';
 
 const props = defineProps<{
   task: Task,
@@ -20,8 +21,8 @@ const router = useRouter();
 const { setTaskIdToEdit, setRightsError } = taskModule.useMutations(['setTaskIdToEdit', 'setRightsError']);
 const { getUser } = authModule.useGetters(['getUser']);
 
-const prettifyDateToObj = (somedate): DateObjTypes => {
-  const date = new Date(somedate);
+const prettifyDateToObj = (someDate): DateObjTypes => {
+  const date = new Date(someDate);
 
   return {
     year: date.toLocaleString('ru-RU', { year: 'numeric'}),
@@ -32,14 +33,14 @@ const prettifyDateToObj = (somedate): DateObjTypes => {
   };
 };
 
-const prettifyDateToStr = (somedate: Date): string => new Date(somedate).toLocaleString();
+const prettifyDateToStr = (someDate: Date): string => new Date(someDate).toLocaleString();
 
 const prettifyCreationDate = (computed((): DateObjTypes => prettifyDateToObj(props.task.date)));
 const prettifyCompletionDate = (computed((): string => prettifyDateToStr(props.task.completedAt)));
 const isOverdue = (computed((): boolean => Date.now() > new Date(props.task.date).getTime()));
 const isHasRights = (computed((): boolean => getUser.value.data.uid === props.task.author));
 
-const modalProperties = {
+const modalsProperties: ModalDescription = {
   delete: {
     title: 'Вы уверены что хотите удалить задачу?',
     id: 'deleteModal',
@@ -63,12 +64,12 @@ const emit = defineEmits<{
 const root = ref<HTMLElement | null>(null);
 
 const toggleModal = (id: string) => {
-  const modal = root.value?.querySelector(`#${id}`);
+  const modal = root.value?.querySelector(`#${id}`) as HTMLElement;
   modal.classList.toggle('is-active');
 }
 
 const toggleModalAndResetRightsError = () => {
-  toggleModal(modalProperties.closeRightsError.id);
+  toggleModal(modalsProperties.closeRightsError.id);
 }
 
 const deleteTask = (id) => {
@@ -151,7 +152,7 @@ const gotToTaskEditPage = (id: string) => {
         class="btn--red"
         type="button"
         title="Удалить"
-        @click="toggleModal(modalProperties.delete.id)"
+        @click="toggleModal(modalsProperties.delete.id)"
       >
         <BasicSvgIcon
           name="delete-icon"
@@ -185,8 +186,8 @@ const gotToTaskEditPage = (id: string) => {
       </BasicButton>
     </div>
     <TaskModal
-      :title="modalProperties.delete.title"
-      :id="modalProperties.delete.id"
+      :title="modalsProperties.delete.title"
+      :id="modalsProperties.delete.id"
     >
       <BasicButton
         class="btn--red"
@@ -198,14 +199,14 @@ const gotToTaskEditPage = (id: string) => {
       <BasicButton
         class="btn--green"
         type="button"
-        @click="toggleModal(modalProperties.delete.id)"
+        @click="toggleModal(modalsProperties.delete.id)"
       >
         Нет
       </BasicButton>
     </TaskModal>
     <TaskModal
-      :title="modalProperties.closeRightsError.title"
-      :id="modalProperties.closeRightsError.id"
+      :title="modalsProperties.closeRightsError.title"
+      :id="modalsProperties.closeRightsError.id"
     >
       <BasicButton
         class="btn--red"
@@ -216,8 +217,8 @@ const gotToTaskEditPage = (id: string) => {
       </BasicButton>
     </TaskModal>
     <TaskModal
-      :title="modalProperties.closeError.title"
-      :id="modalProperties.closeError.id"
+      :title="modalsProperties.closeError.title"
+      :id="modalsProperties.closeError.id"
     >
       <BasicButton
         class="btn--red"

@@ -6,7 +6,7 @@ import NotFound from '@/views/NotFound.vue';
 import LoginPage from '@/views/LoginPage.vue';
 import RegisterPage from '@/views/RegisterPage.vue';
 import ProfilePage from '@/views/ProfilePage.vue';
-import { auth, app } from '@/firebase';
+import { auth } from '@/firebase';
 
 const routes: Array<RouteRecordRaw> = [
   {

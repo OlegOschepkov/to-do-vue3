@@ -5,15 +5,15 @@ import { useStore } from 'vuex';
 import { ref } from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 import { Task } from '@/types/task';
-const taskModule = createNamespacedHelpers('taskModule'); // specific module name
-const authModule = createNamespacedHelpers('authModule'); // specific module name
+const taskModule = createNamespacedHelpers('taskModule');
+const authModule = createNamespacedHelpers('authModule');
 import { useRoute } from 'vue-router'
 import { useTasks } from '@/hooks/useTasks';
 
 const state = ref<Task>(null);
 const route = useRoute();
-const btnTitle = 'Изменить';
 const store = useStore();
+const btnTitle = 'Изменить';
 const { getTaskById, getRouteState } = taskModule.useGetters(['getTaskById', 'getRouteState']);
 const { editTask } = taskModule.useActions(['editTask']);
 const { setTaskIdToEdit } = taskModule.useMutations(['setTaskIdToEdit']);

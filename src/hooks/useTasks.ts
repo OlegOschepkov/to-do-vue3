@@ -1,7 +1,7 @@
 import { computed } from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-const taskModule = createNamespacedHelpers('taskModule'); // specific module name
-const authModule = createNamespacedHelpers('authModule'); // specific module name
+const taskModule = createNamespacedHelpers('taskModule');
+const authModule = createNamespacedHelpers('authModule');
 
 export function useTasks(state, store) {
   const { fetchTasks } = taskModule.useActions(['fetchTasks']);

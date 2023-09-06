@@ -2,7 +2,7 @@
 import { defineProps, defineAsyncComponent } from 'vue';
 import { computed } from 'vue';
 
-const props = defineProps<{ // Так нет нужды описывать сами пропсы. Можно заменить интерфейсом. defineProps - Compiler Macro
+const props = defineProps<{
   name: string
 }>();
 

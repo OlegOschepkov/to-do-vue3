@@ -1,3 +1,5 @@
+<script setup lang="ts">
+</script>
 
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" id="delete">
@@ -6,12 +8,6 @@
   </svg>
 </template>
 
-<script>
-export default {
-  name: "delete-icon"
-}
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 
 </style>

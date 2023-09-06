@@ -2,7 +2,7 @@
 import { useRouter } from "vue-router";
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 import BasicButton from '@/components/UI/BasicButton.vue';
-const { useActions, useGetters } = createNamespacedHelpers('authModule'); // specific module name
+const { useActions, useGetters } = createNamespacedHelpers('authModule');
 
 const router = useRouter();
 

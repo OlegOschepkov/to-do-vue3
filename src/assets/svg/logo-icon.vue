@@ -1,4 +1,6 @@
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<script setup lang="ts">
+</script>
+
 <template>
   <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <title/>
@@ -39,13 +41,7 @@
 </svg>
 </template>
 
-<script>
-export default {
-  name: "logo-icon"
-}
-</script>
-
-<style scoped>
+<style scoped lang="scss">
 .cls-1{fill:#0071af;}
 .cls-2{fill:#7db6d6;}
 .cls-3{fill:#00659d;}
