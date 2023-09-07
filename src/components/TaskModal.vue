@@ -10,12 +10,12 @@ const props = defineProps<{
 
 <template>
   <div
-    :id="id"
+    :id="props.id"
     class="modal"
   >
     <div class="modal__wrapper">
       <h4 class="modal__title">
-        {{ title }}
+        {{ props.title }}
       </h4>
       <div class="modal__btns">
         <slot />

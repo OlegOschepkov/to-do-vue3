@@ -80,7 +80,7 @@ onUnmounted(() => {
 
       <aside class="aside aside--right">
         <TaskForm
-          @addTask="addTask"
+          @add-task="addTask"
         />
       </aside>
     </div>

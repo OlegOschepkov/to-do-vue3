@@ -48,13 +48,13 @@ if (!getRouteState.value) {
       v-else
       :initial-data="{
         id: getTaskById.id,
-        date: getTaskById.date,
         title: getTaskById.title,
+        date: getTaskById.date,
         importance: getTaskById.importance,
         access: getTaskById.access,
         btnTitle
       }"
-      @editTask="editTask"
+      @edit-task="editTask"
     />
   </div>
 </template>

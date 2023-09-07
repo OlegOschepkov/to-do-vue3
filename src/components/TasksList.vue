@@ -13,13 +13,13 @@ const props = defineProps<{
   completed?: boolean
 }>();
 
-const { deleteTask, completeTask, returnTask } = useActions(['deleteTask', 'completeTask', 'returnTask']);
+const { deleteTask, completeTask } = useActions(['deleteTask', 'completeTask']);
 </script>
 
 <template>
   <div class="tasks-list">
     <h2
-      v-if="!completed"
+      v-if="!props.completed"
       class="title title--h2"
     >
       Текущие задачи
@@ -31,7 +31,7 @@ const { deleteTask, completeTask, returnTask } = useActions(['deleteTask', 'comp
       Завершенные задачи
     </h2>
     <h2
-      v-if="tasks.length === 0 && isLoading === false"
+      v-if="props.tasks.length === 0 && props.isLoading === false"
       class="title title--h2"
     >
       Создайте задачу или измените условия фильтрации
@@ -42,16 +42,16 @@ const { deleteTask, completeTask, returnTask } = useActions(['deleteTask', 'comp
         name="task-list"
       >
         <TasksListTask
-          v-for="task in tasks"
+          v-for="task in props.tasks"
           :key="task.id"
           :task="task"
-          :completed="completed"
-          :is-error="isError"
-          @deleteTask="deleteTask"
-          @completeTask="completeTask"
+          :completed="props.completed"
+          :is-error="props.isError"
+          @delete-task="deleteTask"
+          @complete-task="completeTask"
         />
         <LoadingIndicator
-          v-if="isLoading"
+          v-if="props.isLoading"
         />
       </transition-group>
     </ul>

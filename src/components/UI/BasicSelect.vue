@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect';
 import { defineEmits, defineProps } from 'vue';
-import { SortOption, defaultSortOptions } from '@/types/sortOptions';
+import { SortOption } from '@/types/sortOptions';
 
 const props = defineProps<{
   modelValue: string | number | undefined,
@@ -20,9 +20,9 @@ const onSelect = (value: string) => {
 <template>
   <div class="select-element">
     <Multiselect
-      :value="modelValue"
+      :value="props.modelValue"
       placeholder="Без сортировки"
-      :options="options"
+      :options="props.options"
       @change="onSelect"
     />
   </div>

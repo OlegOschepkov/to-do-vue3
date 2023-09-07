@@ -66,7 +66,7 @@ const { registerNewUser } = useActions(['registerNewUser']);
       :validation-schema="validationSchema"
       :schema="formSchema.fields"
       :btn-title="formSchema.btnTitle"
-      @submitHandler="registerNewUser"
+      @submit-handler="registerNewUser"
     />
   </div>
 </template>

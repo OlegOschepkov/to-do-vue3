@@ -2,10 +2,7 @@
 import DynamicForm from "@/components/DynamicForm.vue";
 import * as yup from 'yup';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
-import { useRouter } from 'vue-router';
 const { useActions, useGetters } = createNamespacedHelpers('authModule');
-
-const router = useRouter();
 
 const { getUser } = useGetters(['getUser']);
 
@@ -40,7 +37,7 @@ const { logIn } = useActions(['logIn']);
 <template>
   <div class="container container--animation">
     <h1 class="title">
-      Регистрация
+      Вход
     </h1>
     <div
       v-if="getUser.data?.uid"
@@ -52,7 +49,7 @@ const { logIn } = useActions(['logIn']);
       :validation-schema="validationSchema"
       :schema="formSchema.fields"
       :btn-title="formSchema.btnTitle"
-      @submitHandler="logIn"
+      @submit-handler="logIn"
     />
   </div>
 </template>

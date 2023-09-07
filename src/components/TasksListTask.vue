@@ -18,7 +18,7 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
-const { setTaskIdToEdit, setRightsError } = taskModule.useMutations(['setTaskIdToEdit', 'setRightsError']);
+const { setTaskIdToEdit } = taskModule.useMutations(['setTaskIdToEdit']);
 const { getUser } = authModule.useGetters(['getUser']);
 
 const prettifyDateToObj = (someDate): DateObjTypes => {
@@ -38,7 +38,8 @@ const prettifyDateToStr = (someDate: Date): string => new Date(someDate).toLocal
 const prettifyCreationDate = (computed((): DateObjTypes => prettifyDateToObj(props.task.date)));
 const prettifyCompletionDate = (computed((): string => prettifyDateToStr(props.task.completedAt)));
 const isOverdue = (computed((): boolean => Date.now() > new Date(props.task.date).getTime()));
-const isHasRights = (computed((): boolean => getUser.value.data.uid === props.task.author));
+const isHasRights = (computed((): boolean => getUser.value.data.uid === props.task.author.uid));
+const getName = (computed((): string => props.task.author.displayName));
 
 const modalsProperties: ModalDescription = {
   delete: {
@@ -135,9 +136,17 @@ const gotToTaskEditPage = (id: string) => {
       >
         Завершено - {{ prettifyCompletionDate }}
       </p>
-      <p class="task-list__importance">
-        Важность: {{ task.importance }}
-      </p>
+      <div class="task-list__wrapper">
+        <p class="task-list__importance">
+          Важность: {{ task.importance }}
+        </p>
+        <p
+          v-if="task.access"
+          class="task-list__author"
+        >
+          Владелец: {{ getName }}
+        </p>
+      </div>
     </div>
     <div
       v-if="task.access"
@@ -170,7 +179,7 @@ const gotToTaskEditPage = (id: string) => {
         class="btn--red"
         type="button"
         title="Удалить"
-        @click="toggleModal(modalsProperties.delete.id)"
+        @click="deleteTask(task.id)"
       >
         <BasicSvgIcon
           name="delete-icon"
@@ -362,6 +371,16 @@ const gotToTaskEditPage = (id: string) => {
   &__importance {
     @include reset-item;
     font-style: italic;
+  }
+
+  &__author {
+    @include reset-item;
+  }
+
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   &__access {

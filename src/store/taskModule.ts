@@ -107,7 +107,7 @@ export const taskModule = {
         const queryRef = query(
           stateCollectionRef,
           or(
-            where("author", "==", rootState.authModule.user?.data?.uid ),
+            where("author.uid", "==", rootState.authModule.user?.data?.uid ),
             where("access", "==", 'all')
           )
         );
@@ -177,7 +177,7 @@ export const taskModule = {
       state.unsubscribe();
     },
 
-    async addTask({ state, commit, rootState }, payload: Task) {
+    async addTask({ commit, rootState }, payload: Task) {
       try {
         commit('setLoading', true);
         await addDoc(stateCollectionRef, {
@@ -185,7 +185,10 @@ export const taskModule = {
           date: payload.date,
           importance: payload.importance,
           completed: payload.completed,
-          author: rootState.authModule.user?.data?.uid,
+          author: {
+            uid: rootState.authModule.user?.data?.uid,
+            displayName: rootState.authModule.user?.data?.displayName
+          },
           access: payload.access
         });
         commit('setLoading', false);
@@ -195,7 +198,7 @@ export const taskModule = {
       }
     },
 
-    async deleteTask({ state, commit, getters, rootState }, payload: string) {
+    async deleteTask({ commit }, payload: string) {
       try {
         commit('setLoading', true);
         await deleteDoc(doc(stateCollectionRef, payload));
@@ -206,7 +209,7 @@ export const taskModule = {
       }
     },
 
-    async completeTask({ state, commit, getters, rootState }, payload: Task) {
+    async completeTask({ commit }, payload: Task) {
       try {
         commit('setLoading', true);
         const modifiedTask = doc(stateCollectionRef, payload.id);
@@ -221,7 +224,7 @@ export const taskModule = {
       }
     },
 
-    async editTask({ state, commit, getters, rootState }, payload: Task) {
+    async editTask({ commit }, payload: Task) {
       try {
         const modifiedTask = doc(stateCollectionRef, payload.id);
         commit('setLoading', true);

@@ -21,16 +21,22 @@ const emit = defineEmits<{
 const onSubmit = (values: object) => {
   emit('submitHandler', values);
 }
+
+const onInput = (e) => {
+  const target = e.target;
+  const parent = target.closest('.input-element');
+  target.value ? parent?.classList.add('not-empty') : parent?.classList.remove('not-empty')
+}
 </script>
 
 <template>
   <Form
     class="form"
-    :validation-schema="validationSchema"
+    :validation-schema="props.validationSchema"
     @submit="onSubmit"
   >
     <div
-      v-for="{ name, label, children, as, id, ...attrs } in schema"
+      v-for="{ name, label, children, as, id, ...attrs } in props.schema"
       :key="name"
       class="input-element"
     >
@@ -42,6 +48,7 @@ const onSubmit = (values: object) => {
           :as="as"
           :name="name"
           v-bind="attrs"
+          @input="onInput"
         >
           <template
             v-if="children && children.length"
@@ -71,9 +78,8 @@ const onSubmit = (values: object) => {
         />
       </label>
     </div>
-
     <BasicButton>
-      {{ btnTitle }}
+      {{ props.btnTitle }}
     </BasicButton>
   </Form>
 </template>

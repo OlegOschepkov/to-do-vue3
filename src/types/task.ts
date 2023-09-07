@@ -3,9 +3,12 @@ interface Task {
   title: string,
   date: Date,
   importance: number,
-  completed: boolean,
+  completed?: boolean,
   completedAt?: Date,
-  author?: string,
+  author?: {
+    uid: string,
+    displayName: string
+  },
   access: string,
 }
 

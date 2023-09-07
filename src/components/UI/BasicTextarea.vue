@@ -10,13 +10,13 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (event: 'update:modelValue', value: String): void;
+  (event: 'update:modelValue', value: string): void;
 }>();
 
 const { value, errorMessage } = useField(() => props.name);
 
 const onChange = () => {
-  emit('update:modelValue', value.value as String);
+  emit('update:modelValue', value.value as string);
 };
 </script>
 
