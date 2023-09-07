@@ -31,9 +31,9 @@ const mouseLeave = () => {
         :to="link.url"
         class="navbar__link"
         :class="{ 'navbar__link--profile' : link.url === '/profile' }"
+        data-float-parent
         @mouseover.self="mouseOver"
         @mouseleave="mouseLeave"
-        data-float-parent
       >
         <BasicSvgIcon
           :name="link.icon"

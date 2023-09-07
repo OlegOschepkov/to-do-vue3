@@ -39,7 +39,9 @@ onUnmounted(() => {
     <div class="tasks-page">
       <aside class="aside aside--left">
         <div class="form">
-          <h3 class="title title--h3">Фильтрация</h3>
+          <h3 class="title title--h3">
+            Фильтрация
+          </h3>
 
           <BasicTextInput
             id="search"
@@ -50,14 +52,16 @@ onUnmounted(() => {
           />
           <BasicSelect
             :model-value="selectedSort"
-            @update:model-value="setSelectedSort"
             :options="sortOptions"
+            @update:model-value="setSelectedSort"
           />
         </div>
       </aside>
 
       <div class="container">
-        <h1 class="title">Список задач</h1>
+        <h1 class="title">
+          Список задач
+        </h1>
 
         <div class="tasks-container">
           <TasksList

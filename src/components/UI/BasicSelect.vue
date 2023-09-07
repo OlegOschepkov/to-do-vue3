@@ -21,11 +21,10 @@ const onSelect = (value: string) => {
   <div class="select-element">
     <Multiselect
       :value="modelValue"
-      @change="onSelect"
       placeholder="Без сортировки"
       :options="options"
-    >
-    </Multiselect>
+      @change="onSelect"
+    />
   </div>
 </template>
 

@@ -19,10 +19,10 @@ const { value, handleChange } = useField(props.name, {
 <template>
   <div class="radio-element">
     <input
-      type="radio"
       v-bind="$attrs"
-      v-model="value"
       :id="id"
+      v-model="value"
+      type="radio"
       :value="radiovalue"
       :checked="radiovalue === Number(value) || checked"
       @change="handleChange(radiovalue)"

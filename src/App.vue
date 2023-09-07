@@ -11,7 +11,7 @@ fetchUser();
 <template>
   <div id="app">
     <div class="page-container">
-      <TheNavBar/>
+      <TheNavBar />
       <div class="page">
         <router-view
           v-slot="{ Component }"

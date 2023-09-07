@@ -22,9 +22,9 @@ const { handleChange } = useField(props.name, undefined, {
 <template>
   <div class="checkbox-element">
     <input
-      type="checkbox"
       v-bind="$attrs"
       :id="id"
+      type="checkbox"
       :value="checkboxvalue"
       :checked="checked"
       @change="handleChange(checkboxvalue)"

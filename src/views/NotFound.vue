@@ -3,8 +3,12 @@
 
 <template>
   <div class="container container--animation">
-    <h1 class="title">404</h1>
-    <p class="text">Нет такой страницы</p>
+    <h1 class="title">
+      404
+    </h1>
+    <p class="text">
+      Нет такой страницы
+    </p>
   </div>
 </template>
 

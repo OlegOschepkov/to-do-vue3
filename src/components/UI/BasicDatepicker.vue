@@ -27,19 +27,19 @@ const updateDate = (e: Date) => {
       {{ label }}
     </p>
     <VueDatePicker
-      :model-value="value"
-      @update:model-value="updateDate"
-      :name="name"
       :id="id"
-    ></VueDatePicker>
+      :model-value="value"
+      :name="name"
+      @update:model-value="updateDate"
+    />
     <span
-      class="error"
       id="`${id}-error`"
+      class="error"
       aria-live="assertive"
       role="alert"
     >
-        {{ errorMessage }}
-      </span>
+      {{ errorMessage }}
+    </span>
   </div>
 </template>
 

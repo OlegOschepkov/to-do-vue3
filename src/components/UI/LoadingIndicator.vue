@@ -3,12 +3,12 @@
 
 <template>
   <div class="lds-ellipsis">
-    <div class="lds-ellipsis__background"></div>
+    <div class="lds-ellipsis__background" />
     <div class="lds-ellipsis__wrapper">
-      <div class="lds-ellipsis__element"></div>
-      <div class="lds-ellipsis__element"></div>
-      <div class="lds-ellipsis__element"></div>
-      <div class="lds-ellipsis__element"></div>
+      <div class="lds-ellipsis__element" />
+      <div class="lds-ellipsis__element" />
+      <div class="lds-ellipsis__element" />
+      <div class="lds-ellipsis__element" />
     </div>
   </div>
 </template>

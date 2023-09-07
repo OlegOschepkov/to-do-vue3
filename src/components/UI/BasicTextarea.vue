@@ -27,14 +27,14 @@ const onChange = () => {
   >
     <label :for="id">
       <textarea
-        type="text"
-        v-model="value"
         :id="id"
+        v-model="value"
+        type="text"
         :name="name"
-        @input="onChange"
         :placeholder="placeholder"
         :aria-describedby="errorMessage ? `${id}-error` : null"
         :aria-invalid="errorMessage ? true : null"
+        @input="onChange"
       />
       <span
         v-if="label"
@@ -43,8 +43,8 @@ const onChange = () => {
         {{ label }}
       </span>
       <span
-        class="error"
         :id="`${id}-error`"
+        class="error"
         aria-live="assertive"
         role="alert"
       >

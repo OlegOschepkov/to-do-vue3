@@ -4,8 +4,7 @@
 
 <template>
   <button class="btn">
-    <slot>
-    </slot>
+    <slot />
   </button>
 </template>
 

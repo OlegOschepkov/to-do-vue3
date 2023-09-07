@@ -36,8 +36,8 @@ if (!getRouteState.value) {
     </h2>
 
     <h2
-      class="title title--h2 error"
       v-if="isError"
+      class="title title--h2 error"
     >
       Произошла ошибка, попробуйте еще раз
     </h2>
@@ -46,14 +46,14 @@ if (!getRouteState.value) {
     />
     <TaskForm
       v-else
-      :initialData="{
-      id: getTaskById.id,
-      date: getTaskById.date,
-      title: getTaskById.title,
-      importance: getTaskById.importance,
-      access: getTaskById.access,
-      btnTitle
-    }"
+      :initial-data="{
+        id: getTaskById.id,
+        date: getTaskById.date,
+        title: getTaskById.title,
+        importance: getTaskById.importance,
+        access: getTaskById.access,
+        btnTitle
+      }"
       @editTask="editTask"
     />
   </div>

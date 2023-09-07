@@ -30,16 +30,16 @@ const onSubmit = (values: object) => {
     @submit="onSubmit"
   >
     <div
-      class="input-element"
       v-for="{ name, label, children, as, id, ...attrs } in schema"
       :key="name"
+      class="input-element"
     >
       <label
         :for="name"
       >
         <Field
-          :as="as"
           :id="name"
+          :as="as"
           :name="name"
           v-bind="attrs"
         >
@@ -47,9 +47,9 @@ const onSubmit = (values: object) => {
             v-if="children && children.length"
           >
             <component
+              :is="tag"
               v-for="({ tag, text, ...childAttrs }, idx) in children"
               :key="idx"
-              :is="tag"
               v-bind="childAttrs"
             >
               {{ text }}
@@ -60,12 +60,12 @@ const onSubmit = (values: object) => {
           v-if="label"
           class="input-element__label"
         >
-        {{ label }}
-      </span>
+          {{ label }}
+        </span>
         <ErrorMessage
+          :id="`${id}-error`"
           class="error"
           :name="name"
-          :id="`${id}-error`"
           aria-live="assertive"
           role="alert"
         />

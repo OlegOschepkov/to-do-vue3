@@ -100,37 +100,54 @@ const gotToTaskEditPage = (id: string) => {
 
 <template>
   <li
+    ref="root"
     class="task-list__element"
     :class="{ 'task-list__element--overdue': isOverdue, 'task-list__element--completed': completed }"
-    ref="root"
   >
     <div class="task-list__date">
       <div class="task-list__date-wrapper">
-        <p class="task-list__day">{{prettifyCreationDate.day}}</p>
-        <p class="task-list__month">{{prettifyCreationDate.month}}</p>
+        <p class="task-list__day">
+          {{ prettifyCreationDate.day }}
+        </p>
+        <p class="task-list__month">
+          {{ prettifyCreationDate.month }}
+        </p>
       </div>
       <div class="task-list__date-wrapper">
-        <p class="task-list__weekday">{{prettifyCreationDate.weekday}}</p>
-        <p class="task-list__time">{{prettifyCreationDate.time}}</p>
+        <p class="task-list__weekday">
+          {{ prettifyCreationDate.weekday }}
+        </p>
+        <p class="task-list__time">
+          {{ prettifyCreationDate.time }}
+        </p>
       </div>
-      <p class="task-list__year">{{prettifyCreationDate.year}}</p>
+      <p class="task-list__year">
+        {{ prettifyCreationDate.year }}
+      </p>
     </div>
     <div class="task-list__text-wrapper">
-      <p class="task-list__title">{{task.title}}</p>
-      <p
-        class="task-list__title task-list__title--completed"
-        v-if="completed"
-      >
-        Завершено - {{prettifyCompletionDate}}
+      <p class="task-list__title">
+        {{ task.title }}
       </p>
-      <p class="task-list__importance">Важность: {{task.importance}}</p>
+      <p
+        v-if="completed"
+        class="task-list__title task-list__title--completed"
+      >
+        Завершено - {{ prettifyCompletionDate }}
+      </p>
+      <p class="task-list__importance">
+        Важность: {{ task.importance }}
+      </p>
     </div>
-    <div class="task-list__access" v-if="task.access">
+    <div
+      v-if="task.access"
+      class="task-list__access"
+    >
       Групповое
     </div>
     <div
-      class="task-list__btns"
       v-if="completed"
+      class="task-list__btns"
     >
       <BasicButton
         class="btn--green"
@@ -146,8 +163,9 @@ const gotToTaskEditPage = (id: string) => {
       </BasicButton>
     </div>
     <div
+      v-else
       class="task-list__btns"
-      v-else>
+    >
       <BasicButton
         class="btn--red"
         type="button"
@@ -186,8 +204,8 @@ const gotToTaskEditPage = (id: string) => {
       </BasicButton>
     </div>
     <TaskModal
-      :title="modalsProperties.delete.title"
       :id="modalsProperties.delete.id"
+      :title="modalsProperties.delete.title"
     >
       <BasicButton
         class="btn--red"
@@ -205,8 +223,8 @@ const gotToTaskEditPage = (id: string) => {
       </BasicButton>
     </TaskModal>
     <TaskModal
-      :title="modalsProperties.closeRightsError.title"
       :id="modalsProperties.closeRightsError.id"
+      :title="modalsProperties.closeRightsError.title"
     >
       <BasicButton
         class="btn--red"
@@ -217,8 +235,8 @@ const gotToTaskEditPage = (id: string) => {
       </BasicButton>
     </TaskModal>
     <TaskModal
-      :title="modalsProperties.closeError.title"
       :id="modalsProperties.closeError.id"
+      :title="modalsProperties.closeError.title"
     >
       <BasicButton
         class="btn--red"

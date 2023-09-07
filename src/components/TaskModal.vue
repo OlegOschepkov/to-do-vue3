@@ -10,17 +10,15 @@ const props = defineProps<{
 
 <template>
   <div
-    class="modal"
     :id="id"
+    class="modal"
   >
     <div class="modal__wrapper">
       <h4 class="modal__title">
         {{ title }}
       </h4>
       <div class="modal__btns">
-        <slot>
-
-        </slot>
+        <slot />
       </div>
     </div>
   </div>

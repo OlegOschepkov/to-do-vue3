@@ -19,20 +19,20 @@ const { deleteTask, completeTask, returnTask } = useActions(['deleteTask', 'comp
 <template>
   <div class="tasks-list">
     <h2
-      class="title title--h2"
       v-if="!completed"
+      class="title title--h2"
     >
       Текущие задачи
     </h2>
     <h2
-      class="title title--h2"
       v-else
+      class="title title--h2"
     >
       Завершенные задачи
     </h2>
     <h2
-      class="title title--h2"
       v-if="tasks.length === 0 && isLoading === false"
+      class="title title--h2"
     >
       Создайте задачу или измените условия фильтрации
     </h2>
@@ -43,8 +43,8 @@ const { deleteTask, completeTask, returnTask } = useActions(['deleteTask', 'comp
       >
         <TasksListTask
           v-for="task in tasks"
-          :task="task"
           :key="task.id"
+          :task="task"
           :completed="completed"
           :is-error="isError"
           @deleteTask="deleteTask"

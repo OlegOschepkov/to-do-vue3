@@ -125,28 +125,31 @@ const addTask = (values) => {
     class="form"
     @submit="onSubmit"
   >
-    <h3 class="title title--h3">Создание задачи</h3>
+    <h3 class="title title--h3">
+      Создание задачи
+    </h3>
     <fieldset>
-      <legend>{{groupLabel}}</legend>
+      <legend>{{ groupLabel }}</legend>
       <BasicDatepicker
         :id="datepicker.id"
         :label="datepicker.label"
         :name="datepicker.name"
       />
       <BasicTextarea
-        :name="input.name"
         :id="input.id"
-        :label="input.label"/>
+        :name="input.name"
+        :label="input.label"
+      />
     </fieldset>
     <fieldset>
       <legend>{{ checkbox.groupLabel }}</legend>
       <BasicCheckbox
         :id="checkbox.group.id"
+        :key="checkbox.group.id"
         :checkboxvalue="checkbox.group.value"
         :checked="checkbox.group.checked"
         :label="checkbox.group.label"
         :name="checkbox.group.name"
-        :key="checkbox.group.id"
       />
       <ErrorMessage
         class="error"
@@ -158,10 +161,10 @@ const addTask = (values) => {
       <BasicRadio
         v-for="el in radio.group"
         :id="el.id"
+        :key="el.id"
         :radiovalue="el.value"
         :label="el.label"
         :name="el.name"
-        :key="el.id"
       />
       <ErrorMessage
         class="error"

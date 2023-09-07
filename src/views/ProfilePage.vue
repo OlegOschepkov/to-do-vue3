@@ -16,9 +16,14 @@ const { getUser } = useGetters(['getUser']);
     <div
       v-if="getUser.data?.uid"
     >
-      <h1 class="title">Добро пожаловать, {{getUser.data?.displayName}}</h1>
+      <h1 class="title">
+        Добро пожаловать, {{ getUser.data?.displayName }}
+      </h1>
       <div class="card-body">
-        <p class="success" role="alert">
+        <p
+          class="success"
+          role="alert"
+        >
           Вы успешно вошли!
         </p>
         <BasicButton
@@ -27,7 +32,6 @@ const { getUser } = useGetters(['getUser']);
           Выйти
         </BasicButton>
       </div>
-
     </div>
     <div
       v-else

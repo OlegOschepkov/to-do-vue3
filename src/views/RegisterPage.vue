@@ -53,7 +53,9 @@ const { registerNewUser } = useActions(['registerNewUser']);
 
 <template>
   <div class="container container--animation">
-    <h1 class="title">Регистрация</h1>
+    <h1 class="title">
+      Регистрация
+    </h1>
     <div
       v-if="getUser.data?.uid"
     >
@@ -61,10 +63,11 @@ const { registerNewUser } = useActions(['registerNewUser']);
     </div>
     <DynamicForm
       v-else
-      @submitHandler="registerNewUser"
       :validation-schema="validationSchema"
       :schema="formSchema.fields"
-      :btn-title="formSchema.btnTitle"/>
+      :btn-title="formSchema.btnTitle"
+      @submitHandler="registerNewUser"
+    />
   </div>
 </template>
 
