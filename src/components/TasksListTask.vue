@@ -73,12 +73,16 @@ const toggleModalAndResetRightsError = () => {
   toggleModal(modalsProperties.closeRightsError.id);
 }
 
-const deleteTask = (id) => {
+const checkingBeforeDeleteTask = () => {
   if (isHasRights.value) {
-    emit('deleteTask', id);
+    toggleModal(modalsProperties.delete.id);
   } else {
     toggleModalAndResetRightsError();
   }
+}
+
+const deleteTask = (id) => {
+  emit('deleteTask', id);
 }
 
 const completeTask = (task) => {
@@ -179,7 +183,7 @@ const gotToTaskEditPage = (id: string) => {
         class="btn--red"
         type="button"
         title="Удалить"
-        @click="deleteTask(task.id)"
+        @click="checkingBeforeDeleteTask"
       >
         <BasicSvgIcon
           name="delete-icon"

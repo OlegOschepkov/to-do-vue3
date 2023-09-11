@@ -13,7 +13,9 @@
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
+@import '@/assets/scss/variables.scss';
+
 .lds-ellipsis {
   display: inline-flex;
   align-items: center;
@@ -34,7 +36,7 @@
     width: 13px;
     height: 13px;
     border-radius: 50%;
-    background: #31c292;
+    background: $color-emerald;
     animation-timing-function: cubic-bezier(0, 1, 1, 0);
 
     &:nth-child(1) {
@@ -57,6 +59,16 @@
       animation: lds-ellipsis3 0.6s infinite;
     }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity $trans-default;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 @keyframes lds-ellipsis1 {

@@ -6,7 +6,6 @@ import { ref } from 'vue';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 import { Task } from '@/types/task';
 const taskModule = createNamespacedHelpers('taskModule');
-const authModule = createNamespacedHelpers('authModule');
 import { useRoute } from 'vue-router'
 import { useTasks } from '@/hooks/useTasks';
 
@@ -17,9 +16,7 @@ const btnTitle = 'Изменить';
 const { getTaskById, getRouteState } = taskModule.useGetters(['getTaskById', 'getRouteState']);
 const { editTask } = taskModule.useActions(['editTask']);
 const { setTaskIdToEdit } = taskModule.useMutations(['setTaskIdToEdit']);
-const { fetchUser } = authModule.useActions(['fetchUser']);
 
-fetchUser();
 setTaskIdToEdit(route.params.taskId);
 
 const { isLoading, isError, getTasksFromDB } = useTasks(state, store);

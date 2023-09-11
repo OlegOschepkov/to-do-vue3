@@ -40,9 +40,11 @@ const onInput = (e) => {
     :validation-schema="props.validationSchema"
     @submit="onSubmit"
   >
-    <LoadingIndicator
-      v-if="isLoading"
-    />
+    <transition name="fade">
+      <LoadingIndicator
+        v-if="isLoading"
+      />
+    </transition>
 
     <div
       v-for="{ name, label, children, as, id, ...attrs } in props.schema"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DynamicForm from "@/components/DynamicForm.vue";
-import AuthErrorsIndicator from "@/components/UI/AuthErrorsIndicator.vue";
+import AuthErrorsIndicator from "@/components/UI/TheAuthErrorsIndicator.vue";
 import * as yup from 'yup';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 const { useActions, useGetters } = createNamespacedHelpers('authModule');

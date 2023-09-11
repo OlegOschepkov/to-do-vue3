@@ -51,7 +51,7 @@ const { deleteTask, completeTask } = useActions(['deleteTask', 'completeTask']);
           @complete-task="completeTask"
         />
         <LoadingIndicator
-          v-if="props.isLoading"
+          v-if="isLoading"
         />
       </transition-group>
     </ul>
