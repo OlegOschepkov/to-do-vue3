@@ -12,10 +12,23 @@ export const authModule = {
   state: (): UserState => ({
     user: {
       data: {}
-    }
+    },
+    error: {
+      isError: false,
+      errorCode: ''
+    },
+    isLoading: false
   }),
 
   mutations: {
+    setLoading(state: UserState, payload: boolean) {
+      if (payload) {
+        state.isLoading = payload
+      } else {
+        setTimeout(() => state.isLoading = payload, 300) // Убираю мигание при быстром ответе от сервера
+      }
+    },
+
     setUser(state: UserState, payload: object) {
       state.user.data = payload;
     },
@@ -23,58 +36,100 @@ export const authModule = {
     setClearState(state: UserState) {
       state.user.data = {}
     },
+
+    setError(state: UserState, payload) {
+      state.error = {
+        isError: payload.isError,
+        errorCode: payload.errorCode
+      }
+    }
   },
 
   getters: {
     getUser(state: UserState) {
       return state.user
+    },
+
+    getError(state: UserState) {
+      return state.error
     }
   },
 
   actions: {
     async registerNewUser({ commit }, payload: NewUser) {
       try {
+        commit('setLoading', true);
         const response = await createUserWithEmailAndPassword(auth, payload.email, payload.password);
         if (response) {
           commit('setUser', response.user)
           await updateProfile(response.user, {
             displayName: payload.name
           });
+          await router.push('/');
+          commit('setError', {
+            isError: false,
+            errorCode: 'none'
+          });
         }
+        commit('setLoading', false);
       } catch (e) {
-        commit('setError', true);
+        commit('setError', {
+          isError: true,
+          errorCode: e.code
+        });
         console.log(e.message);
+        commit('setLoading', false);
+
       }
     },
 
     async logIn({ commit }, payload: LoginPayload) {
       try {
-        const response = await signInWithEmailAndPassword(auth, payload.email, payload.password)
+        commit('setLoading', true);
+        const response = await signInWithEmailAndPassword(auth, payload.email, payload.password);
         if (response) {
           commit('setUser', response.user);
-          //TODO: срывается роутер
-
-          router.push('/');
+          await router.push('/');
+          commit('setError', {
+            isError: false,
+            errorCode: 'none'
+          });
         }
+        commit('setLoading', false);
       } catch (e) {
-        commit('setError', true);
+        commit('setError', {
+          isError: true,
+          errorCode: e.code
+        });
         console.log(e.message);
+        commit('setLoading', false);
       }
     },
 
     async logOut({ commit }) {
       try {
+        commit('setLoading', true);
         await signOut(auth)
         commit('setUser', null)
         commit('setClearState', null)
+        commit('setError', {
+          isError: false,
+          errorCode: 'none'
+        });
+        commit('setLoading', false);
       } catch (e) {
-        commit('setError', true);
+        commit('setError', {
+          isError: true,
+          errorCode: e.code
+        });
         console.log(e.message);
+        commit('setLoading', false);
       }
     },
 
     async fetchUser({ commit }) {
       try {
+        commit('setLoading', true);
         await auth.onAuthStateChanged(function(user) {
           if (user) {
             commit('setUser', user)
@@ -82,10 +137,18 @@ export const authModule = {
             commit('setUser', null)
           }
         });
-
+        commit('setError', {
+          isError: false,
+          errorCode: 'none'
+        });
+        commit('setLoading', false);
       } catch (e) {
-        commit('setError', true);
+        commit('setError', {
+          isError: true,
+          errorCode: e.code
+        });
         console.log(e.message);
+        commit('setLoading', false);
       }
     }
   }

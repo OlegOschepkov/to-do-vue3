@@ -95,7 +95,7 @@ const { deleteTask, completeTask } = useActions(['deleteTask', 'completeTask']);
       width: 100%;
       height: 100%;
       background-color: rgba($color-default-white, 0.5);
-      filter: blur(5px);
+      backdrop-filter: blur(5px);
     }
   }
 }

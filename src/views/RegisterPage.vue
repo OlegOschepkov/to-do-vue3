@@ -57,6 +57,12 @@ const { registerNewUser } = useActions(['registerNewUser']);
       Регистрация
     </h1>
     <div
+      v-if="getError.isError"
+      class="error"
+    >
+      Произошла ошибка: {{ errorMessage }}
+    </div>
+    <div
       v-if="getUser.data?.uid"
     >
       Вы уже зарегистрированы, чтобы создать нового пользователя выйдите из текущего профиля

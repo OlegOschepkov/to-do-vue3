@@ -15,7 +15,7 @@ const emit = defineEmits<{
 
 const { value, errorMessage } = useField(() => props.name);
 
-const onChange = () => {
+const onInput = () => {
   emit('update:modelValue', value.value as string);
 };
 </script>
@@ -34,7 +34,7 @@ const onChange = () => {
         :placeholder="placeholder"
         :aria-describedby="errorMessage ? `${id}-error` : null"
         :aria-invalid="errorMessage ? true : null"
-        @input="onChange"
+        @input="onInput"
       />
       <span
         v-if="label"

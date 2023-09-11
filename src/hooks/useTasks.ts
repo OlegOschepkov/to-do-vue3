@@ -3,7 +3,7 @@ import { createNamespacedHelpers } from 'vuex-composition-helpers';
 const taskModule = createNamespacedHelpers('taskModule');
 const authModule = createNamespacedHelpers('authModule');
 
-export function useTasks(state, store) {
+export function useTasks (state, store) {
   const { fetchTasks } = taskModule.useActions(['fetchTasks']);
   const { fetchUser } = authModule.useActions(['fetchUser']);
 
@@ -12,7 +12,7 @@ export function useTasks(state, store) {
   };
 
   const setUser = async () => {
-    fetchUser()
+    await fetchUser();
   }
 
   const isLoading = computed((): boolean => store.state.taskModule.isLoading);

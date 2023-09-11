@@ -12,31 +12,28 @@ import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
     </p>
     <ul class="list">
       <li class="list__element">
-        Список Задач позволяет создавать, редактировать и удалять задачи
+        Регистрация пользователей. Незарегистрированным пользователям доступна только главная страница и страницы регистрации/входа. Формы регистрации и входа формируются динамически, согласно переданной в props схеме.
       </li>
       <li class="list__element">
-        У задачи надо указать время, описание и важность
+        Создание, редактирование и удаление задачи, задачи доступны только самому пользователю. Есть также групповые задачи, доступные всем пользователям, но удалять/менять/завершать эти задачи может только автор. Просроченные задачи подсвечиваются красным и помещаются вверх списка.
       </li>
       <li class="list__element">
-        Предусмотрена возможность фильтрации по названию и сортировки по дате или названию
+        При создании задачи необходимо указать время, описание и важность, валидация предусмотрена.
       </li>
       <li class="list__element">
-        росроченные задачи автоматически закрепляются вверху списка и получают красную тень
+        Возможность фильтрации по названию и сортировки по дате, названию, важности.
       </li>
       <li class="list__element">
-        Несколько страниц + динамическая страница edit-task
+        Динамическая страница редактирования задачи, с динамическим значением полей формы.
       </li>
       <li class="list__element">
         Встроенная анимация vue
       </li>
       <li class="list__element">
-        Динамические роуты и обработка несуществующих роутов
+        Динамические роуты и обработка несуществующих роутов, routeguard.
       </li>
       <li class="list__element">
         Состояние приложения сохраняется при перезагрузке, используется Firebase
-      </li>
-      <li class="list__element">
-        Динамическое состояние формы (для edit-task)
       </li>
     </ul>
 
@@ -63,7 +60,7 @@ import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
         Vuex
       </li>
       <li class="list__element">
-        <s>Pinia</s> решил не использовать
+        Firebase
       </li>
       <li class="list__element">
         <s>Axios</s> так как используется firebase, то axios не применяется
@@ -72,16 +69,10 @@ import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
         Seeders
       </li>
       <li class="list__element">
-        Конфигурационные файлы (_config)
-      </li>
-      <li class="list__element">
-        Options API, с последующим рефкатором в пользу Composition API и script setup
+        Options API, с последующим рефактором в пользу Composition API и script setup
       </li>
       <li class="list__element">
         Typescript
-      </li>
-      <li class="list__element">
-        <s>Localstore</s>&nbsp;&#8594;&nbsp;Firebase
       </li>
       <li class="list__element">
         SCSS
@@ -93,7 +84,7 @@ import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
         @vuepic/vue-datepicker для выбора даты
       </li>
       <li class="list__element">
-        vee-validate+yup для валидации формы создания задачи
+        vee-validate+yup для валидации форм
       </li>
     </ul>
 
@@ -125,10 +116,14 @@ import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
           name="check-icon"
           width="16"
           height="16"
+        />&nbsp;&nbsp;&#8594;script setup&nbsp;<BasicSvgIcon
+          name="check-icon"
+          width="16"
+          height="16"
         />&nbsp;названия говорят сами за себя</span>
       </li>
       <li class="list__element">
-        improvement(TODO) - различные улучшения, оптимизации, редизайн.
+        improvement(WIP) - различные улучшения, оптимизации, редизайн.
       </li>
     </ul>
   </div>
@@ -141,6 +136,7 @@ import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
   span {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
   }
 
   svg {

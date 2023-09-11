@@ -133,11 +133,10 @@ export const taskModule = {
         commit('setTasks', tempObjForTasks);
         commit('setRouteState');
         dispatch('startListener');
+        commit('setLoading', false);
       } catch (e) {
         commit('setError', true);
         console.log(e.message)
-      } finally {
-        commit('setLoading', false);
       }
     },
 
@@ -236,7 +235,7 @@ export const taskModule = {
           access: payload.access
         });
         commit('setLoading', false);
-        router.push('/todo-list');
+        await router.push('/todo-list');
       } catch (e) {
         commit('setError', true);
         console.log(e.message);

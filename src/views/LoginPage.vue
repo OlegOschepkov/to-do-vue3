@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import DynamicForm from "@/components/DynamicForm.vue";
+import AuthErrorsIndicator from "@/components/UI/AuthErrorsIndicator.vue";
 import * as yup from 'yup';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 const { useActions, useGetters } = createNamespacedHelpers('authModule');
@@ -31,6 +32,7 @@ const validationSchema = yup.object().shape({
   password: yup.string().min(6, 'Введите от 6 до 50 символов').max(50, 'Введите от 6 до 50 символов').required('Обязательное поле'),
 });
 
+
 const { logIn } = useActions(['logIn']);
 </script>
 
@@ -39,6 +41,7 @@ const { logIn } = useActions(['logIn']);
     <h1 class="title">
       Вход
     </h1>
+    <AuthErrorsIndicator />
     <div
       v-if="getUser.data?.uid"
     >
