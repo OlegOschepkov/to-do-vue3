@@ -39,6 +39,7 @@ const props = defineProps<{
   left: 0;
   top: 0;
   border-radius: 8px;
+  backdrop-filter: blur(3px);
 
   &__wrapper {
     padding: 15px;

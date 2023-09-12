@@ -88,9 +88,16 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/mixins.scss';
+
 .tasks-page {
   display: flex;
   min-height: calc(100vh - 104px);
+
+  @include vp-767 {
+    flex-direction: column;
+  }
 }
 
 .aside {
@@ -100,6 +107,10 @@ onUnmounted(() => {
 
   .input-element:first-of-type {
     margin-top: 0;
+  }
+
+  @include vp-767 {
+    max-width: unset;
   }
 }
 </style>

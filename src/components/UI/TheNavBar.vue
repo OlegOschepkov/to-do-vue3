@@ -7,13 +7,17 @@ const headerLinks: HeaderLinks[] = defaultHeaderLinks;
 let floatingText: HTMLElement;
 
 const mouseOver = (e: Event) => {
-  const target = e.target as HTMLElement;
-  floatingText = target.querySelector('[data-float-text]') as HTMLElement;
-  floatingText.style.maxWidth = floatingText.scrollWidth + 'px';
+  if (window.innerWidth >= 525) {
+    const target = e.target as HTMLElement;
+    floatingText = target.querySelector('[data-float-text]') as HTMLElement;
+    floatingText.style.maxWidth = floatingText.scrollWidth + 'px';
+  }
 };
 
 const mouseLeave = () => {
-  floatingText.style.maxWidth = '';
+  if (window.innerWidth >= 525) {
+    floatingText.style.maxWidth = '';
+  }
 };
 </script>
 
@@ -55,6 +59,7 @@ const mouseLeave = () => {
 
 <style lang="scss">
 @import '@/assets/scss/variables.scss';
+@import '@/assets/scss/mixins.scss';
 
 @keyframes spark {
   0% {
@@ -109,8 +114,6 @@ const mouseLeave = () => {
     color: $color-nero;
     white-space: nowrap;
     padding: 10px 10px 10px 44px;
-    border-top-right-radius: 42px;
-    border-bottom-right-radius: 42px;
     background-color: $color-anakiwa;
 
   }
@@ -126,6 +129,18 @@ const mouseLeave = () => {
 
     &--profile {
       margin-left: auto;
+
+      .navbar__text-wrapper {
+        direction: rtl;
+        left: auto;
+        right: 40px;
+        border-radius: 42px 0 0 42px;
+      }
+
+      .navbar__text {
+        padding: 10px 44px 10px 10px;
+        border-radius: 42px 0 0 42px;
+      }
     }
 
     &.router-link-active {
@@ -147,6 +162,15 @@ const mouseLeave = () => {
       pointer-events: none;
       z-index: 3;
       position: relative;
+      min-width: 64px;
+      min-height: 64px;
+
+      @include vp-525 {
+        min-width: 32px;
+        min-height: 32px;
+        max-width: 32px;
+        max-height: 32px;
+      }
     }
 
     &:hover {

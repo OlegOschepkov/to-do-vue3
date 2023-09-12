@@ -33,6 +33,7 @@ fetchUser();
 
 <style lang="scss">
 @import '@/assets/scss/variables.scss';
+@import '@/assets/scss/mixins.scss';
 
 #app {
   min-height: 100vh;
@@ -58,6 +59,10 @@ fetchUser();
 .page {
   min-height: calc(100vh - 180px);
   padding-top: 180px;
+
+  @include vp-767 {
+    padding-top: 100px;
+  }
 }
 
 .page-container {

@@ -284,6 +284,10 @@ const gotToTaskEditPage = (id: string) => {
     &--completed {
       background-color: rgba($color-anakiwa, 0.3);
     }
+
+    @include vp-767 {
+      flex-direction: column;
+    }
   }
 
   &__btns {
@@ -313,6 +317,16 @@ const gotToTaskEditPage = (id: string) => {
         fill: $color-emerald;
       }
     }
+
+    @include vp-767 {
+      width: 65px;
+      order: 2;
+      position: absolute;
+      right: 0;
+      min-height: 157px;
+      max-height: 157px;
+      border-left: 1px solid $color-san-marino;
+    }
   }
 
   &__date {
@@ -322,6 +336,15 @@ const gotToTaskEditPage = (id: string) => {
     min-width: 120px;
     border-right: 1px solid $color-san-marino;
     padding: 15px;
+
+    @include vp-767 {
+      max-width: 220px;
+      order: 1;
+      border-right: none;
+      padding-right: 80px;
+      min-height: 157px;
+      max-height: 157px;
+    }
   }
 
   &__date-wrapper {
@@ -362,6 +385,11 @@ const gotToTaskEditPage = (id: string) => {
     flex-direction: column;
     justify-content: space-between;
     padding: 15px 7px 15px 15px;
+
+    @include vp-767 {
+      order: 100;
+      border-top: 1px solid $color-san-marino;
+    }
   }
 
   &__title {
@@ -385,6 +413,11 @@ const gotToTaskEditPage = (id: string) => {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @include vp-767 {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
   &__access {
@@ -393,11 +426,16 @@ const gotToTaskEditPage = (id: string) => {
     text-orientation: upright;
     text-align: center;
     background-color: $color-emerald;
-    position: relative;
-    top: 0;
     color: $color-default-white;
     font-weight: bold;
     padding: 15px 0;
+
+    @include vp-767 {
+      writing-mode: unset;
+      text-orientation: unset;
+      order: 3;
+      padding: 5px 10px;
+    }
   }
 }
 
