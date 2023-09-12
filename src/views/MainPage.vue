@@ -143,4 +143,16 @@ import BasicSvgIcon from '@/components/UI/BasicSvgIcon.vue';
     fill: $color-emerald;
   }
 }
+
+a {
+  color: $color-azure;
+  text-decoration: none;
+  transition: color $trans-default;
+
+  &:active,
+  &:hover {
+    color: $color-anakiwa;
+  }
+}
+
 </style>
