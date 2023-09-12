@@ -52,6 +52,12 @@ npm run serve
 npm run build
 ```
 
+### Deploy to Firebase (https://todovue3project.web.app)
+### [HowToDeploy](https://cli.vuejs.org/ru/guide/deployment.html#firebase)
+```
+firebase deploy --only hosting
+```
+
 ### Lints and fixes files
 ```
 npm run lint
