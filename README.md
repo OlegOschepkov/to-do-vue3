@@ -1,5 +1,6 @@
 # to-do-vue3
 
+## Хостинг https://todovue3project.web.app
 ### Файл конфига firebase (src/firebase/index.ts) не включен в репо по соображениям безопасности
 
 ## Что было реализовано в приложении
@@ -52,10 +53,10 @@ npm run serve
 npm run build
 ```
 
-### Deploy to Firebase (https://todovue3project.web.app)
-### [HowToDeploy](https://cli.vuejs.org/ru/guide/deployment.html#firebase)
+### Deploy to Firebase hosting (build + deploy)
+### [Preparation instructions](https://cli.vuejs.org/ru/guide/deployment.html#firebase)
 ```
-firebase deploy --only hosting
+npm run deploy
 ```
 
 ### Lints and fixes files
